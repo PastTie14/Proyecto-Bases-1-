@@ -32,13 +32,26 @@ public class DBConnection {
             stmt.setString(2, email);
             stmt.setString(3, password);
             stmt.setString(4, createdBy);
-            stmt.setString(5, createdAt);
+            
+            java.sql.Date sqlCreatedAt = convertToDate(createdAt);
+            stmt.setDate(5, sqlCreatedAt);
+            
             stmt.setString(6, modifiedBy);
-            stmt.setString(7, modifiedAt);
-
+            
+            java.sql.Date sqlModifiedAt = convertToDate(modifiedAt);
+            stmt.setDate(7, sqlModifiedAt);
+            
             stmt.execute();
         } catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
+    }
+    
+    // method for converting a string to Date
+    private static java.sql.Date convertToDate(String dateString) {
+        // DD/MM/YYYY format
+        String[] parts = dateString.split("/");
+        String formatedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+        return java.sql.Date.valueOf(formatedDate);
     }
 }
