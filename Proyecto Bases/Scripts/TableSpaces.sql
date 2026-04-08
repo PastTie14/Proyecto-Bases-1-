@@ -1,0 +1,29 @@
+
+--TABLESPACES
+
+-- TS_DATA
+CREATE TABLESPACE TS_DATA
+    DATAFILE 'C:\app\Ian\oradata\Pr1\ts_data01.dbf'
+    SIZE 20M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 1M
+    MAXSIZE 500M;
+
+
+-- TS_INDEXES
+CREATE TABLESPACE TS_INDEX
+    DATAFILE 'C:\app\Ian\oradata\Pr1\ts_index01.dbf'
+    SIZE 15M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 1M
+    MAXSIZE 300M;
+    
+
+
+
+
+
+
+
