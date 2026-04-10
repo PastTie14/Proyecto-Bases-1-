@@ -3,7 +3,6 @@
 -- Tables: pet_extra_info, bounty, current_status,
 --         energy_level, training_ease
 -- Depends on: pet (06), currency (01)
--- NOTE: No NOT NULL constraints on this group of tables
 -- ============================================================
 
 -- ============================================
