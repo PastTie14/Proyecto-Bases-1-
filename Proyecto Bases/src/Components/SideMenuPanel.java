@@ -36,7 +36,7 @@ public class SideMenuPanel extends JPanel {
 
     // ── Tipografía ────────────────────────────────────────
     private static final Font FONT_ITEM    = new Font("SansSerif", Font.PLAIN, 14);
-    private static final Font FONT_BTN     = new Font("SansSerif", Font.BOLD, 18);
+    private static final Font FONT_BTN     = new Font("SansSerif", Font.BOLD, 14);
 
     // ── Dimensiones ──────────────────────────────────────
     private static final int MAX_WIDTH     = 200;
