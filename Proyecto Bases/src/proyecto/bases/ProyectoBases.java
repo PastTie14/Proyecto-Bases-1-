@@ -1,7 +1,13 @@
 package proyecto.bases;
 
 import Connect.DBConnection;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -13,9 +19,7 @@ public class ProyectoBases {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException{
-        
-        DBConnection.insertUser(1, "allan@gmail.com", "1234", "Allan", "5/4/2026", "Allan", "5/4/2026");
-        
+        new RegisterPage();
     }
     
 }
