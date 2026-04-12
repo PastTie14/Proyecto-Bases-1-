@@ -1,5 +1,4 @@
-CREATE OR REPLACE PROCEDURE insertEnergyLevel(id_energyLevel IN NUMBER, "name" IN VARCHAR2,
-                                           id_petExtraInfo IN NUMBER)
+CREATE OR REPLACE PROCEDURE insertEnergyLevel(id_energyLevel IN NUMBER, "name" IN VARCHAR2)
 
 AS 
 BEGIN

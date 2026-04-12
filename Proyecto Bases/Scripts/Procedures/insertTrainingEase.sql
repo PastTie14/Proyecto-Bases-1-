@@ -1,5 +1,4 @@
-CREATE OR REPLACE PROCEDURE insertTrainingEase(id_trainingEase IN NUMBER, "name" IN VARCHAR2,
-                                            id_petExtraInfo IN NUMBER)
+CREATE OR REPLACE PROCEDURE insertTrainingEase(id_trainingEase IN NUMBER, "name" IN VARCHAR2)
 
 AS 
 BEGIN
