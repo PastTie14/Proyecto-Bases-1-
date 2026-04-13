@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION insertPet(id_pet IN NUMBER, picture IN VARCHAR2, firs
                                        birth_date IN DATE, date_lost IN DATE, date_found IN DATE,
                                        email IN VARCHAR2, createdBy IN VARCHAR2, createdAt IN DATE,
                                        modifiedBy IN VARCHAR2, modifiedAt IN DATE, id_status IN NUMBER,
-                                       id_pet_type IN NUMBER, id_rescuer NUMBER)
+                                       id_pet_type IN NUMBER, id_rescuer IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
