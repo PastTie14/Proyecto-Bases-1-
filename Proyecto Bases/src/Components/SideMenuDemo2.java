@@ -34,6 +34,9 @@ public class SideMenuDemo2 {
 
             // ── PetGridPanel con mascotas de prueba ───────
             PetGridPanel petGrid = new PetGridPanel(buildDemoPets());
+            
+            //PetForm para test
+            PetFormPanel petForm = new PetFormPanel();
 
             // ── Ítems del menú ────────────────────────────
             List<MenuItem> items = Arrays.asList(
@@ -82,8 +85,7 @@ public class SideMenuDemo2 {
                     public String getName() { return "Da en adopción"; }
                     public void show() {
                         content.removeAll();
-                        placeholder.setText("🏠  Da en adopción");
-                        content.add(placeholder, BorderLayout.CENTER);
+                        content.add(petForm);
                         content.revalidate();
                         content.repaint();
                     }

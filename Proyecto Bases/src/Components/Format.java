@@ -105,7 +105,7 @@ public final class Format {
     public static final Font FONT_PRICE         = new Font("SansSerif", Font.BOLD,  14);
  
     /** Botones de acción. */
-    public static final Font FONT_BUTTON        = new Font("SansSerif", Font.BOLD,  13);
+    public static final Font FONT_BUTTON        = new Font("SansSerif", Font.BOLD,  8);
  
     /** Ícono / hamburguesa (tamaño grande). */
     public static final Font FONT_ICON          = new Font("SansSerif", Font.PLAIN, 16);

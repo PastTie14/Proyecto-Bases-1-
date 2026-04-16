@@ -219,6 +219,8 @@ public class PetCard extends JPanel {
  
     protected void onCardClicked() {
         // TODO: abrir popup/detalle de la mascota
+        Frame parent = (Frame) SwingUtilities.getWindowAncestor(this);
+        new PetPopup(parent, pet).setVisible(true);
     }
  
     protected void onCardHovered(boolean entering) {
