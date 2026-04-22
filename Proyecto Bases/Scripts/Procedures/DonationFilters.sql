@@ -1,6 +1,6 @@
 CREATE OR REPLACE PROCEDURE getDonationFilters (pAmount IN NUMBER, pIdAssociation IN NUMBER, pIdCurrency IN NUMBER, 
-                                                pIdUser IN NUMBER, pCreatedAt IN DATE, donationCursor OUT SYS_REFCURSOR)
-
+                                                pIdUser IN NUMBER, pCreatedAt IN DATE, pStartDate IN DATE, 
+                                                pEndDate IN DATE, donationCursor OUT SYS_REFCURSOR)
 AS
 BEGIN
     OPEN donationCursor FOR
@@ -20,6 +20,6 @@ BEGIN
         AND d.id_currency = NVL(pIdCurrency, d.id_currency)
         AND d.id_association = NVL(pIdAssociation, d.id_association)
         AND u.id_user = NVL(pIdUser, u.id_user)
-        AND d.createdAt = NVL(pCreatedAt, d.createdAt)
+        AND d.createdAt BETWEEN NVL(pStartDate, d.createdAt) AND NVL(pEndDate, d.createdAt)
         ORDER BY d.createdAt;
 END getDonationFilters;
