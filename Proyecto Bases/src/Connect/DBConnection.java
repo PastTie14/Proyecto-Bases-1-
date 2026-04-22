@@ -12,7 +12,7 @@ import oracle.jdbc.OracleTypes;
  * @author Allan
  */
 public class DBConnection {
-    public static void insertUser(int id_user, String email, String password,
+    public static void insertUser(String email, String password,
                                     String createdBy, String createdAt,
                                     String modifiedBy, String modifiedAt) throws SQLException {
         
@@ -26,20 +26,19 @@ public class DBConnection {
 
             // creates the call and call the procedure
             // the ? are where the variables go
-            CallableStatement stmt = con.prepareCall("{ CALL insertUser(?, ?, ?, ?, ?, ?, ?)}");
+            CallableStatement stmt = con.prepareCall("{ CALL insertUser(s_user.nextVal, ?, ?, ?, ?, ?, ?)}");
 
-            stmt.setInt(1, id_user);
-            stmt.setString(2, email);
-            stmt.setString(3, password);
-            stmt.setString(4, createdBy);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, createdBy);
             
             java.sql.Date sqlCreatedAt = convertToDate(createdAt);
-            stmt.setDate(5, sqlCreatedAt);
+            stmt.setDate(4, sqlCreatedAt);
             
-            stmt.setString(6, modifiedBy);
+            stmt.setString(5, modifiedBy);
             
             java.sql.Date sqlModifiedAt = convertToDate(modifiedAt);
-            stmt.setDate(7, sqlModifiedAt);
+            stmt.setDate(6, sqlModifiedAt);
             
             stmt.execute();
         } catch (Exception e) {
