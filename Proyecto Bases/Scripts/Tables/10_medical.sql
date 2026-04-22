@@ -3,7 +3,6 @@
 -- Tables: medic_sheet, disease, disease_x_medic_sheet,
 --         treatment, treatment_x_disease
 -- Depends on: veterinarian (05), pet_extra_info (09)
--- NOTE: No NOT NULL constraints on this group of tables
 -- ============================================================
 
 -- ============================================
