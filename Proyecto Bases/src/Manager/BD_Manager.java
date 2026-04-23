@@ -4,12 +4,10 @@
  */
 package Manager;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Ian
  */
-public class WindowManager {
+public class BD_Manager {
     
 }
