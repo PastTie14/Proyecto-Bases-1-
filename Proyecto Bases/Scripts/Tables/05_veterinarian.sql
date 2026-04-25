@@ -14,7 +14,11 @@ CREATE TABLE veterinarian
     second_name     VARCHAR2(50),
     first_surname   VARCHAR2(50),
     second_surname  VARCHAR2(50),
-    clinic_name     VARCHAR2(100)
+    clinic_name     VARCHAR2(100),
+    created_at      DATE,
+    created_by      VARCHAR2(10),
+    modified_       DATE,
+    modified_by VARCHAR2(10)
 )
 TABLESPACE TS_DATA;
 
