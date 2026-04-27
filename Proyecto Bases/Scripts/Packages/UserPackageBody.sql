@@ -1,10 +1,10 @@
 CREATE OR REPLACE PACKAGE BODY adminUser AS
 
-PROCEDURE insertUser(id_user IN NUMBER,email VARCHAR2,"password" VARCHAR2, createdBy VARCHAR2, createdAt DATE, modifiedBy VARCHAR2, modifiedAt DATE)
+PROCEDURE insertUser(id_user IN NUMBER,email VARCHAR2,"password" VARCHAR2)
 IS 
 BEGIN
-    INSERT INTO "user"
-    VALUES(id_user,email,"password",createdBy,createdAt,modifiedBy,modifiedAt);
+    INSERT INTO "user" (id_user, email, "password")
+    VALUES(id_user,email,"password");
     COMMIT;
 END;
 
@@ -47,6 +47,40 @@ BEGIN
     INSERT INTO "log"
     VALUES(id_log,changeDate,changeBy,tableName,fieldName,previousValue,currentValue,id_user);
     COMMIT;
+END;
+
+
+
+FUNCTION getAssociation RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM association;
+    RETURN v_cursor;
+END;
+
+FUNCTION getAdopter RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM adopter;
+    RETURN v_cursor;
+END;
+
+FUNCTION getRescuer RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM rescuer;
+    RETURN v_cursor;
+END;
+
+FUNCTION getCribHouse RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM crib_house;
+    RETURN v_cursor;
 END;
 
 END;

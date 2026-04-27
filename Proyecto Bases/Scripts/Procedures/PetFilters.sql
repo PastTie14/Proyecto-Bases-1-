@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE getFilters (pIdChip IN NUMBER, pIdDistrict IN NUMBER, pIdCanton IN NUMBER,
+CREATE OR REPLACE PROCEDURE getPetFilters (pIdChip IN NUMBER, pIdDistrict IN NUMBER, pIdCanton IN NUMBER,
                                         pIdProvince IN NUMBER, pIdStatus IN NUMBER, pIdPetType IN NUMBER,
                                         pIdRescuer IN NUMBER, pIdRace IN NUMBER, pIdColor IN NUMBER,
                                         petCursor OUT SYS_REFCURSOR)
@@ -50,4 +50,4 @@ BEGIN
         AND p.id_rescuer = NVL(pIdRescuer, p.id_rescuer)
         AND c.id_color = NVL(pIdColor, c.id_color)
         ORDER BY createdAt;
-END getFilters;
+END getPetFilters;
