@@ -1,51 +1,51 @@
 CREATE OR REPLACE PACKAGE BODY adminUser AS
 
-PROCEDURE insertUser(id_user IN NUMBER,email VARCHAR2,"password" VARCHAR2)
+PROCEDURE insertUser(pIdUser IN NUMBER, pEmail VARCHAR2, pPassword VARCHAR2)
 IS 
 BEGIN
     INSERT INTO "user" (id_user, email, "password")
-    VALUES(id_user,email,"password");
+    VALUES(pIdUser, pEmail, pPassword);
     COMMIT;
 END;
 
-PROCEDURE insertAssociation(id_user IN NUMBER, "name" VARCHAR2)
+PROCEDURE insertAssociation(pIdUser IN NUMBER, pName VARCHAR2)
 IS 
 BEGIN
     INSERT INTO association
-    VALUES(id_user,"name");
+    VALUES(pIdUser, pName);
     COMMIT;
 END;
 
-PROCEDURE insertAdopter(id_user IN NUMBER, first_name VARCHAR2, second_name VARCHAR2, first_surname VARCHAR2, second_surname VARCHAR2)
+PROCEDURE insertAdopter(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2)
 IS 
 BEGIN
     INSERT INTO adopter
-    VALUES(id_user,first_name,second_name,first_surname,second_surname);
+    VALUES(pIdUser, pFirstName, pSecondName, pFirstSurname, pSecondSurname);
     COMMIT;
 END;
 
-PROCEDURE insertRescuer(id_user IN NUMBER, first_name VARCHAR2, second_name VARCHAR2, first_surname VARCHAR2, second_surname VARCHAR2)
+PROCEDURE insertRescuer(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2)
 IS 
 BEGIN
     INSERT INTO rescuer
-    VALUES(id_user,first_name,second_name,first_surname,second_surname);
+    VALUES(pIdUser, pFirstName, pSecondName, pFirstSurname, pSecondSurname);
     COMMIT;
 END;
 
-PROCEDURE insertCribHouse(id_user IN NUMBER, "name" VARCHAR2, requires_donations IN NUMBER, accepted_size IN NUMBER)
+PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER)
 IS 
 BEGIN
     INSERT INTO crib_house
-    VALUES(id_user,"name",requires_donations,accepted_size);
+    VALUES(pIdUser, pName, pRequiresDonations, pAcceptedSize);
     COMMIT;
 END;
 
-PROCEDURE insertLog(id_log IN NUMBER, changeDate DATE, changeBy VARCHAR2, tableName VARCHAR2, fieldName VARCHAR2, previousValue VARCHAR2,
-currentValue VARCHAR2, id_user IN NUMBER)
+PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
+                    pCurrentValue VARCHAR2, pIdUser IN NUMBER)
 IS 
 BEGIN
     INSERT INTO "log"
-    VALUES(id_log,changeDate,changeBy,tableName,fieldName,previousValue,currentValue,id_user);
+    VALUES(pIdLog, pChangeDate, pChangeBy, pTableName, pFieldName, pPreviousValue, pCurrentValue, pIdUser);
     COMMIT;
 END;
 

@@ -1,45 +1,59 @@
 CREATE OR REPLACE PACKAGE BODY adminPetExtraInfo AS
 
-PROCEDURE insertCurrentStatus(id_currentStatus IN NUMBER, status_type IN VARCHAR2)
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+                            pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
+                            pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
+                            pIdTrainingEase IN NUMBER)
+RETURN NUMBER
+AS 
+    n_petExtraInfo_id NUMBER(8);
+BEGIN
+    INSERT INTO pet_extra_info
+    VALUES(pIdPetExtraInfo, pSize, pBeforePicture, pAfterPicture, pIdPet,
+            pIdCurrentStatus, pIdEnergyLevel, pIdTrainingEase);
+    COMMIT;
+    SELECT s_petExtraInfo.CURRVAL INTO n_petExtraInfo_id FROM DUAL;
+    RETURN (n_petExtraInfo_id);
+END insertPetExtraInfo;
 
+--=======================================================================================
+
+PROCEDURE insertCurrentStatus(pIdCurrentStatus IN NUMBER, pStatusType IN VARCHAR2)
 IS 
 BEGIN
     INSERT INTO current_status
-    VALUES(id_currentStatus, status_type);
+    VALUES(pIdCurrentStatus, pStatusType);
     COMMIT;
 END insertCurrentStatus;
 
 --=======================================================================================
 
-PROCEDURE insertEnergyLevel(id_energyLevel IN NUMBER, "name" IN VARCHAR2)
-
+PROCEDURE insertEnergyLevel(pIdEnergyLevel IN NUMBER, pName IN VARCHAR2)
 IS 
 BEGIN
     INSERT INTO energy_level
-    VALUES(id_energyLevel, "name", id_petExtraInfo);
+    VALUES(pIdEnergyLevel, pName);
     COMMIT;
 END insertEnergyLevel;
 
 --=======================================================================================
 
-PROCEDURE insertTrainingEase(id_trainingEase IN NUMBER, "name" IN VARCHAR2)
-
+PROCEDURE insertTrainingEase(pIdTrainingEase IN NUMBER, pName IN VARCHAR2)
 AS 
 BEGIN
     INSERT INTO training_ease
-    VALUES(id_trainingEase, "name", id_petExtraInfo);
+    VALUES(pIdTrainingEase, pName);
     COMMIT;
 END insertTrainingEase;
 
 --=======================================================================================
 
-PROCEDURE insertBounty(id_bounty IN NUMBER, amount IN NUMBER,
-                                        id_petExtraInfo IN NUMBER, id_currency IN NUMBER)
-
+PROCEDURE insertBounty(pIdBounty IN NUMBER, pAmount IN NUMBER,
+                       pIdPetExtraInfo IN NUMBER, pIdCurrency IN NUMBER)
 AS 
 BEGIN
     INSERT INTO bounty
-    VALUES(id_bounty, amount, id_petExtraInfo, id_currency);
+    VALUES(pIdBounty, pAmount, pIdPetExtraInfo, pIdCurrency);
     COMMIT;
 END insertBounty;
 

@@ -1,11 +1,17 @@
 CREATE OR REPLACE PACKAGE adminPet IS
+              
+FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
+                                       pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
+                                       pEmail IN VARCHAR2, pCreatedBy IN VARCHAR2, pCreatedAt IN DATE,
+                                       pModifiedBy IN VARCHAR2, pModifiedAt IN DATE, pIdStatus IN NUMBER,
+                                       pIdPetType IN NUMBER, pIdRescuer IN NUMBER) RETURN NUMBER;
                                        
-PROCEDURE insertIdChip(id_chip IN NUMBER, chip_number IN VARCHAR2,
-                                            registration_date IN DATE, id_pet IN NUMBER);
-PROCEDURE insertPetXColor(id_pet IN NUMBER, id_color IN NUMBER);
+PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
+                        pRegistrationDate IN DATE, pIdPet IN NUMBER);
+PROCEDURE insertPetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER);
 
-PROCEDURE insertPetXDistrict(id_pet IN NUMBER, id_district IN NUMBER);
+PROCEDURE insertPetXDistrict(pIdPet IN NUMBER, pIdDistrict IN NUMBER);
 
-PROCEDURE insertPetTypeXCribHouse(id_petType IN NUMBER, id_cribHouse IN NUMBER);
+PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER);
 
 END adminPet;

@@ -1,18 +1,18 @@
 CREATE OR REPLACE PACKAGE BODY adminFinancial AS
 
-PROCEDURE insertDonation(id_donation IN NUMBER, amount IN NUMBER, id_association IN NUMBER, id_currency IN NUMBER)
+PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, pIdCurrency IN NUMBER)
 IS 
 BEGIN
     INSERT INTO donation
-    VALUES(id_donation,amount,id_association,id_currency);
+    VALUES(pIdDonation, pAmount, pIdAssociation, pIdCurrency);
     COMMIT;
 END;
 
-PROCEDURE insertDonationXUser(id_user IN NUMBER, id_donation IN NUMBER)
+PROCEDURE insertDonationXUser(pIdUser IN NUMBER, pIdDonation IN NUMBER)
 IS 
 BEGIN
     INSERT INTO donation_x_user
-    VALUES(id_user,id_donation);
+    VALUES(pIdUser, pIdDonation);
     COMMIT;
 END;
 

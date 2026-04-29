@@ -1,74 +1,74 @@
 CREATE OR REPLACE PACKAGE BODY adminCatalogs AS
 
-PROCEDURE insertCurrency(id_currency IN NUMBER, "name" VARCHAR2,acronym VARCHAR2)
+PROCEDURE insertCurrency(pIdCurrency IN NUMBER, pName VARCHAR2, pAcronym VARCHAR2)
 IS 
 BEGIN
     INSERT INTO currency
-    VALUES(id_currency,"name",acronym);
+    VALUES(pIdCurrency, pName, pAcronym);
     COMMIT;
 END;
 
-PROCEDURE insertProvince(id_province IN NUMBER, "name" VARCHAR2)
+PROCEDURE insertProvince(pIdProvince IN NUMBER, pName VARCHAR2)
 IS 
 BEGIN
     INSERT INTO province
-    VALUES(id_province,"name");
+    VALUES(pIdProvince, pName);
     COMMIT;
 END;
 
-PROCEDURE insertCanton(id_canton IN NUMBER, "name" VARCHAR2,id_province IN NUMBER)
+PROCEDURE insertCanton(pIdCanton IN NUMBER, pName VARCHAR2, pIdProvince IN NUMBER)
 IS 
 BEGIN
     INSERT INTO canton
-    VALUES(id_canton,"name",id_province);
+    VALUES(pIdCanton, pName, pIdProvince);
     COMMIT;
 END;
 
-PROCEDURE insertDistrict(id_district IN NUMBER, "name" VARCHAR2,id_canton IN NUMBER)
+PROCEDURE insertDistrict(pIdDistrict IN NUMBER, pName VARCHAR2, pIdCanton IN NUMBER)
 IS 
 BEGIN
     INSERT INTO district
-    VALUES(id_district,"name",id_canton);
+    VALUES(pIdDistrict, pName, pIdCanton);
     COMMIT;
 END;
 
-PROCEDURE insertPetType(id_pet_type IN NUMBER, "name" VARCHAR2)
+PROCEDURE insertPetType(pIdPetType IN NUMBER, pName VARCHAR2)
 IS 
 BEGIN
     INSERT INTO pet_type
-    VALUES(id_pet_type,"name");
+    VALUES(pIdPetType, pName);
     COMMIT;
 END;
 
-PROCEDURE insertRace(id_race IN NUMBER, "name" VARCHAR2,id_pet_type IN NUMBER)
+PROCEDURE insertRace(pIdRace IN NUMBER, pName VARCHAR2, pIdPetType IN NUMBER)
 IS 
 BEGIN
     INSERT INTO race
-    VALUES(id_race,"name",id_pet_type);
+    VALUES(pIdRace, pName, pIdPetType);
     COMMIT;
 END;
 
-PROCEDURE insertStatus(id_status IN NUMBER, status_type VARCHAR2)
+PROCEDURE insertStatus(pIdStatus IN NUMBER, pStatusType VARCHAR2)
 IS 
 BEGIN
     INSERT INTO status
-    VALUES(id_status,status_type);
+    VALUES(pIdStatus, pStatusType);
     COMMIT;
 END;
 
-PROCEDURE insertColor(id_color IN NUMBER, "name" VARCHAR2)
+PROCEDURE insertColor(pIdColor IN NUMBER, pName VARCHAR2)
 IS 
 BEGIN
     INSERT INTO color
-    VALUES(id_color,"name");
+    VALUES(pIdColor, pName);
     COMMIT;
 END;
 
-PROCEDURE insertValueType(id_value_type IN NUMBER, "value" VARCHAR2)
+PROCEDURE insertValueType(pIdValueType IN NUMBER, pType VARCHAR2)
 IS 
 BEGIN
     INSERT INTO value_type
-    VALUES(id_value_type,"value");
+    VALUES(pIdValueType, pType);
     COMMIT;
 END;
 

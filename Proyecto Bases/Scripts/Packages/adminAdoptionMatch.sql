@@ -1,19 +1,19 @@
 CREATE OR REPLACE PACKAGE adminAdoptionMatch IS
 
-PROCEDURE insertAdoptionForm(id_adoption IN NUMBER, notes VARCHAR2,
-                                        adoption_date IN DATE, "reference" IN VARCHAR2,
-                                        id_adopter IN NUMBER, id_pet IN NUMBER);
+PROCEDURE insertAdoptionForm(pIdAdoption IN NUMBER, pNotes VARCHAR2,
+                            pAdoptionDate IN DATE, pReference IN VARCHAR2,
+                            pIdAdopter IN NUMBER, pIdPet IN NUMBER);
 
-PROCEDURE insertPhoto(id_photo IN NUMBER, "date" IN DATE, 
-                                    photo_dir IN VARCHAR2, id_adopter IN NUMBER);
+PROCEDURE insertPhoto(pIdPhoto IN NUMBER, pDate IN DATE, 
+                        pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER);
 
-PROCEDURE insertRating(id_rating IN NUMBER, score IN NUMBER, 
-                                        id_user IN NUMBER, id_adopter IN NUMBER);
+PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER, 
+                        pIdUser IN NUMBER, pIdAdopter IN NUMBER);
 
-PROCEDURE insertMatch(id_match IN NUMBER, match_date IN DATE,
-                                        similarity_percentage IN NUMBER);
+PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
+                        pSimilarityPercentage IN NUMBER);
 
-PROCEDURE insertParameters(id_parameter IN NUMBER, "value" IN VARCHAR2,
-                                        id_match IN NUMBER, id_value_type IN NUMBER);
+PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
+                            pIdMatch IN NUMBER, pIdValueType IN NUMBER);
 
 END adminAdoptionMatch;

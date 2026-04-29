@@ -1,18 +1,18 @@
 CREATE OR REPLACE PACKAGE BODY adminBlackList AS
 
-PROCEDURE insertBlackList(id_report IN NUMBER, id_user IN NUMBER)
+PROCEDURE insertBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)
 IS 
 BEGIN
     INSERT INTO black_list
-    VALUES(id_report,id_user);
+    VALUES(pIdReport, pIdUser);
     COMMIT;
 END;
 
-PROCEDURE insertUserXBlackList(reason VARCHAR2, id_user IN NUMBER, id_report IN NUMBER)
+PROCEDURE insertUserXBlackList(pReason IN VARCHAR2, pIdUser IN NUMBER, pIdReport IN NUMBER)
 IS 
 BEGIN
     INSERT INTO user_x_black_list
-    VALUES(reason,id_user,id_report);
+    VALUES(pReason, pIdUser, pIdReport);
     COMMIT;
 END;
 

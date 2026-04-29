@@ -1,12 +1,12 @@
 CREATE OR REPLACE PACKAGE adminUser IS
 
-PROCEDURE insertUser(id_user IN NUMBER,email VARCHAR2,"password" VARCHAR2);
-PROCEDURE insertAssociation(id_user IN NUMBER, "name" VARCHAR2);
-PROCEDURE insertAdopter(id_user IN NUMBER, first_name VARCHAR2, second_name VARCHAR2, first_surname VARCHAR2, second_surname VARCHAR2);
-PROCEDURE insertRescuer(id_user IN NUMBER, first_name VARCHAR2, second_name VARCHAR2, first_surname VARCHAR2, second_surname VARCHAR2);
-PROCEDURE insertCribHouse(id_user IN NUMBER, "name" VARCHAR2, requires_donations IN NUMBER, accepted_size IN NUMBER);
-PROCEDURE insertLog(id_log IN NUMBER, changeDate DATE, changeBy VARCHAR2, tableName VARCHAR2, fieldName VARCHAR2, previousValue VARCHAR2,
-currentValue VARCHAR2, id_user IN NUMBER);
+PROCEDURE insertUser(pIdUser IN NUMBER, pEmail VARCHAR2, pPassword VARCHAR2);
+PROCEDURE insertAssociation(pIdUser IN NUMBER, pName VARCHAR2);
+PROCEDURE insertAdopter(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
+PROCEDURE insertRescuer(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
+PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER);
+PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
+                    pCurrentValue VARCHAR2, pIdUser IN NUMBER);
 
 FUNCTION getAssociation RETURN SYS_REFCURSOR;
 FUNCTION getAdopter RETURN SYS_REFCURSOR;

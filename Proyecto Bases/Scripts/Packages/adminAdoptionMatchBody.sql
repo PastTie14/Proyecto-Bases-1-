@@ -1,61 +1,56 @@
 CREATE OR REPLACE PACKAGE BODY adminAdoptionMatch AS
 
-PROCEDURE insertAdoptionForm(id_adoption IN NUMBER, notes VARCHAR2,
-                                        adoption_date IN DATE, "reference" IN VARCHAR2,
-                                        id_adopter IN NUMBER, id_pet IN NUMBER)
-
+PROCEDURE insertAdoptionForm(pIdAdoption IN NUMBER, pNotes VARCHAR2,
+                                        pAdoptionDate IN DATE, pReference IN VARCHAR2,
+                                        pIdAdopter IN NUMBER, pIdPet IN NUMBER)
 IS 
 BEGIN
     INSERT INTO adoption_form
-    VALUES(id_adoption, notes, adoption_date, "reference", id_adopter, id_pet);
+    VALUES(pIdAdoption, pNotes, pAdoptionDate, pReference, pIdAdopter, pIdPet);
     COMMIT;
 END insertAdoptionForm;
 
 --=======================================================================================
 
-PROCEDURE insertPhoto(id_photo IN NUMBER, "date" IN DATE, 
-                                    photo_dir IN VARCHAR2, id_adopter IN NUMBER)
-
+PROCEDURE insertPhoto(pIdPhoto IN NUMBER, pDate IN DATE, 
+                                    pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER)
 IS 
 BEGIN
     INSERT INTO photo
-    VALUES(id_photo, "date", photo_dir, id_adopter);
+    VALUES(pIdPhoto, pDate, pPhotoDir, pIdAdopter);
     COMMIT;
 END insertPhoto;
 
 --=======================================================================================
 
-PROCEDURE insertRating(id_rating IN NUMBER, score IN NUMBER, 
-                                        id_user IN NUMBER, id_adopter IN NUMBER)
-
+PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER, 
+                                        pIdUser IN NUMBER, pIdAdopter IN NUMBER)
 IS 
 BEGIN
     INSERT INTO rating
-    VALUES(id_rating, score, id_user, id_adopter);
+    VALUES(pIdRating, pScore, pIdUser, pIdAdopter);
     COMMIT;
 END insertRating;
 
 --=======================================================================================
 
-PROCEDURE insertMatch(id_match IN NUMBER, match_date IN DATE,
-                                        similarity_percentage IN NUMBER)
-
+PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
+                                        pSimilarityPercentage IN NUMBER)
 IS 
 BEGIN
     INSERT INTO match
-    VALUES(id_match, match_date, similarity_percentage);
+    VALUES(pIdMatch, pMatchDate, pSimilarityPercentage);
     COMMIT;
 END insertMatch;
 
 --=======================================================================================
 
-PROCEDURE insertParameters(id_parameter IN NUMBER, "value" IN VARCHAR2,
-                                            id_match IN NUMBER, id_value_type IN NUMBER)
-
+PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
+                                            pIdMatch IN NUMBER, pIdValueType IN NUMBER)
 IS 
 BEGIN
     INSERT INTO parameters
-    VALUES(id_parameter, "value", id_match, id_value_type);
+    VALUES(pIdParameter, pValue, pIdMatch, pIdValueType);
     COMMIT;
 END insertParameters;
 
