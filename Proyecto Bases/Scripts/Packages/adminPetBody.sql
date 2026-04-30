@@ -2,17 +2,16 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 
 FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
-                                       pEmail IN VARCHAR2, pCreatedBy IN VARCHAR2, pCreatedAt IN DATE,
-                                       pModifiedBy IN VARCHAR2, pModifiedAt IN DATE, pIdStatus IN NUMBER,
-                                       pIdPetType IN NUMBER, pIdRescuer IN NUMBER)
+                                       pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdPetType IN NUMBER, 
+                                       pIdRescuer IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
-    INSERT INTO pet
+    INSERT INTO pet (id_pet, picture, first_name, birth_date,
+                    date_lost, date_found, email, id_status, id_pet_type, id_rescuer)
     VALUES(pIdPet, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pCreatedBy, pCreatedAt, pModifiedBy, pModifiedAt,
-            pIdStatus, pIdPetType, pIdRescuer);
+            pEmail, pIdStatus, pIdPetType, pIdRescuer);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); -- returns the pet id to use it in intermediate tables
@@ -22,7 +21,7 @@ PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
                         pRegistrationDate IN DATE, pIdPet IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO identification_chip
+    INSERT INTO identification_chip (id_chip, chip_number, registration_date, id_pet)
     VALUES(pIdChip, pChipNumber, pRegistrationDate, pIdPet);
     COMMIT;
 END insertIdChip;
@@ -30,7 +29,7 @@ END insertIdChip;
 PROCEDURE insertPetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO pet_x_color
+    INSERT INTO pet_x_color (id_pet, id_color)
     VALUES(pIdPet, pIdColor);
     COMMIT;
 END insertPetXColor;
@@ -38,7 +37,7 @@ END insertPetXColor;
 PROCEDURE insertPetXDistrict(pIdPet IN NUMBER, pIdDistrict IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO pet_x_district
+    INSERT INTO pet_x_district (id_pet, id_district)
     VALUES(pIdPet, pIdDistrict);
     
     COMMIT;
@@ -47,7 +46,7 @@ END insertPetXDistrict;
 PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO pet_type_x_crib_house
+    INSERT INTO pet_type_x_crib_house (id_pet_type, id_crib_house)
     VALUES(pIdPetType, pIdCribHouse);
     COMMIT;
 END insertPetTypeXCribHouse;
