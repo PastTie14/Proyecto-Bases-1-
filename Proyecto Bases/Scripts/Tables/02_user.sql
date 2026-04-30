@@ -171,8 +171,7 @@ CREATE TABLE "log"
     tableName     VARCHAR2(20),
     fieldName     VARCHAR2(20),
     previousValue VARCHAR2(20),
-    currentValue  VARCHAR2(20),
-    id_user       NUMBER(8)
+    currentValue  VARCHAR2(20)
 )
 TABLESPACE TS_DATA;
 
@@ -192,12 +191,5 @@ ALTER TABLE "log"
     MODIFY fieldName CONSTRAINT log_fieldName_nn NOT NULL;
 
 ALTER TABLE "log"
-    MODIFY id_user CONSTRAINT log_idUser_nn NOT NULL;
-
-ALTER TABLE "log"
     ADD CONSTRAINT pk_log PRIMARY KEY (id_log)
     USING INDEX TABLESPACE TS_INDEX;
-
-ALTER TABLE "log"
-    ADD CONSTRAINT fk_log_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
