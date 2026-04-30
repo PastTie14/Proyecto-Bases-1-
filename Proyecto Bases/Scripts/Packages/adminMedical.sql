@@ -8,7 +8,7 @@ PROCEDURE insertDisease(pIdDisease IN NUMBER, pName IN VARCHAR2);
 PROCEDURE insertMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN VARCHAR2,
                                 pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER);
 
-PROCEDURE insertDiseaseXMedicSheet(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
+PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER);
 
 PROCEDURE insertTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
 

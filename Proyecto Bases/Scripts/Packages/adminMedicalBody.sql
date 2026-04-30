@@ -4,7 +4,7 @@ PROCEDURE insertTreatment(pIdTreatment IN NUMBER, pName IN VARCHAR2,
                                             pDose IN VARCHAR2)
 IS 
 BEGIN
-    INSERT INTO treatment
+    INSERT INTO treatment (id_treatment, "name", dose)
     VALUES(pIdTreatment, pName, pDose);
     COMMIT;
 END insertTreatment;
@@ -14,7 +14,7 @@ END insertTreatment;
 PROCEDURE insertDisease(pIdDisease IN NUMBER, pName IN VARCHAR2)
 IS 
 BEGIN
-    INSERT INTO disease
+    INSERT INTO disease (id_disease, "name")
     VALUES(pIdDisease, pName);
     COMMIT;
 END insertDisease;
@@ -22,21 +22,21 @@ END insertDisease;
 --=======================================================================================
 
 PROCEDURE insertMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN VARCHAR2,
-                                            pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER)
+                            pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO medic_sheet
+    INSERT INTO medic_sheet (id_medic_sheet, abandonment_description, id_veterinarian, id_pet_extra_info)
     VALUES(pIdMedicSheet, pAbandonmentDescription, pIdVeterinarian, pIdPetExtraInfo);
     COMMIT;
 END insertMedicSheet;
 
 --=======================================================================================
 
-PROCEDURE insertDiseaseXMedicSheet(pIdTreatment IN NUMBER, pIdDisease IN NUMBER)
+PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO disease_x_medic_sheet
-    VALUES(pIdTreatment, pIdDisease);
+    INSERT INTO disease_x_medic_sheet (id_disease, id_medic_sheet)
+    VALUES(pIdDisease, pIdMedicSheet);
     COMMIT;
 END insertDiseaseXMedicSheet;
 
@@ -45,7 +45,7 @@ END insertDiseaseXMedicSheet;
 PROCEDURE insertTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO treatment_x_disease
+    INSERT INTO treatment_x_disease (id_treatment, id_disease)
     VALUES(pIdTreatment, pIdDisease);
     COMMIT;
 END insertTreatmentXDisease;
@@ -78,7 +78,7 @@ PROCEDURE updateMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN V
 IS
 BEGIN
     UPDATE medic_sheet
-    SET abandomnment_description = pAbandonmentDescription
+    SET abandonment_description = pAbandonmentDescription
     
     WHERE id_medic_sheet = pIdMedicSheet
     AND id_veterinarian = pIdVeterinarian
