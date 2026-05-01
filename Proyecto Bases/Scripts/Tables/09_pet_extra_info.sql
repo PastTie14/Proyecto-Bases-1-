@@ -69,7 +69,8 @@ ALTER TABLE pet_extra_info
 
 ALTER TABLE pet_extra_info
     ADD CONSTRAINT fk_pei_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet);
+    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
+    ON DELETE CASCADE;
     
 ALTER TABLE pet_extra_info
     ADD CONSTRAINT fk_pei_currentStatus
@@ -101,8 +102,10 @@ ALTER TABLE bounty
 
 ALTER TABLE bounty
     ADD CONSTRAINT fk_bounty_pet_extra_info
-    FOREIGN KEY (id_pet_extra_info) REFERENCES pet_extra_info (id_pet_extra_info);
+    FOREIGN KEY (id_pet_extra_info) REFERENCES pet_extra_info (id_pet_extra_info)
+    ON DELETE CASCADE;
 
 ALTER TABLE bounty
     ADD CONSTRAINT fk_bounty_currency
-    FOREIGN KEY (id_currency) REFERENCES currency (id_currency);
+    FOREIGN KEY (id_currency) REFERENCES currency (id_currency)
+    ON DELETE CASCADE;

@@ -62,7 +62,8 @@ ALTER TABLE association
 
 ALTER TABLE association
     ADD CONSTRAINT fk_association_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- ADOPTER
@@ -92,7 +93,8 @@ ALTER TABLE adopter
 
 ALTER TABLE adopter
     ADD CONSTRAINT fk_adopter_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- RESCUER
@@ -122,7 +124,8 @@ ALTER TABLE rescuer
 
 ALTER TABLE rescuer
     ADD CONSTRAINT fk_rescuer_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- CRIB HOUSE
@@ -154,7 +157,8 @@ ALTER TABLE crib_house
 
 ALTER TABLE crib_house
     ADD CONSTRAINT fk_crib_house_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 ALTER TABLE crib_house
     ADD CONSTRAINT chk_requires_donations

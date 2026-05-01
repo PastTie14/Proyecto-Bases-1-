@@ -54,8 +54,10 @@ ALTER TABLE user_x_black_list
 
 ALTER TABLE user_x_black_list
     ADD CONSTRAINT fk_uxbl_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 ALTER TABLE user_x_black_list
     ADD CONSTRAINT fk_uxbl_report
-    FOREIGN KEY (id_report) REFERENCES black_list (id_report);
+    FOREIGN KEY (id_report) REFERENCES black_list (id_report)
+    ON DELETE CASCADE;

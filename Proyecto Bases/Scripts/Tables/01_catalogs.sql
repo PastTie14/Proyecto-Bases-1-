@@ -74,7 +74,8 @@ ALTER TABLE canton
 
 ALTER TABLE canton
     ADD CONSTRAINT fk_canton_province
-    FOREIGN KEY (id_province) REFERENCES province (id_province);
+    FOREIGN KEY (id_province) REFERENCES province (id_province)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- DISTRICT
@@ -102,7 +103,8 @@ ALTER TABLE district
 
 ALTER TABLE district
     ADD CONSTRAINT fk_district_canton
-    FOREIGN KEY (id_canton) REFERENCES canton (id_canton);
+    FOREIGN KEY (id_canton) REFERENCES canton (id_canton)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- PET TYPE
@@ -150,7 +152,8 @@ ALTER TABLE race
 
 ALTER TABLE race
     ADD CONSTRAINT fk_race_pet_type
-    FOREIGN KEY (id_pet_type) REFERENCES pet_type (id_pet_type);
+    FOREIGN KEY (id_pet_type) REFERENCES pet_type (id_pet_type)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- STATUS

@@ -31,15 +31,18 @@ ALTER TABLE phone_number
 
 ALTER TABLE phone_number
     ADD CONSTRAINT fk_phone_user
-    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user)
+    ON DELETE CASCADE;
 
 ALTER TABLE phone_number
     ADD CONSTRAINT fk_phone_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet);
+    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
+    ON DELETE CASCADE;
 
 ALTER TABLE phone_number
     ADD CONSTRAINT fk_phone_veterinarian
-    FOREIGN KEY (id_veterinarian) REFERENCES veterinarian (id_veterinarian);
+    FOREIGN KEY (id_veterinarian) REFERENCES veterinarian (id_veterinarian)
+    ON DELETE CASCADE;
 
 ALTER TABLE phone_number
     ADD CONSTRAINT chk_phone_single_owner
