@@ -25,4 +25,11 @@ FUNCTION getAdopter RETURN SYS_REFCURSOR;
 FUNCTION getRescuer RETURN SYS_REFCURSOR;
 FUNCTION getCribHouse RETURN SYS_REFCURSOR;
 
+-- DELETE
+PROCEDURE deleteUser(pidUser IN NUMBER);
+PROCEDURE deleteAssociation(pidUser IN NUMBER);
+PROCEDURE deleteAdopter(pidUser IN NUMBER);
+PROCEDURE deleteRescuer(pidUser IN NUMBER);
+PROCEDURE deleteCribHouse(pidUser IN NUMBER);
+
 END adminUser;

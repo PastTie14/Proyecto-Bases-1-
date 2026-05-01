@@ -38,4 +38,8 @@ FUNCTION getRating RETURN SYS_REFCURSOR;
 FUNCTION getMatch RETURN SYS_REFCURSOR;
 FUNCTION getParameters RETURN SYS_REFCURSOR;
 
+-- DELETE
+PROCEDURE deletePhoto(pIdPhoto IN NUMBER);
+PROCEDURE deleteRating(pIdRating IN NUMBER);
+
 END adminAdoptionMatch;

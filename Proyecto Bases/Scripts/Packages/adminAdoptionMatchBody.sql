@@ -156,4 +156,20 @@ IS
         RETURN v_cursor;
 END;
 
+-- ======================================== DELETE ========================================
+
+PROCEDURE deletePhoto(pIdPhoto IN NUMBER)
+IS
+BEGIN
+    DELETE FROM photo
+    WHERE id_photo = pIdPhoto;
+END;
+
+PROCEDURE deleteRating(pIdRating IN NUMBER)
+IS
+BEGIN
+    DELETE FROM rating
+    WHERE id_rating = pIdRating;
+END;
+
 END adminAdoptionMatch;

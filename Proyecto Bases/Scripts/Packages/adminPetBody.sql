@@ -141,4 +141,13 @@ BEGIN
     RETURN v_cursor;
 END;
 
+-- ======================================== DELETE ========================================
+
+PROCEDURE deletePet(pIdPet IN NUMBER)
+IS
+BEGIN
+    DELETE FROM pet
+    WHERE id_pet = pIdPet;
+END;
+
 END adminPet;

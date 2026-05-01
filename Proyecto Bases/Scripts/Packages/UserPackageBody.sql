@@ -151,4 +151,40 @@ BEGIN
     RETURN v_cursor;
 END;
 
+-- ======================================== DELETE ========================================
+PROCEDURE deleteUser(pidUser IN NUMBER)
+IS
+BEGIN
+    DELETE FROM "user"
+    WHERE id_user = pIdUser;
+END;
+
+PROCEDURE deleteAssociation(pidUser IN NUMBER)
+IS
+BEGIN
+    DELETE FROM association
+    WHERE id_user = pIdUser;
+END;
+
+PROCEDURE deleteAdopter(pidUser IN NUMBER)
+IS
+BEGIN
+    DELETE FROM adopter
+    WHERE id_user = pIdUser;
+END;
+
+PROCEDURE deleteRescuer(pidUser IN NUMBER)
+IS
+BEGIN
+    DELETE FROM rescuer
+    WHERE id_user = pIdUser;
+END;
+
+PROCEDURE deleteCribHouse(pidUser IN NUMBER)
+IS
+BEGIN
+    DELETE FROM crib_house
+    WHERE id_user = pIdUser;
+END;
+
 END;

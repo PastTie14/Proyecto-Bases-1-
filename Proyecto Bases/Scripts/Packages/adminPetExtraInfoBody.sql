@@ -149,4 +149,12 @@ BEGIN
     RETURN v_cursor;
 END;
 
+-- DELETE
+PROCEDURE deleteBounty(pIdBounty IN NUMBER)
+IS
+BEGIN
+    DELETE FROM bounty
+    WHERE id_bounty = pIdBounty;
+END;
+
 END adminPetExtraInfo;
