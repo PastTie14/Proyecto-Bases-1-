@@ -36,18 +36,21 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION getUsersFromBlackList(pIdBlackList IN NUMBER) RETURN SYS_REFCURSOR
+FUNCTION getUsersFromBlackList(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR 
         SELECT u.email, uxbl.reason
-        FROM user_x_black_list uxbl
+        FROM black_list bl
     
+        INNER JOIN user_x_black_list uxbl
+        ON bl.id_report = uxbl.id_report
+        
         INNER JOIN "user" u
         ON uxbl.id_user = u.id_user
     
-        WHERE uxbl.id_report = pIdBlackList;
+        WHERE bl.id_user = pIdUser;
     RETURN v_cursor;
 END;
 

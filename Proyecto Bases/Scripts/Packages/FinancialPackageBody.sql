@@ -28,6 +28,16 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getDonationById(pIdDonation IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT d.amount FROM donation d
+        WHERE d.id_donation = pIdDonation;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getDonationXUser RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;

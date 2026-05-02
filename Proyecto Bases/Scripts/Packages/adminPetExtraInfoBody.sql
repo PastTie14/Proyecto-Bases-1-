@@ -117,6 +117,17 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getPetExtraInfoById(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT * FROM pet_extra_info p
+        WHERE p.id_pet = pIdPet;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getCurrentStatus RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -124,6 +135,16 @@ BEGIN
     OPEN v_cursor FOR SELECT * FROM current_status;
     RETURN v_cursor;
 END;
+
+FUNCTION getCurrentStatusById(pIdCurrentStatus IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT cs.status_type FROM current_status cs 
+        WHERE cs.id_current_status = pIdCurrentStatus;
+    RETURN v_cursor;
+END;
+
 
 FUNCTION getEnergyLevel RETURN SYS_REFCURSOR
 IS
@@ -133,6 +154,16 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getEnergyLevelById(pIdEnergyLevel IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT el."name" FROM energy_level el
+        WHERE el.id_energy_level= pIdEnergyLevel;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getTrainingEase RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -141,11 +172,30 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getTrainingEaseById(pIdTrainingEase IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT te."name" FROM training_ease te
+        WHERE te.id_training_ease = pIdTrainingEase;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getBounty RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR SELECT * FROM bounty;
+    RETURN v_cursor;
+END;
+
+FUNCTION getBountyById(pIdBounty IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT b.amount FROM bounty b
+        WHERE b.id_bounty= pIdBounty;
     RETURN v_cursor;
 END;
 

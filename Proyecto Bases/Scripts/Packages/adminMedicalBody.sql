@@ -97,6 +97,17 @@ IS
         RETURN v_cursor;
 END;
 
+FUNCTION getTreatmentById(pIdTreatment IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT t."name" FROM treatment t
+            WHERE t.id_treatment = pIdTreatment;
+        RETURN v_cursor;
+END;
+
+
 FUNCTION getDisease RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -106,6 +117,17 @@ IS
         RETURN v_cursor;
 END;
 
+FUNCTION getDiseaseById(pIdDisease IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT d."name" FROM disease d
+            WHERE d.id_disease = pIdDisease;
+        RETURN v_cursor;
+END;
+
+
 FUNCTION getMedicSheet RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -114,6 +136,17 @@ IS
             SELECT * FROM medic_sheet;
         RETURN v_cursor;
 END;
+
+FUNCTION getMedicSheetById(pIdMedicSheet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM medic_sheet
+            WHERE id_medic_sheet = pIdMedicSheet;
+        RETURN v_cursor;
+END;
+
 
 FUNCTION getDiseaseXMedicSheet RETURN SYS_REFCURSOR
 IS

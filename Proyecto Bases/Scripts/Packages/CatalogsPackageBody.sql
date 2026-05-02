@@ -156,6 +156,16 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
     
+    FUNCTION getCurrencyById(pIdCurrency IN NUMBER) RETURN SYS_REFCURSOR 
+    IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM currency c
+            WHERE c.id_currency = pIdCurrency;
+        RETURN v_cursor;
+    END;    
+    
 
     FUNCTION getProvince RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -164,6 +174,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM province;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getProvinceById(pIdProvince IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT p."name" FROM province p
+            WHERE p.id_province = pIdProvince;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getCanton RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -173,6 +193,16 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
 
+    FUNCTION getCantonById(pIdCanton IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM canton c
+            WHERE c.id_canton = pIdCanton;
+        RETURN v_cursor;
+    END;
+    
+
     FUNCTION getDistrict RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
     BEGIN
@@ -180,6 +210,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM district;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getDistrictById(pIdDistrict IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT d."name" FROM district d
+            WHERE d.id_district = pIdDistrict;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getPetType RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -188,6 +228,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM pet_type;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getPetTypeById(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT pt."name" FROM pet_type pt
+            WHERE pt.id_pet_type = pIdPetType;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getRace RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -196,6 +246,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM race;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getRaceById(pIdRace IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT r."name" FROM race r
+            WHERE r.id_race = pIdRace;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getStatus RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -204,6 +264,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM status;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getStatusById(pIdStatus IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT s.status_type FROM status s
+            WHERE s.id_status = pIdStatus;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getColor RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -212,6 +282,17 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM color;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getColorById(pIdColor IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM color c
+            WHERE c.id_color = pIdColor;
+        RETURN v_cursor;
+    END;
+
+    
 
     FUNCTION getValueType RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -220,5 +301,15 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM value_type;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getValueTypeById(pIdValueType IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT vt."type" FROM value_type vt
+            WHERE vt.id_value_type = pIdValueType;
+        RETURN v_cursor;
+    END;
+    
 
 END adminCatalogs;

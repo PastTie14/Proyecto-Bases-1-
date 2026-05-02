@@ -6,6 +6,8 @@ PROCEDURE insertDonationXUser(pIdUser IN NUMBER, pIdDonation IN NUMBER);
 
 -- GET
 FUNCTION getDonation RETURN SYS_REFCURSOR;
+FUNCTION getDonationById(pIdDonation IN NUMBER) RETURN SYS_REFCURSOR;
+
 FUNCTION getDonationXUser RETURN SYS_REFCURSOR;
 
 END adminFinancial;

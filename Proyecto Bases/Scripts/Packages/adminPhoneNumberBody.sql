@@ -22,6 +22,16 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getPhoneNumberById(pIdPhone IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT p."number" FROM phone_number p
+        WHERE p.id_phone = pIdPhone;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getUserPhones(pIdUser IN NUMBER) RETURN SYS_REFCURSOR 
 IS
     phoneCursor SYS_REFCURSOR;
