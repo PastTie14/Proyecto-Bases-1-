@@ -7,6 +7,7 @@ PROCEDURE insertUserXBlackList(pReason IN VARCHAR2, pIdUser IN NUMBER, pIdReport
 -- GET
 FUNCTION getBlackList RETURN SYS_REFCURSOR;
 FUNCTION getUserXBlackList RETURN SYS_REFCURSOR;
+FUNCTION getUsersFromBlackList(pIdBlackList IN NUMBER) RETURN SYS_REFCURSOR;
 
 -- DELETE
 PROCEDURE deleteUserFromBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER);

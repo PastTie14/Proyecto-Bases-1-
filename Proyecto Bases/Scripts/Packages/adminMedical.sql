@@ -20,14 +20,13 @@ PROCEDURE updateDisease(pIdDisease IN NUMBER, pName IN VARCHAR2);
 PROCEDURE updateMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN VARCHAR2,
                                 pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER);
 
---PROCEDURE updateDiseaseXMedicSheet(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
-
---PROCEDURE updateTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
-
 -- GET
 FUNCTION getTreatment RETURN SYS_REFCURSOR;
 FUNCTION getDisease RETURN SYS_REFCURSOR;
 FUNCTION getMedicSheet RETURN SYS_REFCURSOR;
 FUNCTION getDiseaseXMedicSheet RETURN SYS_REFCURSOR;
 FUNCTION getTreatmentXDisease RETURN SYS_REFCURSOR;
+FUNCTION getDiseasesFromMedicSheet(pIdMedicSheet IN NUMBER) RETURN SYS_REFCURSOR;
+FUNCTION getTreatmentsForDisease(pIdDisease IN NUMBER) RETURN SYS_REFCURSOR;
+
 END adminMedical;

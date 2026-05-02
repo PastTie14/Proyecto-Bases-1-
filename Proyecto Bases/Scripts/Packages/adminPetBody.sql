@@ -112,6 +112,51 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getPetColors(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT c."name"
+        FROM color c
+        
+        INNER JOIN pet_x_color pxc
+        ON c.id_color = pxc.id_color
+        
+        WHERE pxc.id_pet = pIdPet;
+    RETURN v_cursor;
+END;
+
+FUNCTION getDistrictPets(pIdDistrict IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT p.id_pet, p.first_name
+        FROM pet p
+        
+        INNER JOIN pet_x_district pxd
+        ON p.id_pet= pxd.id_pet
+        
+        WHERE pxd.id_district = pIdDistrict;
+    RETURN v_cursor;
+END;
+
+FUNCTION getCribHousePetTypes(pIdCribHouse IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT pt."name"
+        FROM pet_type pt
+        
+        INNER JOIN pet_type_x_crib_house ptxch
+        ON pt.id_pet_type = ptxch.id_pet_type
+        
+        WHERE ptxch.id_crib_house = pIdCribHouse;
+    RETURN v_cursor;
+END;
+
 -- ======================================== DELETE ========================================
 
 PROCEDURE deletePet(pIdPet IN NUMBER)

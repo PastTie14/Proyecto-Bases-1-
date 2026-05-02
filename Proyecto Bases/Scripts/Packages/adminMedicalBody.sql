@@ -86,29 +86,8 @@ BEGIN
     COMMIT;
 END;
 
-/*
-PROCEDURE updateDiseaseXMedicSheet(pIdTreatment IN NUMBER, pIdDisease IN NUMBER)
-IS
-BEGIN
-    UPDATE disease_x_medic_sheet
-    SET 
-    
-    WHERE ;
-    COMMIT;
-END;
-
-PROCEDURE updateTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER)
-IS
-BEGIN
-    UPDATE treatment_x_disease
-    SET 
-    
-    WHERE ;
-    COMMIT;
-END;
-*/
-
 -- ======================================== GET ========================================
+
 FUNCTION getTreatment RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -152,6 +131,36 @@ IS
         OPEN v_cursor FOR
             SELECT * FROM treatment_x_disease;
         RETURN v_cursor;
+END;
+
+FUNCTION getDiseasesFromMedicSheet(pIdMedicSheet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT d."name"
+        FROM disease d
+    
+        INNER JOIN disease_x_medic_sheet dxms
+        ON d.id_disease = dxms.id_disease
+    
+        WHERE dxms.id_medic_sheet = pIdMedicSheet;
+    RETURN v_cursor;
+END;
+
+FUNCTION getTreatmentsForDisease(pIdDisease IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT t."name"
+        FROM treatment t
+    
+        INNER JOIN treatment_x_disease txd
+        ON t.id_treatment = txd.id_treatment
+    
+        WHERE txd.id_disease = pIdDisease;
+    RETURN v_cursor;
 END;
 
 END adminMedical;

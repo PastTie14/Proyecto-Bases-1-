@@ -36,6 +36,21 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getUsersFromBlackList(pIdBlackList IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR 
+        SELECT u.email, uxbl.reason
+        FROM user_x_black_list uxbl
+    
+        INNER JOIN "user" u
+        ON uxbl.id_user = u.id_user
+    
+        WHERE uxbl.id_report = pIdBlackList;
+    RETURN v_cursor;
+END;
+
 -- ======================================== DELETE ========================================
 
 PROCEDURE deleteUserFromBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)

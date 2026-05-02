@@ -31,7 +31,7 @@ BEGIN
         FROM phone_number p
         
         WHERE p.id_user = pIdUser;
-        RETURN phoneCursor;
+    RETURN phoneCursor;
 END;
 
 FUNCTION getPetPhones(pIdPet IN NUMBER) RETURN SYS_REFCURSOR 
@@ -43,7 +43,7 @@ BEGIN
         FROM phone_number p
         
         WHERE p.id_pet = pIdPet;
-        RETURN phoneCursor;
+    RETURN phoneCursor;
 END;
 
 FUNCTION getVeterinarianPhones(pIdVeterinarian IN NUMBER) RETURN SYS_REFCURSOR 
@@ -55,7 +55,7 @@ BEGIN
         FROM phone_number p
         
         WHERE p.id_veterinarian = pIdVeterinarian;
-        RETURN phoneCursor;
+    RETURN phoneCursor;
 END;
 
 -- ======================================== DELETE ========================================
