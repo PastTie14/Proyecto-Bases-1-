@@ -119,6 +119,12 @@ BEGIN
     RETURN v_cursor;
 END;
 
+
+
+
+
+
+
 FUNCTION getUserById(pIdUser IN NUMBER) RETURN SYS_REFCURSOR 
 IS
     v_cursor SYS_REFCURSOR;
