@@ -19,14 +19,6 @@ PROCEDURE updatePet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHA
                     pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                     pEmail IN VARCHAR2, pIdStatus IN NUMBER);
 
-/*
-PROCEDURE updatePetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER);
-
-PROCEDURE updatePetXDistrict(pIdPet IN NUMBER, pIdDistrict IN NUMBER);
-
-PROCEDURE updatePetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER);
-*/
-
 -- GET 
 FUNCTION getPet RETURN SYS_REFCURSOR;
 FUNCTION getIdChip RETURN SYS_REFCURSOR;

@@ -70,35 +70,6 @@ BEGIN
     COMMIT;
 END;                                       
 
-/*
-PROCEDURE updatePetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER)
-IS
-BEGIN
-    UPDATE pet_x_color
-    SET 
-    WHERE ;
-    COMMIT;
-END;
-
-PROCEDURE updatePetXDistrict(pIdPet IN NUMBER, pIdDistrict IN NUMBER)
-IS
-BEGIN
-    UPDATE pet_x_district
-    SET 
-    WHERE ;
-    COMMIT;
-END;
-
-PROCEDURE updatePetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER)
-IS
-BEGIN
-    UPDATE pet_type_x_crib_house
-    SET 
-    WHERE ;
-    COMMIT;
-END;
-*/
-
 -- ======================================== GET ========================================
 
 FUNCTION getPet RETURN SYS_REFCURSOR
