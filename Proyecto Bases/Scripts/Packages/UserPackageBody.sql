@@ -119,6 +119,15 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION login (p_email IN VARCHAR2, p_password IN VARCHAR2) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM "user"
+    WHERE email = p_email AND "password" = p_password;
+    RETURN v_cursor;
+END;
+
 FUNCTION getAssociation RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;

@@ -17,6 +17,8 @@ BEGIN
     RETURN (n_pet_id); -- returns the pet id to use it in intermediate tables
 END insertPet;
 
+
+
 PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
                         pRegistrationDate IN DATE, pIdPet IN NUMBER)
 IS 
@@ -108,6 +110,25 @@ BEGIN
     OPEN v_cursor FOR SELECT * FROM pet;
     RETURN v_cursor;
 END;
+
+FUNCTION getPetById(p_idPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM pet
+    Where id_pet = p_idPet;
+    Return v_cursor;
+END;
+
+FUNCTION getPetByStatus(p_idStatus IN NUMBER) RETURN SYS_REFCURSOR
+IS 
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM pet
+    WHERE id_status = p_idStatus;
+    Return v_cursor;
+END;
+
 
 FUNCTION getIdChip RETURN SYS_REFCURSOR
 IS
