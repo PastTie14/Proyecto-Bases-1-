@@ -14,8 +14,8 @@ import java.time.format.DateTimeFormatter;
  * Página de registro de usuarios.
  *
  * Flujo:
- *   - Al registrar con éxito  → cierra esta ventana y muestra el LoginPage.
- *   - El botón "Ya tengo cuenta" → cierra esta ventana y muestra el LoginPage.
+ *   - Al registrarse exitosamente cierra esta ventana y muestra el LoginPage.
+ *   - El botón "Ya tengo cuenta" cierra esta ventana y muestra el LoginPage.
  */
 public class RegisterPage {
 
@@ -57,9 +57,9 @@ public class RegisterPage {
 
     private JPanel buildCard() {
         // La tarjeta usa BorderLayout:
-        //   NORTH  → encabezado (logo + título)
-        //   CENTER → formulario (GridBagLayout)
-        //   SOUTH  → botones
+        //   NORTH: encabezado (logo + título)
+        //   CENTER: formulario (GridBagLayout)
+        //   SOUTH: botones
         JPanel card = new JPanel(new BorderLayout(0, 0)) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -184,9 +184,9 @@ public class RegisterPage {
         }
 
         try {
-            String fecha = LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            DBConnection.insertUser(nombre, pass, email, fecha, "User", fecha);
+            //String fecha = LocalDateTime.now()
+                    //.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            DBConnection.insertUser(email, pass);
 
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",

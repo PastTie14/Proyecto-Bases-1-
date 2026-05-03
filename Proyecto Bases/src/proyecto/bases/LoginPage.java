@@ -2,7 +2,7 @@ package proyecto.bases;
 
 import Components.Format;
 import Connect.DBConnection;
-import Components.mainWindow;
+//import Components.mainWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -164,7 +164,7 @@ public class LoginPage {
             if (rs != null && rs.next()) {
                 // Login exitoso → cerrar esta ventana y abrir mainWindow
                 frame.dispose();
-                SwingUtilities.invokeLater(() -> mainWindow.main(null));
+//                SwingUtilities.invokeLater(() -> mainWindow.main(null));
             } else {
                 JOptionPane.showMessageDialog(frame,
                     "Email o contraseña incorrectos.",

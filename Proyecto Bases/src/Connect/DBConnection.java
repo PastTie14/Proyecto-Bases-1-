@@ -13,8 +13,10 @@ import oracle.jdbc.OracleTypes;
 public class DBConnection {
     
     public static String host = "jdbc:oracle:thin:@localhost:1521:Pr1";
-    public static String uName = "db_user";
-    public static String  uPass = "1414";
+    //public static String uName = "db_user";
+    //public static String  uPass = "1414";
+    public static String uName = "TS";
+    public static String  uPass = "TS";
     
     public static ResultSet getTuplas(String FunctionName) throws SQLException {
         System.out.println("BEGIN ? := " + FunctionName + "; END;");
@@ -265,9 +267,7 @@ public class DBConnection {
 
         return (ResultSet) stmt.getObject(1);
     }
-    public static void insertUser(String email, String password,
-                                    String createdBy, String createdAt,
-                                    String modifiedBy, String modifiedAt) throws SQLException {
+    public static void insertUser(String email, String password) throws SQLException {
 
         Connection con = null;
         CallableStatement stmt = null;
@@ -276,13 +276,9 @@ public class DBConnection {
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
 
-            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?, ?, ?, ?, ?)}");
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?)}");
             stmt.setString(1, email);
             stmt.setString(2, password);
-            stmt.setString(3, createdBy);
-            stmt.setDate(4, convertToDate(createdAt));
-            stmt.setString(5, modifiedBy);
-            stmt.setDate(6, convertToDate(modifiedAt));
 
             stmt.execute();
             con.commit();

@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/*
 public class SideMenuDemo2 {
 
     public static void main(String[] args) {
@@ -174,7 +174,7 @@ public class SideMenuDemo2 {
         return list;
     }
 
-    /** Crea un Pet con PetExtraInfo y MedicSheet a partir de los datos básicos. */
+    // Crea un Pet con PetExtraInfo y MedicSheet a partir de los datos básicos. 
     private static Pet makePet(int id, String name, String breed,
                                String status, String energy,
                                String training, int bounty, String currency) {
@@ -196,3 +196,4 @@ public class SideMenuDemo2 {
         return pet;
     }
 }
+*/
