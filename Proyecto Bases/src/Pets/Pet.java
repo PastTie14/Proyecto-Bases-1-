@@ -1,167 +1,214 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Pets;
-import Users.User;
+ 
+import static Connect.DBConnection.host;
+import static Connect.DBConnection.uName;
+import static Connect.DBConnection.uPass;
+import Connect.DBItem;
+import Connect.DBConnection;
+ 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import oracle.jdbc.OracleTypes;
+ 
 /**
+ * Modelo de mascota.
  *
- * @author Ian
+ * Los datos de la fila se almacenan en {@code data} (un ArrayList&lt;String&gt;)
+ * que se carga desde la BD la primera vez que se necesita.
+ * Cada getter extrae su valor por índice de posición.
+ *
+ * Índices de columna (según SELECT del stored procedure getPetById / getPet):
+ *   0  id_pet
+ *   1  picture
+ *   2  first_name
+ *   3  birth_date
+ *   4  date_lost
+ *   5  date_found
+ *   6  email
+ *   7  id_status
+ *   8  id_pet_type
+ *   9  id_rescuer
  */
-public class Pet {
-    private int id;
-    private String picture; //Dir de la imagen
-    private String birthdate;
-    private String email;
-    private String dateLost;
-    private String dateFound;
-    private String createdBy;
-    private String createdAt;
-    private String modifiedBy;
-    private String modifiedAt;
-    private String Status; //Valor Cerrado, depende de la tabla en la BD
-    private String petType;
-    private User rescuer;
-    private PetExtraInfo extraInfo;
-
-    public Pet(int id, String birthdate, String email, String dateLost, String dateFound, String createdBy, String createdAt, String Status, String petType) {
-        this.id = id;
-        this.birthdate = birthdate;
-        this.email = email;
-        this.dateLost = dateLost;
-        this.dateFound = dateFound;
-        this.createdBy = createdBy;
-        this.createdAt = createdAt;
-        this.Status = Status;
-        this.petType = petType;
-    }
-
-    public Pet(int id, String picture, String birthdate, String email, String dateLost, String createdBy, String createdAt, String Status, String petType, User rescuer) {
-        this.id = id;
-        this.picture = picture;
-        this.birthdate = birthdate;
-        this.email = email;
-        this.dateLost = dateLost;
-        this.createdBy = createdBy;
-        this.createdAt = createdAt;
-        this.Status = Status;
-        this.petType = petType;
-        this.rescuer = rescuer;
-    }
-    
-    
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+public class Pet extends DBItem {
+ 
+    private static final Logger LOG = Logger.getLogger(Pet.class.getName());
+ 
+    // ── Clave primaria ────────────────────────────────────────────
+    private final int id;
+ 
+    /**
+     * Almacena todos los campos de la fila como Strings.
+     * Se llena la primera vez que se llama a cualquier getter.
+     */
+    private ArrayList<String> data;
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  CONSTRUCTOR
+    // ─────────────────────────────────────────────────────────────
+ 
+    public Pet(int id) {
         this.id = id;
     }
-
-    public String getPicture() {
-        return picture;
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  CARGA LAZY
+    // ─────────────────────────────────────────────────────────────
+ 
+    /**
+     * Carga {@code data} desde la BD si todavía no se ha hecho.
+     * Se invoca automáticamente desde cada getter.
+     */
+    private void loadData() {
+        if (data != null) return;
+ 
+        data = new ArrayList<>();
+        try {
+            ResultSet rs = getItem();
+            if (rs != null && rs.next()) {
+                int cols = rs.getMetaData().getColumnCount();
+                for (int i = 1; i <= cols; i++) {
+                    data.add(rs.getString(i)); // null se guarda como null
+                }
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error al cargar datos de Pet id=" + id, ex);
+        }
     }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  GETTERS — cada uno accede a su índice en data
+    // ─────────────────────────────────────────────────────────────
+ 
+    public int    getId()        { return id; }
+ 
+    public String getPicture()   { loadData(); return get(1); }
+    public String getFirstName() { loadData(); return get(2); }
+    public String getBirthdate() { loadData(); return get(3); }
+    public String getDateLost()  { loadData(); return get(4); }
+    public String getDateFound() { loadData(); return get(5); }
+    public String getEmail()     { loadData(); return get(6); }
+    public int    getIdStatus()  { loadData(); return getInt(7); }
+    public int    getIdPetType() { loadData(); return getInt(8); }
+    public int    getIdRescuer() { loadData(); return getInt(9); }
+ 
+    /** Alias para mantener compatibilidad con los componentes existentes. */
+    public String getPetType() { loadData(); return get(2); }
+    public String getStatus()  { loadData(); return get(7); }
+ 
+    /** Info extra (tabla aparte) — implementar cuando esté disponible. */
+    public PetExtraInfo getExtraInfo() { return null; }
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  HELPERS INTERNOS
+    // ─────────────────────────────────────────────────────────────
+ 
+    /** Retorna el valor en el índice dado, o null si está fuera de rango. */
+    private String get(int index) {
+        return (data != null && index < data.size()) ? data.get(index) : null;
     }
-
-    public String getBirthdate() {
-        return birthdate;
+ 
+    /** Retorna el valor como int; 0 si es null o no parseable. */
+    private int getInt(int index) {
+        String val = get(index);
+        if (val == null) return 0;
+        try { return Integer.parseInt(val); }
+        catch (NumberFormatException e) { return 0; }
     }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDateLost() {
-        return dateLost;
-    }
-
-    public void setDateLost(String dateLost) {
-        this.dateLost = dateLost;
-    }
-
-    public String getDateFound() {
-        return dateFound;
-    }
-
-    public void setDateFound(String dateFound) {
-        this.dateFound = dateFound;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public String getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(String modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
-    public String getStatus() {
-        return Status;
-    }
-
-    public void setStatus(String Status) {
-        this.Status = Status;
-    }
-
-    public String getPetType() {
-        return petType;
-    }
-
-    public void setPetType(String petType) {
-        this.petType = petType;
-    }
-
-    public User getRescuer() {
-        return rescuer;
-    }
-
-    public void setRescuer(User rescuer) {
-        this.rescuer = rescuer;
-    }
-
-    public PetExtraInfo getExtraInfo() {
-        return extraInfo;
-    }
-
-    public void setExtraInfo(PetExtraInfo extraInfo) {
-        this.extraInfo = extraInfo;
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  OPERACIONES DE BD — ESTÁTICAS
+    // ─────────────────────────────────────────────────────────────
+ 
+    public static ResultSet getAllPets() {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getPet(); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.execute();
+            return (ResultSet) stmt.getObject(1);
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    
+    public static ResultSet getAllPetsByStatus(int p_IdStatus){
+         try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getPetByStatus("+p_IdStatus+"); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.execute();
+            return (ResultSet) stmt.getObject(1);
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  OPERACIONES DE BD — INSTANCIA
+    // ─────────────────────────────────────────────────────────────
+ 
+    @Override
+    public ResultSet getItem() {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getPetById(?); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.setInt(2, id);
+            stmt.execute();
+            return (ResultSet) stmt.getObject(1);
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+ 
+    public void updateItem(String pPicture, String pFirstName, String pBirthDate,
+                           String pDateLost, String pDateFound, String pEmail, int pIdStatus) {
+        Connection con = null;
+        CallableStatement stmt = null;
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+ 
+            stmt = con.prepareCall("{ CALL adminPet.updatePet(?, ?, ?, ?, ?, ?, ?, ?) }");
+            stmt.setInt(1, id);
+            stmt.setString(2, pPicture);
+            stmt.setString(3, pFirstName);
+            stmt.setString(4, pBirthDate);
+            stmt.setString(5, pDateLost);
+            stmt.setString(6, pDateFound);
+            stmt.setString(7, pEmail);
+            stmt.setInt(8, pIdStatus);
+            stmt.execute();
+            con.commit();
+ 
+            data = null; // invalida caché para refrescar en el próximo getter
+ 
+        } catch (Exception e) {
+            if (con != null) try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (con  != null) try { con.close();  } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+ 
+    @Override
+    public void deleteItem() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+ 
+    @Override
+    public void updateItem() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
+ 
