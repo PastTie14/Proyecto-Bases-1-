@@ -119,6 +119,16 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getUserById(pIdUser IN NUMBER) RETURN SYS_REFCURSOR 
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT u.email FROM "user" u
+        WHERE u.id_user = pIdUser;
+    RETURN v_cursor;
+END;
+
 FUNCTION login (p_email IN VARCHAR2, p_password IN VARCHAR2) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -128,6 +138,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
+
 FUNCTION getAssociation RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -135,6 +146,17 @@ BEGIN
     OPEN v_cursor FOR SELECT * FROM association;
     RETURN v_cursor;
 END;
+
+FUNCTION getAssociationById(pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR 
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT a."name" FROM association a
+        WHERE a.id_user = pIdAssociation;
+    RETURN v_cursor;
+END;
+
 
 FUNCTION getAdopter RETURN SYS_REFCURSOR
 IS
@@ -144,6 +166,18 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getAdopterById(pIdAdopter IN NUMBER) RETURN SYS_REFCURSOR 
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT a.first_name, a.second_name, a.first_surname, a.second_surname 
+        FROM adopter a
+        WHERE a.id_user = pIdAdopter;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getRescuer RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -152,11 +186,33 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getRescuerById(pIdRescuer IN NUMBER) RETURN SYS_REFCURSOR 
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT r.first_name, r.second_name, r.first_surname, r.second_surname 
+        FROM rescuer r
+        WHERE r.id_user = pIdRescuer;
+    RETURN v_cursor;
+END;
+
+
 FUNCTION getCribHouse RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR SELECT * FROM crib_house;
+    RETURN v_cursor;
+END;
+
+FUNCTION getCribHouseById(pIdCribHouse IN NUMBER) RETURN SYS_REFCURSOR 
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT ch."name" FROM crib_house ch
+        WHERE ch.id_user = pIdCribHouse;
     RETURN v_cursor;
 END;
 
