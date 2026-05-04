@@ -35,6 +35,7 @@ BEGIN
     OPEN v_cursor FOR SELECT * FROM user_x_black_list;
     RETURN v_cursor;
 END;
+<<<<<<< Updated upstream
 
 FUNCTION getUsersFromBlackList(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
 IS
@@ -54,6 +55,9 @@ BEGIN
     RETURN v_cursor;
 END;
 
+=======
+  
+>>>>>>> Stashed changes
 -- ======================================== DELETE ========================================
 
 PROCEDURE deleteUserFromBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)

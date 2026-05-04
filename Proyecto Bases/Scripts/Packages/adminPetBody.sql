@@ -133,6 +133,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
+<<<<<<< Updated upstream
 FUNCTION getPetColors(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -177,6 +178,16 @@ BEGIN
         WHERE ptxch.id_crib_house = pIdCribHouse;
     RETURN v_cursor;
 END;
+=======
+FUNCTION getCardInfo(p_id_pet IN NUMBER) RETURN SYS_REFCURSOR
+IS 
+v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM pet;
+    RETURN v_cursor;
+END;
+
+
 
 -- ======================================== DELETE ========================================
 

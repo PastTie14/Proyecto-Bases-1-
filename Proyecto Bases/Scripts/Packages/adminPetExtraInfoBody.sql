@@ -117,6 +117,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
+<<<<<<< Updated upstream
 FUNCTION getPetExtraInfoById(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -128,6 +129,17 @@ BEGIN
 END;
 
 
+=======
+FUNCTION getPetExtraInfoById(p_Id_pet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM pet_extra_info
+    WHERE id_pet = p_id_pet;
+    RETURN v_cursor;
+END;
+
+>>>>>>> Stashed changes
 FUNCTION getCurrentStatus RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -136,12 +148,21 @@ BEGIN
     RETURN v_cursor;
 END;
 
+<<<<<<< Updated upstream
 FUNCTION getCurrentStatusById(pIdCurrentStatus IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR SELECT cs.status_type FROM current_status cs 
         WHERE cs.id_current_status = pIdCurrentStatus;
+=======
+FUNCTION getCurrentStatusById(p_id_currStatus IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM current_status
+    WHERE p_id_currStatus = id_current_status;
+>>>>>>> Stashed changes
     RETURN v_cursor;
 END;
 

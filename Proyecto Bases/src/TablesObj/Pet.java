@@ -1,4 +1,4 @@
-package Pets;
+package TablesObj;
  
 import static Connect.DBConnection.host;
 import static Connect.DBConnection.uName;
@@ -102,7 +102,7 @@ public class Pet extends DBItem {
     public String getStatus()  { loadData(); return get(7); }
  
     /** Info extra (tabla aparte) — implementar cuando esté disponible. */
-    public PetExtraInfo getExtraInfo() { return null; }
+    public PetExtraInfo getExtraInfo() { return new PetExtraInfo(id); }
  
     // ─────────────────────────────────────────────────────────────
     //  HELPERS INTERNOS

@@ -1,16 +1,21 @@
 package Components;
 
-import Pets.Pet;
-import Pets.PetExtraInfo;
-import Pets.MedicSheet;
+import TablesObj.Pet;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+<<<<<<< Updated upstream:Proyecto Bases/src/Components/SideMenuDemo2.java
 /*
 public class SideMenuDemo2 {
+=======
+
+public class mainWindow {
+    
+>>>>>>> Stashed changes:Proyecto Bases/src/Components/mainWindow.java
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -32,8 +37,8 @@ public class SideMenuDemo2 {
             placeholder.setForeground(new Color(160, 160, 160));
             content.add(placeholder, BorderLayout.CENTER);
 
-            // ── PetGridPanel con mascotas de prueba ───────
-            PetGridPanel petGrid = new PetGridPanel(buildDemoPets());
+            // ── PetGridPanel con mascotas de prueba
+            PetGridPanel petGrid = new PetGridPanel();
             
             //PetForm para test
             PetFormPanel petForm = new PetFormPanel();
@@ -152,25 +157,11 @@ public class SideMenuDemo2 {
         });
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  DATOS DE PRUEBA
-    // ─────────────────────────────────────────────────────────────
 
-    private static ArrayList<Pet> buildDemoPets() {
-        ArrayList<Pet> list = new ArrayList<>();
+ 
 
-        list.add(makePet(1, "Max",            "Golden Retriever", "Available",        "High",   "Easy",     300, "$"));
-        list.add(makePet(2, "Luna",           "Tabby",            "Available",        "Medium", "Moderate", 150, "$"));
-        list.add(makePet(3, "Charlie",        "Beagle",           "Available",        "High",   "Moderate", 350, "$"));
-        list.add(makePet(4, "Mia",            "Siamese",          "Pending Adoption", "Low",    "Easy",     200, "$"));
-        list.add(makePet(5, "Rocky",          "Labrador",         "Available",        "High",   "Easy",     280, "$"));
-        list.add(makePet(6, "Bella",          "Persian",          "Adopted",          "Low",    "Easy",     180, "$"));
-        list.add(makePet(7, "Toby",           "Poodle",           "Available",        "Medium", "Easy",     320, "$"));
-        list.add(makePet(8, "Nala",           "Maine Coon",       "In Treatment",     "Medium", "Moderate", 220, "$"));
-        list.add(makePet(9, "Zeus",           "German Shepherd",  "Available",        "High",   "Hard",     400, "$"));
-        
-        list.get(0).setPicture("https://misanimales.com/wp-content/uploads/2021/07/golden-retriever-valla-768x576.jpg");
 
+<<<<<<< Updated upstream:Proyecto Bases/src/Components/SideMenuDemo2.java
         return list;
     }
 
@@ -195,5 +186,7 @@ public class SideMenuDemo2 {
         pet.setExtraInfo(extra);
         return pet;
     }
+=======
+>>>>>>> Stashed changes:Proyecto Bases/src/Components/mainWindow.java
 }
 */
