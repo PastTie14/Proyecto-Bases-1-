@@ -9,6 +9,7 @@ create or replace PACKAGE adminCatalogs IS
     PROCEDURE insertStatus(p_id_status IN NUMBER, p_status_type VARCHAR2);
     PROCEDURE insertColor(p_id_color IN NUMBER, p_name VARCHAR2);
     PROCEDURE insertValueType(p_id_value_type IN NUMBER, p_type VARCHAR2);
+    PROCEDURE insertSize(p_id_size IN NUMBER, p_name IN VARCHAR2);
 
     -- UPDATE
     PROCEDURE updateCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2);
@@ -48,5 +49,8 @@ create or replace PACKAGE adminCatalogs IS
     
     FUNCTION getValueType RETURN SYS_REFCURSOR;
     FUNCTION getValueTypeById(pIdValueType IN NUMBER) RETURN SYS_REFCURSOR;
+    
+    FUNCTION getSize RETURN SYS_REFCURSOR;
+    FUNCTION getSizeById(pIdSize IN NUMBER) RETURN SYS_REFCURSOR;
     
 END adminCatalogs;

@@ -65,6 +65,12 @@ create or replace PACKAGE BODY adminCatalogs AS
         COMMIT;
     END;
 
+    PROCEDURE insertSize(p_id_size IN NUMBER, p_name IN VARCHAR2) IS
+    BEGIN
+        INSERT INTO "size" (id_size, "name")
+        VALUES(p_id_size, p_name);
+        COMMIT;
+    END;
 
     -- ==================== UPDATE ====================
 
@@ -311,5 +317,22 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
     
+    
+    FUNCTION getSize RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM "size";
+        RETURN v_cursor;
+    END;
+    
+    FUNCTION getSizeById(pIdSize IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT s."name" FROM "size" s
+            WHERE s.id_size = pIdSize;
+        RETURN v_cursor;
+    END;
 
 END adminCatalogs;
