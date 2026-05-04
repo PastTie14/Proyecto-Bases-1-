@@ -9,6 +9,8 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.event.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,12 +32,7 @@ public class RegisterPage {
     private final JTextField tfFirstSurname = buildTextField();
     private final JTextField tfSecondSurname = buildTextField();
     
-    private final String[] donationsRequired = {"Yes", "No"};
-    private final JComboBox comboBoxDonations = buildComboBox(donationsRequired);
-    private final JCheckBox checkBox1 = buildCheckBox("Small");
-    private final JCheckBox checkBox2 = buildCheckBox("Medium");
-    private final JCheckBox checkBox3 = buildCheckBox("Big");
-    
+    private final JCheckBox donationsCheckBox = buildCheckBox("Requires donations");
     private final JPasswordField tfPass  = buildPasswordField();
     private final JTextField tfEmail  = buildTextField();
 
@@ -47,6 +44,8 @@ public class RegisterPage {
     
     private JPanel form;
     private GridBagConstraints gc;
+    private List<JCheckBox> sizeList = new ArrayList<>();
+    private JPanel sizesPanel;
 
     // ─────────────────────────────────────────────────────────────
     public RegisterPage(JFrame loginFrame) {
@@ -217,16 +216,10 @@ public class RegisterPage {
             addFormField(current, "Name", tfName, true);
             current+= 2;
             
-            addFormField(current, "Requires donations", comboBoxDonations, true);
+            addFormField(current, "Requires donations", donationsCheckBox, true);
             current+= 2;
             
-            addFormField(current, "Small", checkBox1, true);
-            current+= 2;
-            
-            addFormField(current, "Medium", checkBox2, true);
-            current+= 2;
-            
-            addFormField(current, "Big", checkBox3, true);
+            addSizesSection(current);
             current+= 2;
         }
         
@@ -239,6 +232,92 @@ public class RegisterPage {
         // updates the window
         form.revalidate();
         form.repaint();
+    }
+    
+    // Método para agregar la sección de tamaños
+    private void addSizesSection(int gridY) {
+        // Label para la sección
+        GridBagConstraints labelGc = new GridBagConstraints();
+        labelGc.fill = GridBagConstraints.HORIZONTAL;
+        labelGc.weightx = 1.0;
+        labelGc.gridx = 0;
+        labelGc.gridy = gridY;
+        labelGc.insets = new Insets(0, 0, 4, 0);
+        form.add(fieldLabel("Accepted pet sizes:"), labelGc);
+        
+        // Panel para los checkboxes
+        sizesPanel = new JPanel();
+        sizesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        sizesPanel.setOpaque(false);
+        sizesPanel.setBackground(Format.COLOR_BG);
+        sizesPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Format.COLOR_DIVIDER, 1, true),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        
+        // Cargar tamaños desde la base de datos
+        loadSizesFromDatabase();
+        
+        // Agregar el panel al formulario
+        GridBagConstraints fieldGc = new GridBagConstraints();
+        fieldGc.fill = GridBagConstraints.HORIZONTAL;
+        fieldGc.weightx = 1.0;
+        fieldGc.gridx = 0;
+        fieldGc.gridy = gridY + 1;
+        fieldGc.insets = new Insets(0, 0, 14, 0);
+        form.add(sizesPanel, fieldGc);
+    }
+    
+    // Método para cargar tamaños desde la base de datos
+    private void loadSizesFromDatabase() {
+        sizeList.clear();
+        sizesPanel.removeAll();
+        
+        try (ResultSet rs = DBConnection.getSizes()) {
+            while (rs.next()) {
+                int id = rs.getInt("id_size");
+                String name = rs.getString("name");
+                
+                JCheckBox checkBox = new JCheckBox(name);
+                checkBox.setFont(Format.FONT_BODY_SMALL);
+                checkBox.setForeground(Format.COLOR_TEXT_PRIMARY);
+                checkBox.setOpaque(false);
+                checkBox.putClientProperty("id_size", id); // Guardar el ID
+                
+                sizeList.add(checkBox);
+                sizesPanel.add(checkBox);
+            }
+            
+            // Si no hay tamaños, mostrar un mensaje
+            if (sizeList.isEmpty()) {
+                JLabel emptyLabel = new JLabel("No hay tamaños disponibles");
+                emptyLabel.setFont(Format.FONT_BODY_SMALL);
+                emptyLabel.setForeground(Format.COLOR_TEXT_SECONDARY);
+                sizesPanel.add(emptyLabel);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JLabel errorLabel = new JLabel("Error al cargar tamaños");
+            errorLabel.setFont(Format.FONT_BODY_SMALL);
+            errorLabel.setForeground(Color.RED);
+            sizesPanel.add(errorLabel);
+        }
+        
+        sizesPanel.revalidate();
+        sizesPanel.repaint();
+    }
+    
+    // Método para obtener los tamaños seleccionados
+    private List<Integer> getSelectedSizes() {
+        List<Integer> selectedIds = new ArrayList<>();
+        for (JCheckBox checkBox : sizeList) {
+            if (checkBox.isSelected()) {
+                Integer id = (Integer) checkBox.getClientProperty("id_size");
+                selectedIds.add(id);
+            }
+        }
+        return selectedIds;
     }
 
     /*
@@ -369,11 +448,13 @@ public class RegisterPage {
             }
         } // end of association
         
-        /*
+        
         if (comboBoxUsers.getSelectedItem().equals("Crib house")) {
             
             String name = tfName.getText().trim();
-            int size1 = checkBox1.getInt();
+            
+            // 1 if the checkBox is selected, 0 if not
+            int requiresDonations = donationsCheckBox.isSelected() ? 1 : 0;
             
             if (name.isBlank() || pass.isBlank() || email.isBlank()) {
             JOptionPane.showMessageDialog(frame,
@@ -383,8 +464,14 @@ public class RegisterPage {
         }
 
         try {
+            List<Integer> selectedSizes = getSelectedSizes();
+            if (selectedSizes.isEmpty()){
+                JOptionPane.showMessageDialog(frame, "Select at least one pet size", 
+                        "No sizes selected", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             
-            //DBConnection.insertCribHouse(email, pass, name);
+            DBConnection.insertCribHouse(email, pass, name, requiresDonations, selectedSizes);
                     
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
@@ -399,7 +486,7 @@ public class RegisterPage {
                 "Error", JOptionPane.ERROR_MESSAGE);
             }
         } // end of Crib house
-        */
+        
     }
 
     private void volverALogin() {
@@ -491,9 +578,6 @@ public class RegisterPage {
         JComboBox combox = new JComboBox(users);
         combox.setFont(Format.FONT_BODY_SMALL);
         combox.setForeground(Format.COLOR_PRIMARY);
-        //combox.setContentAreaFilled(false);
-        //combox.setBorderPainted(false);
-        //combox.setFocusPainted(false);
         return combox;
     }
     

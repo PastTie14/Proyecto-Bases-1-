@@ -72,6 +72,13 @@ create or replace PACKAGE BODY adminCatalogs AS
         COMMIT;
     END;
 
+    PROCEDURE insertSizeXCribHouse(p_id_size IN NUMBER, p_id_crib_house IN NUMBER) IS
+    BEGIN
+        INSERT INTO size_x_crib_house (id_size, id_crib_house)
+        VALUES(p_id_size, p_id_crib_house);
+        COMMIT;
+    END;
+    
     -- ==================== UPDATE ====================
 
     PROCEDURE updateCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2) IS
@@ -332,6 +339,16 @@ create or replace PACKAGE BODY adminCatalogs AS
         OPEN v_cursor FOR
             SELECT s."name" FROM "size" s
             WHERE s.id_size = pIdSize;
+        RETURN v_cursor;
+    END;
+    
+    FUNCTION getSizes RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id_size, "name"
+            FROM "size" 
+            ORDER BY id_size;
         RETURN v_cursor;
     END;
 

@@ -10,6 +10,7 @@ create or replace PACKAGE adminCatalogs IS
     PROCEDURE insertColor(p_id_color IN NUMBER, p_name VARCHAR2);
     PROCEDURE insertValueType(p_id_value_type IN NUMBER, p_type VARCHAR2);
     PROCEDURE insertSize(p_id_size IN NUMBER, p_name IN VARCHAR2);
+    PROCEDURE insertSizeXCribHouse(p_id_size IN NUMBER, p_id_crib_house IN NUMBER);
 
     -- UPDATE
     PROCEDURE updateCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2);
@@ -52,5 +53,6 @@ create or replace PACKAGE adminCatalogs IS
     
     FUNCTION getSize RETURN SYS_REFCURSOR;
     FUNCTION getSizeById(pIdSize IN NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getSizes RETURN SYS_REFCURSOR;
     
 END adminCatalogs;

@@ -1,11 +1,11 @@
 CREATE OR REPLACE PACKAGE adminUser IS
 
 -- INSERT
-PROCEDURE insertUser(pIdUser IN NUMBER, pEmail VARCHAR2, pPassword VARCHAR2);
+PROCEDURE insertUser(pIdUser OUT NUMBER, pEmail VARCHAR2, pPassword VARCHAR2);
 PROCEDURE insertAssociation(pIdUser IN NUMBER, pName VARCHAR2);
 PROCEDURE insertAdopter(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
 PROCEDURE insertRescuer(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
-PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER);
+PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER);
 PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
                     pCurrentValue VARCHAR2, pIdUser IN NUMBER);
 
@@ -16,7 +16,7 @@ PROCEDURE updateAdopter(pIdUser IN NUMBER, pFirstName IN VARCHAR2, pSecondName V
                         pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
 PROCEDURE updateRescuer(pIdUser IN NUMBER, pFirstName IN VARCHAR2, pSecondName IN VARCHAR2, 
                         pFirstSurname IN VARCHAR2, pSecondSurname IN VARCHAR2);
-PROCEDURE updateCribHouse(pIdUser IN NUMBER, pName IN VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER);
+PROCEDURE updateCribHouse(pIdUser IN NUMBER, pName IN VARCHAR2, pRequiresDonations IN NUMBER);
 
 -- GET
 FUNCTION getUser RETURN SYS_REFCURSOR;

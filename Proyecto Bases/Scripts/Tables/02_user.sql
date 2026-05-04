@@ -134,8 +134,7 @@ CREATE TABLE crib_house
 (
     id_user            NUMBER(8),
     "name"             VARCHAR2(100),
-    requires_donations NUMBER(1) DEFAULT 0,
-    accepted_size      NUMBER(4)
+    requires_donations NUMBER(1) DEFAULT 0
 )
 TABLESPACE TS_DATA;
 
@@ -147,9 +146,6 @@ ALTER TABLE crib_house
 
 ALTER TABLE crib_house
     MODIFY requires_donations CONSTRAINT cribHouse_requiresDonations_nn NOT NULL;
-
-ALTER TABLE crib_house
-    MODIFY accepted_size CONSTRAINT cribHouse_acceptedSize_nn NOT NULL;
 
 ALTER TABLE crib_house
     ADD CONSTRAINT pk_crib_house PRIMARY KEY (id_user)

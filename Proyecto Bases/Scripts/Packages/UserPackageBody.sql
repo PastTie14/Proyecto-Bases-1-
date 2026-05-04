@@ -2,9 +2,10 @@ CREATE OR REPLACE PACKAGE BODY adminUser AS
 
 -- ======================================== INSERT ========================================
 
-PROCEDURE insertUser(pIdUser IN NUMBER, pEmail VARCHAR2, pPassword VARCHAR2)
+PROCEDURE insertUser(pIdUser OUT NUMBER, pEmail VARCHAR2, pPassword VARCHAR2)
 IS 
 BEGIN
+    SELECT s_user.nextVal INTO pIdUser FROM DUAL;
     INSERT INTO "user" (id_user, email, "password")
     VALUES(pIdUser, pEmail, pPassword);
     COMMIT;
@@ -34,11 +35,11 @@ BEGIN
     COMMIT;
 END;
 
-PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER)
+PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO crib_house (id_user, "name", requires_donations, accepted_size)
-    VALUES(pIdUser, pName, pRequiresDonations, pAcceptedSize);
+    INSERT INTO crib_house (id_user, "name", requires_donations)
+    VALUES(pIdUser, pName, pRequiresDonations);
     COMMIT;
 END;
 
@@ -98,13 +99,12 @@ BEGIN
     COMMIT;
 END;
 
-PROCEDURE updateCribHouse(pIdUser IN NUMBER, pName IN VARCHAR2, pRequiresDonations IN NUMBER, pAcceptedSize IN NUMBER)
+PROCEDURE updateCribHouse(pIdUser IN NUMBER, pName IN VARCHAR2, pRequiresDonations IN NUMBER)
 IS
 BEGIN
     UPDATE crib_house
     SET "name" = pName,
-        requires_donations = pRequiresDonations,
-        accepted_size = pAcceptedSize
+        requires_donations = pRequiresDonations
     WHERE id_user = pIdUser;
     COMMIT;
 END;

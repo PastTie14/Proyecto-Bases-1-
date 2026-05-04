@@ -1,10 +1,13 @@
 package Connect;
 import java.sql.CallableStatement;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import oracle.jdbc.OracleTypes;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,6 +42,19 @@ public class DBConnection {
 
         return (ResultSet) stmt.getObject(1);
     }
+    
+    public static ResultSet getSizes() throws SQLException {
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        con = DriverManager.getConnection(host, uName, uPass);
+        
+        stmt = con.prepareCall("BEGIN ? := adminCatalogs.getSizes(); END;");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.execute();
+        
+        return (ResultSet) stmt.getObject(1);
+}
     
     public static ResultSet getPets() throws SQLException {
 
@@ -308,13 +324,20 @@ public class DBConnection {
             con.setAutoCommit(false);
             
             // calls insertUser to generate the id and then insertAdopter
-            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertAdopter(s_user.currVal, ?, ?, ?, ?)}");
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            stmt.setString(3, firstName);
-            stmt.setString(4, secondName);
-            stmt.setString(5, firstSurname);
-            stmt.setString(6, secondSurname);
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(?, ?, ?)}");
+            stmt.registerOutParameter(1, java.sql.Types.NUMERIC);
+            
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.execute();
+            
+            Long userId = stmt.getLong(1);
+            stmt = con.prepareCall("{ CALL adminUser.insertAdopter(?, ?, ?, ?, ?)}");
+            stmt.setLong(1, userId);
+            stmt.setString(2, firstName);
+            stmt.setString(3, secondName);
+            stmt.setString(4, firstSurname);
+            stmt.setString(5, secondSurname);
             
             stmt.execute();
             con.commit();
@@ -343,11 +366,18 @@ public class DBConnection {
             con.setAutoCommit(false);
             
             // calls insertUser to generate the id and then insertAssociation
-            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertAssociation(s_user.currVal, ?)}");
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            stmt.setString(3, name);
-
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(?, ?, ?)}");
+            stmt.registerOutParameter(1, java.sql.Types.NUMERIC);
+            
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.execute();
+            
+            Long userId = stmt.getLong(1);
+            stmt = con.prepareCall("{ CALL adminUser.insertAssociation(?, ?)}");
+            stmt.setLong(1, userId);
+            stmt.setString(2, name);
+            
             stmt.execute();
             con.commit();
 
@@ -365,26 +395,41 @@ public class DBConnection {
         }
     }
     
-    public static void insertCribHouse(String email, String password, String name, int requiresDonations, 
-                                        int acceptedSize) throws SQLException {
+    public static void insertCribHouse(String email, String password, String name, int requiresDonations,
+                                        List<Integer> acceptedSizes) throws SQLException {
 
         Connection con = null;
         CallableStatement stmt = null;
 
-        try {
+        try {            
+            
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
             
             // calls insertUser to generate the id and then insertCribHouse
-            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertCribHouse(s_user.currVal, ?, ?, ?)}");
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(?, ?, ?)}");
             
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            stmt.setString(3, name);
-            stmt.setInt(4, requiresDonations);
-            stmt.setInt(5, acceptedSize);
+            stmt.registerOutParameter(1, java.sql.Types.NUMERIC);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.execute();
+            
+            Long userId = stmt.getLong(1);
+            stmt = con.prepareCall("{ CALL adminUser.insertCribHouse(?, ?, ?)}");
+            
+            stmt.setLong(1, userId);
+            stmt.setString(2, name);
+            stmt.setInt(3, requiresDonations);
 
             stmt.execute();
+            
+            for (Integer sizeId : acceptedSizes) {
+                stmt = con.prepareCall("{ CALL adminCatalogs.insertSizeXCribHouse(?, ?)}");
+                stmt.setInt(1, sizeId);
+                stmt.setLong(2, userId);
+                stmt.execute();
+            }
+            
             con.commit();
 
         } catch (Exception e) {
@@ -411,13 +456,21 @@ public class DBConnection {
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
             
-            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertRescuer(s_user.currVal, ?, ?, ?, ?)}");
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            stmt.setString(3, firstName);
-            stmt.setString(4, secondName);
-            stmt.setString(5, firstSurname);
-            stmt.setString(6, secondSurname);
+            // calls insertUser to generate the id and then insertRescuer
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(?, ?, ?)}");
+            stmt.registerOutParameter(1, java.sql.Types.NUMERIC);
+            
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.execute();
+            
+            Long userId = stmt.getLong(1);
+            stmt = con.prepareCall("{ CALL adminUser.insertRescuer(?, ?, ?, ?, ?)}");
+            stmt.setLong(1, userId);
+            stmt.setString(2, firstName);
+            stmt.setString(3, secondName);
+            stmt.setString(4, firstSurname);
+            stmt.setString(5, secondSurname);
             
             stmt.execute();
             con.commit();
