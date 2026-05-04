@@ -341,15 +341,5 @@ create or replace PACKAGE BODY adminCatalogs AS
             WHERE s.id_size = pIdSize;
         RETURN v_cursor;
     END;
-    
-    FUNCTION getSizes RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id_size, "name"
-            FROM "size" 
-            ORDER BY id_size;
-        RETURN v_cursor;
-    END;
 
 END adminCatalogs;

@@ -49,12 +49,25 @@ public class DBConnection {
 
         con = DriverManager.getConnection(host, uName, uPass);
         
-        stmt = con.prepareCall("BEGIN ? := adminCatalogs.getSizes(); END;");
+        stmt = con.prepareCall("BEGIN ? := adminCatalogs.getSize(); END;");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.execute();
         
         return (ResultSet) stmt.getObject(1);
-}
+    }
+    
+    public static ResultSet getPetTypes() throws SQLException {
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        con = DriverManager.getConnection(host, uName, uPass);
+        
+        stmt = con.prepareCall("BEGIN ? := adminCatalogs.getPetType(); END;");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.execute();
+        
+        return (ResultSet) stmt.getObject(1);
+    }
     
     public static ResultSet getPets() throws SQLException {
 
@@ -396,7 +409,7 @@ public class DBConnection {
     }
     
     public static void insertCribHouse(String email, String password, String name, int requiresDonations,
-                                        List<Integer> acceptedSizes) throws SQLException {
+                                        List<Integer> acceptedPetTypes, List<Integer> acceptedSizes) throws SQLException {
 
         Connection con = null;
         CallableStatement stmt = null;
@@ -422,6 +435,13 @@ public class DBConnection {
             stmt.setInt(3, requiresDonations);
 
             stmt.execute();
+            
+            for (Integer petTypeId : acceptedPetTypes) {
+                stmt = con.prepareCall("{ CALL adminPet.insertPetTypeXCribHouse(?, ?)}");
+                stmt.setInt(1, petTypeId);
+                stmt.setLong(2, userId);
+                stmt.execute();
+            }
             
             for (Integer sizeId : acceptedSizes) {
                 stmt = con.prepareCall("{ CALL adminCatalogs.insertSizeXCribHouse(?, ?)}");
