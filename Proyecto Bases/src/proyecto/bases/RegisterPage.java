@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.event.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -22,12 +24,29 @@ public class RegisterPage {
     private final JFrame    frame;
     private final JFrame    loginFrame;   // referencia al Login para volver a él
 
-    private final JTextField tfNombre = buildTextField();
+    private final JTextField tfName = buildTextField();
+    private final JTextField tfFirstName = buildTextField();
+    private final JTextField tfSecondName = buildTextField();
+    private final JTextField tfFirstSurname = buildTextField();
+    private final JTextField tfSecondSurname = buildTextField();
+    
+    private final String[] donationsRequired = {"Yes", "No"};
+    private final JComboBox comboBoxDonations = buildComboBox(donationsRequired);
+    private final JCheckBox checkBox1 = buildCheckBox("Small");
+    private final JCheckBox checkBox2 = buildCheckBox("Medium");
+    private final JCheckBox checkBox3 = buildCheckBox("Big");
+    
     private final JPasswordField tfPass  = buildPasswordField();
     private final JTextField tfEmail  = buildTextField();
 
     private final JButton btnRegistrar  = buildPrimaryButton("Registrarse");
     private final JButton btnIrALogin   = buildLinkButton("¿Ya tenés cuenta? Iniciá sesión");
+    
+    private final String[] userTypes = {"Adopter", "Association", "Crib house", "Rescuer"};
+    private final JComboBox comboBoxUsers = buildComboBox(userTypes);
+    
+    private JPanel form;
+    private GridBagConstraints gc;
 
     // ─────────────────────────────────────────────────────────────
     public RegisterPage(JFrame loginFrame) {
@@ -35,7 +54,7 @@ public class RegisterPage {
 
         frame = new JFrame("Quiero un Peludo — Registro");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(460, 560);
+        frame.setSize(660, 900);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setContentPane(buildContent());
@@ -77,8 +96,8 @@ public class RegisterPage {
             }
         };
         card.setOpaque(false);
-        card.setPreferredSize(new Dimension(380, 480));
-        card.setBorder(BorderFactory.createEmptyBorder(32, 36, 28, 36));
+        card.setPreferredSize(new Dimension(680, 600));
+        card.setBorder(BorderFactory.createEmptyBorder(100, 40, 100, 40));
 
         card.add(buildHeader(), BorderLayout.NORTH);
         card.add(buildForm(),   BorderLayout.CENTER);
@@ -112,35 +131,141 @@ public class RegisterPage {
      * estén perfectamente alineados y ocupen todo el ancho disponible.
      */
     private JPanel buildForm() {
-        JPanel form = new JPanel(new GridBagLayout());
+        form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
 
-        GridBagConstraints gc = new GridBagConstraints();
+        gc = new GridBagConstraints();
         gc.fill      = GridBagConstraints.HORIZONTAL;
         gc.weightx   = 1.0;
         gc.gridx     = 0;
         gc.insets    = new Insets(0, 0, 4, 0);
 
+        // User types
+        gc.gridy = 0; gc.insets = new Insets(0, 0, 4, 0);
+        form.add(fieldLabel("User Type"), gc);
+        gc.gridy = 1; gc.insets = new Insets(0, 0, 4, 0);
+        form.add(comboBoxUsers, gc);
+        
+        /*
         // Nombre
-        gc.gridy = 0; form.add(fieldLabel("Nombre de usuario"), gc);
-        gc.gridy = 1; gc.insets = new Insets(0, 0, 14, 0);
-        form.add(tfNombre, gc);
-
-        // Contraseña
-        gc.gridy = 2; gc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Contraseña"), gc);
+        gc.gridy = 2; form.add(fieldLabel("Nombre de usuario"), gc);
         gc.gridy = 3; gc.insets = new Insets(0, 0, 14, 0);
-        form.add(tfPass, gc);
-
+        form.add(tfNombre, gc);
+        
+        
         // Email
-        gc.gridy = 4; gc.insets = new Insets(0, 0, 4, 0);
+        gc.gridy = 2; gc.insets = new Insets(0, 0, 4, 0);
         form.add(fieldLabel("Email"), gc);
-        gc.gridy = 5; gc.insets = new Insets(0, 0, 0, 0);
+        gc.gridy = 3; gc.insets = new Insets(0, 0, 0, 0);
         form.add(tfEmail, gc);
-
+        
+        // Contraseña
+        gc.gridy = 4; gc.insets = new Insets(0, 0, 4, 0);
+        form.add(fieldLabel("Contraseña"), gc);
+        gc.gridy = 5; gc.insets = new Insets(0, 0, 14, 0);
+        form.add(tfPass, gc);
+*/
+        updateFormFields();
+        
         return form;
     }
+    
+    
+    // Method for updating all the form fields depending on the user type
+    private void updateFormFields() {
+        // first, a list for the fixed components (the user type label and comboBox) is made
+        List<Component> fixedComponents = new ArrayList<>();
+        // next, all components in the form are saved in the list
+        for (int i = 0; i < form.getComponentCount(); i++) {
+            Component comp = form.getComponent(i);
+            GridBagConstraints compGc = ((GridBagLayout) form.getLayout()).getConstraints(comp);
+            
+            if (compGc.gridy <= 1)
+                fixedComponents.add(comp);
+        }
+        // everything is removed
+        form.removeAll();
+        
+        // and then the fixed components are reconstructed
+        for (Component comp : fixedComponents)
+            form.add(comp);
+        
+        // the current amount of components 
+        int current = 2;
+        
+        // depending on what user type is selected, different components are shown
+        if (comboBoxUsers.getSelectedItem().equals("Adopter") || comboBoxUsers.getSelectedItem().equals("Rescuer")) {
+            addFormField(current, "First name", tfFirstName, true);
+            current+= 2;
+            
+            addFormField(current, "Second name", tfSecondName, true);
+            current+= 2;
+            
+            addFormField(current, "First surname", tfFirstSurname, true);
+            current+= 2;
+            
+            addFormField(current, "Second surname", tfSecondSurname, true);   
+            current+= 2;
+        }
+        
+        if (comboBoxUsers.getSelectedItem().equals("Association")) {
+            addFormField(current, "Name", tfName, true);
+            current+= 2;
+        }
+        
+        if (comboBoxUsers.getSelectedItem().equals("Crib house")) {
+            addFormField(current, "Name", tfName, true);
+            current+= 2;
+            
+            addFormField(current, "Requires donations", comboBoxDonations, true);
+            current+= 2;
+            
+            addFormField(current, "Small", checkBox1, true);
+            current+= 2;
+            
+            addFormField(current, "Medium", checkBox2, true);
+            current+= 2;
+            
+            addFormField(current, "Big", checkBox3, true);
+            current+= 2;
+        }
+        
+        // adds the email and password text fields
+        addFormField(current, "Email", tfEmail, true);   
+        current+= 2;
+            
+        addFormField(current, "Password", tfPass, true);
+        
+        // updates the window
+        form.revalidate();
+        form.repaint();
+    }
 
+    /*
+        Adds form components
+    */
+    private void addFormField(int gridY, String labelText, JComponent field, boolean addBottomMargin) {
+        // The label
+        GridBagConstraints labelGc = new GridBagConstraints();
+        labelGc.fill = GridBagConstraints.HORIZONTAL;
+        labelGc.weightx = 1.0;
+        labelGc.gridx = 0;
+        labelGc.gridy = gridY;
+        labelGc.insets = new Insets(0, 0, 4, 0);
+        form.add(fieldLabel(labelText), labelGc);
+
+        // the field
+        GridBagConstraints fieldGc = new GridBagConstraints();
+        fieldGc.fill = GridBagConstraints.HORIZONTAL;
+        fieldGc.weightx = 1.0;
+        fieldGc.gridx = 0;
+        fieldGc.gridy = gridY + 1;
+        // checks wether a bottom margin is necessary
+        fieldGc.insets = new Insets(0, 0, addBottomMargin ? 14 : 0, 0);
+        form.add(field, fieldGc);
+    }
+    
+    
     /** Botones al pie de la tarjeta. */
     private JPanel buildFooter() {
         JPanel footer = new JPanel();
@@ -152,7 +277,7 @@ public class RegisterPage {
 
         footer.add(Box.createVerticalStrut(20));
         footer.add(btnRegistrar);
-        footer.add(Box.createVerticalStrut(10));
+        footer.add(Box.createVerticalStrut(20));
         footer.add(btnIrALogin);
         return footer;
     }
@@ -164,6 +289,7 @@ public class RegisterPage {
     private void wireEvents() {
         btnRegistrar.addActionListener(e -> registrar());
         btnIrALogin.addActionListener(e -> volverALogin());
+        comboBoxUsers.addActionListener(e -> updateFormFields());
 
         // Cerrar la ventana también vuelve al login
         frame.addWindowListener(new WindowAdapter() {
@@ -172,11 +298,19 @@ public class RegisterPage {
     }
 
     private void registrar() {
-        String nombre = tfNombre.getText().trim();
         String pass   = new String(tfPass.getPassword()).trim();
         String email  = tfEmail.getText().trim();
-
-        if (nombre.isBlank() || pass.isBlank() || email.isBlank()) {
+        
+        // they share attributes
+        if (comboBoxUsers.getSelectedItem().equals("Adopter") || comboBoxUsers.getSelectedItem().equals("Rescuer")) {
+            
+            String firstName = tfFirstName.getText().trim();
+            String secondName = tfSecondName.getText().trim();
+            String firstSurname = tfFirstSurname.getText().trim();
+            String secondSurname = tfSecondSurname.getText().trim();
+            
+            if (firstName.isBlank() || secondName.isBlank() || firstSurname.isBlank() || 
+                    secondSurname.isBlank() || pass.isBlank() || email.isBlank()) {
             JOptionPane.showMessageDialog(frame,
                 "Por favor completá todos los campos.",
                 "Campos incompletos", JOptionPane.WARNING_MESSAGE);
@@ -184,10 +318,13 @@ public class RegisterPage {
         }
 
         try {
-            //String fecha = LocalDateTime.now()
-                    //.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            DBConnection.insertUser(email, pass);
+            
+            if (comboBoxUsers.getSelectedItem().equals("Adopter"))
+                DBConnection.insertAdopter(email, pass, firstName, secondName, firstSurname, secondSurname);
 
+            if (comboBoxUsers.getSelectedItem().equals("Rescuer"))
+                DBConnection.insertRescuer(email, pass, firstName, secondName, firstSurname, secondSurname);
+                    
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
                 "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
@@ -199,7 +336,70 @@ public class RegisterPage {
             JOptionPane.showMessageDialog(frame,
                 "Error al registrar el usuario.",
                 "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } // end of adopter and rescuer
+        
+        if (comboBoxUsers.getSelectedItem().equals("Association")) {
+            
+            String name = tfName.getText().trim();
+            
+            
+            if (name.isBlank() || pass.isBlank() || email.isBlank()) {
+            JOptionPane.showMessageDialog(frame,
+                "Por favor completá todos los campos.",
+                "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        try {
+            
+            DBConnection.insertAssociation(email, pass, name);
+                    
+            JOptionPane.showMessageDialog(frame,
+                "Cuenta creada correctamente. Podés iniciar sesión.",
+                "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+
+            volverALogin();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                "Error al registrar el usuario.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } // end of association
+        
+        /*
+        if (comboBoxUsers.getSelectedItem().equals("Crib house")) {
+            
+            String name = tfName.getText().trim();
+            int size1 = checkBox1.getInt();
+            
+            if (name.isBlank() || pass.isBlank() || email.isBlank()) {
+            JOptionPane.showMessageDialog(frame,
+                "Por favor completá todos los campos.",
+                "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            
+            //DBConnection.insertCribHouse(email, pass, name);
+                    
+            JOptionPane.showMessageDialog(frame,
+                "Cuenta creada correctamente. Podés iniciar sesión.",
+                "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+
+            volverALogin();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                "Error al registrar el usuario.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } // end of Crib house
+        */
     }
 
     private void volverALogin() {
@@ -285,6 +485,26 @@ public class RegisterPage {
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;
+    }
+    
+    private static JComboBox buildComboBox(String[] users) {
+        JComboBox combox = new JComboBox(users);
+        combox.setFont(Format.FONT_BODY_SMALL);
+        combox.setForeground(Format.COLOR_PRIMARY);
+        //combox.setContentAreaFilled(false);
+        //combox.setBorderPainted(false);
+        //combox.setFocusPainted(false);
+        return combox;
+    }
+    
+    private static JCheckBox buildCheckBox(String label) {
+        JCheckBox checkBox = new JCheckBox(label);
+        checkBox.setFont(Format.FONT_BODY_SMALL);
+        checkBox.setForeground(Format.COLOR_PRIMARY);
+        checkBox.setContentAreaFilled(false);
+        checkBox.setBorderPainted(false);
+        checkBox.setFocusPainted(false);
+        return checkBox;
     }
 
     private static JLabel fieldLabel(String text) {

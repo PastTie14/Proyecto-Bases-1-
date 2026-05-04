@@ -297,7 +297,144 @@ public class DBConnection {
         }
     }
     
+    public static void insertAdopter(String email, String password, String firstName, String secondName, String firstSurname, 
+                                        String secondSurname) throws SQLException {
+
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+            
+            // calls insertUser to generate the id and then insertAdopter
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertAdopter(s_user.currVal, ?, ?, ?, ?)}");
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, firstName);
+            stmt.setString(4, secondName);
+            stmt.setString(5, firstSurname);
+            stmt.setString(6, secondSurname);
+            
+            stmt.execute();
+            con.commit();
+
+        } catch (Exception e) {
+            // Revertir si algo falla
+            if (con != null) {
+                try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace(); 
+
+        } finally {
+            // Cerrar recursos siempre
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
     
+    public static void insertAssociation(String email, String password, String name) throws SQLException {
+
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+            
+            // calls insertUser to generate the id and then insertAssociation
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertAssociation(s_user.currVal, ?)}");
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, name);
+
+            stmt.execute();
+            con.commit();
+
+        } catch (Exception e) {
+            // Revertir si algo falla
+            if (con != null) {
+                try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace(); 
+
+        } finally {
+            // Cerrar recursos siempre
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+    
+    public static void insertCribHouse(String email, String password, String name, int requiresDonations, 
+                                        int acceptedSize) throws SQLException {
+
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+            
+            // calls insertUser to generate the id and then insertCribHouse
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertCribHouse(s_user.currVal, ?, ?, ?)}");
+            
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, name);
+            stmt.setInt(4, requiresDonations);
+            stmt.setInt(5, acceptedSize);
+
+            stmt.execute();
+            con.commit();
+
+        } catch (Exception e) {
+            // Revertir si algo falla
+            if (con != null) {
+                try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace(); 
+
+        } finally {
+            // Cerrar recursos siempre
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+    
+    public static void insertRescuer(String email, String password, String firstName, String secondName, 
+                                    String firstSurname, String secondSurname) throws SQLException {
+
+        Connection con = null;
+        CallableStatement stmt = null;
+
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+            
+            stmt = con.prepareCall("{ CALL adminUser.insertUser(s_user.nextVal, ?, ?); adminUser.insertRescuer(s_user.currVal, ?, ?, ?, ?)}");
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, firstName);
+            stmt.setString(4, secondName);
+            stmt.setString(5, firstSurname);
+            stmt.setString(6, secondSurname);
+            
+            stmt.execute();
+            con.commit();
+
+        } catch (Exception e) {
+            // Revertir si algo falla
+            if (con != null) {
+                try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace(); 
+
+        } finally {
+            // Cerrar recursos siempre
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
 
     private static java.sql.Date convertToDate(String dateString) {
         String[] parts = dateString.split("/");
