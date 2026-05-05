@@ -5,70 +5,70 @@ create or replace PACKAGE BODY adminCatalogs AS
     PROCEDURE insertCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2) IS
     BEGIN
         INSERT INTO currency (id_currency, "name", acronym)
-        VALUES(p_id_currency, p_name, p_acronym);
+        VALUES(s_currency.nextVal, p_name, p_acronym);
         COMMIT;
     END;
 
     PROCEDURE insertProvince(p_id_province IN NUMBER, p_name VARCHAR2) IS
     BEGIN
         INSERT INTO province (id_province, "name")
-        VALUES(p_id_province, p_name);
+        VALUES(s_province.nextVal, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertCanton(p_id_canton IN NUMBER, p_name VARCHAR2, p_id_province IN NUMBER) IS
     BEGIN
         INSERT INTO canton (id_canton, "name", id_province)
-        VALUES(p_id_canton, p_name, p_id_province);
+        VALUES(s_canton.nextVal, p_name, p_id_province);
         COMMIT;
     END;
 
     PROCEDURE insertDistrict(p_id_district IN NUMBER, p_name VARCHAR2, p_id_canton IN NUMBER) IS
     BEGIN
         INSERT INTO district (id_district, "name", id_canton)
-        VALUES(p_id_district, p_name, p_id_canton);
+        VALUES(s_district.nextVal, p_name, p_id_canton);
         COMMIT;
     END;
 
     PROCEDURE insertPetType(p_id_pet_type IN NUMBER, p_name VARCHAR2) IS
     BEGIN
         INSERT INTO pet_type (id_pet_type, "name")
-        VALUES(p_id_pet_type, p_name);
+        VALUES(s_pet_type.nextVal, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertRace(p_id_race IN NUMBER, p_name VARCHAR2, p_id_pet_type IN NUMBER) IS
     BEGIN
         INSERT INTO race (id_race, "name", id_pet_type)
-        VALUES(p_id_race, p_name, p_id_pet_type);
+        VALUES(s_race.nextVal, p_name, p_id_pet_type);
         COMMIT;
     END;
 
     PROCEDURE insertStatus(p_id_status IN NUMBER, p_status_type VARCHAR2) IS
     BEGIN
         INSERT INTO status (id_status, status_type)
-        VALUES(p_id_status, p_status_type);
+        VALUES(s_Status.nextVal, p_status_type);
         COMMIT;
     END;
 
     PROCEDURE insertColor(p_id_color IN NUMBER, p_name VARCHAR2) IS
     BEGIN
         INSERT INTO color (id_color, "name")
-        VALUES(p_id_color, p_name);
+        VALUES(s_color.nextVal, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertValueType(p_id_value_type IN NUMBER, p_type VARCHAR2) IS
     BEGIN
         INSERT INTO value_type (id_value_type, "type")
-        VALUES(p_id_value_type, p_type);
+        VALUES(s_value_type.nextVal, p_type);
         COMMIT;
     END;
 
     PROCEDURE insertSize(p_id_size IN NUMBER, p_name IN VARCHAR2) IS
     BEGIN
         INSERT INTO "size" (id_size, "name")
-        VALUES(p_id_size, p_name);
+        VALUES(s_size.nextVal, p_name);
         COMMIT;
     END;
 

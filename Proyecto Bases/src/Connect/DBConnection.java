@@ -16,10 +16,9 @@ import java.util.ArrayList;
 public class DBConnection {
     
     public static String host = "jdbc:oracle:thin:@localhost:1521:Pr1";
-    //public static String uName = "db_user";
-    //public static String  uPass = "1414";
-    public static String uName = "TS";
-    public static String  uPass = "TS";
+    public static String uName = "db_user";
+    public static String  uPass = "1414";
+
     
     public static ResultSet getTuplas(String FunctionName) throws SQLException {
         System.out.println("BEGIN ? := " + FunctionName + "; END;");

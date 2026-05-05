@@ -76,3 +76,8 @@ DROP TABLE province;
 
 -- FINANCIAL CATALOG
 DROP TABLE currency;
+
+DROP TABLE CRIB_HOUSE;
+DROP TABLE "size";
+
+DROP TABLE "user";

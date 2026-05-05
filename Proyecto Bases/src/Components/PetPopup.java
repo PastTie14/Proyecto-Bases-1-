@@ -1,33 +1,91 @@
 package Components;
  
-import TablesObj.Pet;
 import TablesObj.MedicSheet;
-import TablesObj.PetExtraInfo;
+import TablesObj.Pet;
  
 import javax.swing.*;
 import java.awt.*;
-import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
  
 public class PetPopup extends JDialog {
  
-    private final Pet    pet;
-    private BufferedImage image;
-    private JPanel        imagePanel;
+    /*
+     * ══════════════════════════════════════════════════════════════
+     *  QUERY ESPERADO — Pet.getPopupItem(int id)
+     *  Debe devolver UN solo registro con las siguientes columnas
+     *  en este orden exacto:
+     *
+     *  Índice | Columna sugerida          | Ejemplo
+     *  -------|---------------------------|-------------------------
+     *    0    | picture_url               | "https://..."
+     *    1    | status_type               | "Available"
+     *    2    | pet_type                  | "Perro"
+     *    3    | first_name                | "Firulais"
+     *    4    | birthdate                 | "2021-03-15"
+     *    5    | contact_email             | "refugio@mail.com"
+     *    6    | date_lost                 | "2024-01-10"
+     *    7    | date_found                | "2024-01-12"
+     *    8    | size                      | "1" / "2" / "3"
+     *    9    | energy_level              | "Alto"
+     *   10    | training_ease             | "Fácil"
+     *   11    | shelter_name              | "Refugio Esperanza"
+     *   12    | bounty                    | "5000"
+     *   13    | bounty_currency           | "CRC"
+     *   14    | abandonment_description   | "Encontrado en la calle..."
+     *   15    | diseases                  | "Ninguna" / lista separada por comas
+     *   16    | treatments                | "Desparasitación" / lista separada por comas
+     *
+     *  Uso en Pet.java:
+     *    public static ArrayList<String> getPopupItem(int id) { ... }
+     *
+     * ══════════════════════════════════════════════════════════════
+     */
+ 
+    // ── Índices del ArrayList ─────────────────────────────────────
+    private static final int IDX_PICTURE       = 0;
+    private static final int IDX_STATUS        = 1;
+    private static final int IDX_PET_TYPE      = 2;
+    private static final int IDX_NAME          = 3;
+    private static final int IDX_BIRTHDATE     = 4;
+    private static final int IDX_EMAIL         = 5;
+    private static final int IDX_DATE_LOST     = 6;
+    private static final int IDX_DATE_FOUND    = 7;
+    private static final int IDX_SIZE          = 8;
+    private static final int IDX_ENERGY        = 9;
+    private static final int IDX_TRAINING      = 10;
+    private static final int IDX_SHELTER       = 11;
+    private static final int IDX_BOUNTY        = 12;
+    private static final int IDX_CURRENCY      = 13;
+    private static final int IDX_DESCRIPTION   = 14;
+    private static final int IDX_DISEASES      = 15;
+    private static final int IDX_TREATMENTS    = 16;
+ 
+    // ── Estado interno ────────────────────────────────────────────
+    private final Pet             pet;
+    private final ArrayList<String> rs;
+    private final ArrayList<ArrayList<String>> medicArr;
+    private BufferedImage           image;
+    private JPanel                  imagePanel;
  
     // ─────────────────────────────────────────────────────────────
+    //  CONSTRUCTOR
+    // ─────────────────────────────────────────────────────────────
+ 
     public PetPopup(Frame parent, Pet pet) {
         super(parent, true);
         this.pet = pet;
+        this.rs  = Pet.getPopupItem(pet.getId()); // query dedicado para el popup
+        medicArr = MedicSheet.getMedicalData(pet.getId());
  
         setUndecorated(true);
         setSize(Format.POPUP_WIDTH, Format.POPUP_HEIGHT);
         setLocationRelativeTo(parent);
         setBackground(new Color(0, 0, 0, 0));
- 
         setContentPane(buildRoot());
  
-        String url = pet.getPicture();
+        // Carga asíncrona de imagen
+        String url = get(IDX_PICTURE);
         if (url != null && !url.isBlank()) {
             Format.loadImageAsync(url, img -> {
                 image = img;
@@ -55,7 +113,6 @@ public class PetPopup extends JDialog {
             }
         };
         root.setOpaque(false);
- 
         root.add(buildImagePanel(),  BorderLayout.NORTH);
         root.add(buildScrollInfo(), BorderLayout.CENTER);
         root.add(buildFooter(),      BorderLayout.SOUTH);
@@ -72,7 +129,6 @@ public class PetPopup extends JDialog {
                 g2.setClip(new java.awt.geom.RoundRectangle2D.Float(
                         0, 0, getWidth(), getHeight() + Format.RADIUS_CARD,
                         Format.RADIUS_CARD, Format.RADIUS_CARD));
- 
                 if (image != null) {
                     Image scaled = Format.scaleCover(image, getWidth(), getHeight());
                     int x = (getWidth()  - scaled.getWidth(null))  / 2;
@@ -88,12 +144,9 @@ public class PetPopup extends JDialog {
         imagePanel.setPreferredSize(new Dimension(Format.POPUP_WIDTH, 220));
         imagePanel.setOpaque(false);
  
-        // Badge de estado
-        String currentStatus = (pet.getExtraInfo() != null && pet.getExtraInfo() != null)
-                ? pet.getExtraInfo().getCurrentStatus()
-                : pet.getStatus();
-        JLabel badge = Format.buildStatusBadge(currentStatus != null ? currentStatus : "Available");
-        badge.setBounds(12, 12, 140, 26);
+        // Badge de estado — índice 1: status_type
+        JLabel badge = Format.buildStatusBadge(nvl(get(IDX_STATUS)));
+        badge.setBounds(12, 12, 150, 26);
         imagePanel.add(badge);
  
         // Botón cerrar
@@ -118,38 +171,59 @@ public class PetPopup extends JDialog {
         info.setBackground(Format.COLOR_BG);
         info.setBorder(BorderFactory.createEmptyBorder(16, 20, 8, 20));
  
-        // Encabezado
-        info.add(label(nvl(pet.getPetType()),   Format.FONT_TITLE,    Format.COLOR_TEXT_PRIMARY));
-        info.add(label(nvl(pet.getFirstName()), Format.FONT_SUBTITLE, Format.COLOR_TEXT_SECONDARY));
+        // Encabezado: tipo y nombre
+        // IDX_PET_TYPE (2): pet_type  |  IDX_NAME (3): first_name
+        info.add(label(nvl(get(IDX_PET_TYPE)), Format.FONT_TITLE,    Format.COLOR_TEXT_PRIMARY));
+        info.add(label(nvl(get(IDX_NAME)),     Format.FONT_SUBTITLE, Format.COLOR_TEXT_SECONDARY));
         info.add(gap(8));
  
-        // Datos básicos
+        // ── Sección: Información general ─────────────────────────
         info.add(sectionTitle("Información general"));
-        info.add(row("📅 Fecha de nacimiento", pet.getBirthdate()));
-        info.add(row("📧 Contacto",            pet.getEmail()));
-        info.add(row("📆 Fecha pérdida",       pet.getDateLost()));
-        info.add(row("📆 Fecha encontrado",    pet.getDateFound()));
+        // IDX_BIRTHDATE (4): birthdate
+        info.add(row("📅 Fecha de nacimiento", get(IDX_BIRTHDATE)));
+        // IDX_SIZE (8): size  →  string directo desde la BD (ej: "Pequeño", "Mediano", "Grande")
+        info.add(row("📏 Tamaño",              get(IDX_SIZE)));
+        // IDX_SHELTER (11): shelter_name
+        info.add(row("📍 Refugio / Rescatista", get(IDX_SHELTER)));
+        // IDX_EMAIL (5): contact_email
+        info.add(row("📧 Contacto",            get(IDX_EMAIL)));
+        info.add(gap(4));
  
-        // Info extra (si existe)
-        PetExtraInfo extra = pet.getExtraInfo();
-        if (extra != null) {
+        // ── Sección: Historial ────────────────────────────────────
+        info.add(sectionTitle("Historial"));
+        // IDX_DATE_LOST (6): date_lost
+        info.add(row("📆 Fecha pérdida",       get(IDX_DATE_LOST)));
+        // IDX_DATE_FOUND (7): date_found
+        info.add(row("📆 Fecha encontrado",    get(IDX_DATE_FOUND)));
+        // IDX_DESCRIPTION (14): abandonment_description
+        info.add(row("📝 Descripción",         get(IDX_DESCRIPTION)));
+        info.add(gap(4));
+ 
+        // ── Sección: Comportamiento ───────────────────────────────
+        info.add(sectionTitle("Comportamiento"));
+        // IDX_ENERGY (9): energy_level
+        info.add(row("⚡ Nivel de energía",    get(IDX_ENERGY)));
+        // IDX_TRAINING (10): training_ease
+        info.add(row("✋ Facilidad de entren.", get(IDX_TRAINING)));
+        info.add(gap(4));
+ 
+        // ── Sección: Salud ────────────────────────────────────────
+        info.add(sectionTitle("Salud"));
+        // IDX_DISEASES (15): diseases  (separadas por coma si hay varias)
+        info.add(row("🦠 Enfermedades",     (medicArr.get(0)).toString() ));
+        // IDX_TREATMENTS (16): treatments (separadas por coma si hay varias)
+        info.add(row("💊 Tratamientos",        (medicArr.get(1)).toString()));
+        info.add(gap(4));
+ 
+        // ── Sección: Recompensa ───────────────────────────────────
+        // IDX_BOUNTY (12): bounty  |  IDX_CURRENCY (13): bounty_currency
+        String bounty   = get(IDX_BOUNTY);
+        String currency = get(IDX_CURRENCY);
+        boolean hasBounty = bounty != null && !bounty.isBlank() && !bounty.equals("0");
+        if (hasBounty) {
+            info.add(sectionTitle("Recompensa"));
+            info.add(row("💰 Monto", nvl(currency) + " " + bounty));
             info.add(gap(4));
-            info.add(sectionTitle("Detalles"));
-            info.add(row("📏 Tamaño",     sizeLabel(extra.getSize())));
-            info.add(row("💰 Recompensa", extra.getBountyCurrency() + " " + extra.getBounty()));
- 
-            MedicSheet medic = extra.getMedicInfo();
-            if (medic != null) {
-                info.add(gap(4));
-                info.add(sectionTitle("Ficha médica"));
-                info.add(row("⚡ Nivel de energía",    medic.getEnergyLevel()));
-                info.add(row("✋ Facilidad de entren.", medic.getTrainingEase()));
-                info.add(row("📝 Descripción",         medic.getAbandonmentDescription()));
-                if (medic.getDiseases()   != null && !medic.getDiseases().isEmpty())
-                    info.add(row("🦠 Enfermedades", String.join(", ", medic.getDiseases())));
-                if (medic.getTreatments() != null && !medic.getTreatments().isEmpty())
-                    info.add(row("💊 Tratamientos", String.join(", ", medic.getTreatments())));
-            }
         }
  
         info.add(gap(8));
@@ -207,7 +281,7 @@ public class PetPopup extends JDialog {
         JPanel row = new JPanel(new BorderLayout(8, 0));
         row.setOpaque(false);
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
-        row.setAlignmentX(LEFT_ALIGNMENT);
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
  
         JLabel k = new JLabel(key);
         k.setFont(Format.FONT_BODY_SMALL);
@@ -228,28 +302,33 @@ public class PetPopup extends JDialog {
         JLabel lbl = new JLabel(text);
         lbl.setFont(Format.FONT_SUBTITLE);
         lbl.setForeground(Format.COLOR_PRIMARY);
-        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
         lbl.setBorder(Format.borderSection());
         lbl.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         return lbl;
     }
  
     private JLabel label(String text, Font font, Color color) {
-        JLabel lbl = new JLabel(nvl(text));
+        JLabel lbl = new JLabel(text);
         lbl.setFont(font);
         lbl.setForeground(color);
-        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
         return lbl;
     }
  
     private Component gap(int h) { return Box.createVerticalStrut(h); }
  
-    private static String nvl(String s) { return (s != null && !s.isBlank()) ? s : "—"; }
+    // ─────────────────────────────────────────────────────────────
+    //  HELPERS DE DATOS
+    // ─────────────────────────────────────────────────────────────
  
-    private static String sizeLabel(int size) {
-        if (size == 1) return "Pequeño";
-        if (size == 2) return "Mediano";
-        if (size >= 3) return "Grande";
-        return "—";
+    /** Acceso seguro al ArrayList; devuelve null si el índice no existe. */
+    private String get(int index) {
+        return (rs != null && index < rs.size()) ? rs.get(index) : null;
     }
+ 
+    private static String nvl(String s) {
+        return (s != null && !s.isBlank()) ? s : "—";
+    }
+ 
 }

@@ -30,17 +30,11 @@ PROCEDURE updateBounty(pIdBounty IN NUMBER, pAmount IN NUMBER, pIdCurrency IN NU
 
 -- GET
 FUNCTION getPetExtraInfo RETURN SYS_REFCURSOR;
-<<<<<<< Updated upstream
 FUNCTION getPetExtraInfoById(pIdPet IN NUMBER) RETURN SYS_REFCURSOR;
 
 FUNCTION getCurrentStatus RETURN SYS_REFCURSOR;
 FUNCTION getCurrentStatusById(pIdCurrentStatus IN NUMBER) RETURN SYS_REFCURSOR;
 
-=======
-FUNCTION getPetExtraInfoById(p_Id_pet IN NUMBER) RETURN SYS_REFCURSOR;
-FUNCTION getCurrentStatus RETURN SYS_REFCURSOR;
-FUNCTION getCurrentStatusById(p_id_currStatus IN NUMBER) RETURN SYS_REFCURSOR;
->>>>>>> Stashed changes
 FUNCTION getEnergyLevel RETURN SYS_REFCURSOR;
 FUNCTION getEnergyLevelById(pIdEnergyLevel IN NUMBER) RETURN SYS_REFCURSOR;
 

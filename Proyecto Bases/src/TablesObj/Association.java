@@ -1,8 +1,5 @@
 package TablesObj;
 
-import static Connect.DBConnection.host;
-import static Connect.DBConnection.uName;
-import static Connect.DBConnection.uPass;
 import Connect.DBItem;
 import java.sql.*;
 import java.util.ArrayList;

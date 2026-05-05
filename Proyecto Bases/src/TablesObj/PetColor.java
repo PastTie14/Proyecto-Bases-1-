@@ -15,13 +15,13 @@ import oracle.jdbc.OracleTypes;
  *   0  id_color
  *   1  name
  */
-public class Color extends DBItem {
+public class PetColor extends DBItem {
 
-    private static final Logger LOG = Logger.getLogger(Color.class.getName());
+    private static final Logger LOG = Logger.getLogger(PetColor.class.getName());
     private final int id;
     private ArrayList<String> data;
 
-    public Color(int id) { this.id = id; }
+    public PetColor(int id) { this.id = id; }
 
     private void loadData() {
         if (data != null) return;

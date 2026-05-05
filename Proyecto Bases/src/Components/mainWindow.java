@@ -8,15 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-<<<<<<< Updated upstream:Proyecto Bases/src/Components/SideMenuDemo2.java
-/*
-public class SideMenuDemo2 {
-=======
+
 
 public class mainWindow {
-    
->>>>>>> Stashed changes:Proyecto Bases/src/Components/mainWindow.java
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
 
@@ -41,7 +35,7 @@ public class mainWindow {
             PetGridPanel petGrid = new PetGridPanel();
             
             //PetForm para test
-            PetFormPanel petForm = new PetFormPanel();
+            PetFormPanel petForm = new PetFormPanel(1);
 
             // ── Ítems del menú ────────────────────────────
             List<MenuItem> items = Arrays.asList(
@@ -157,36 +151,5 @@ public class mainWindow {
         });
     }
 
-
- 
-
-
-<<<<<<< Updated upstream:Proyecto Bases/src/Components/SideMenuDemo2.java
-        return list;
-    }
-
-    // Crea un Pet con PetExtraInfo y MedicSheet a partir de los datos básicos. 
-    private static Pet makePet(int id, String name, String breed,
-                               String status, String energy,
-                               String training, int bounty, String currency) {
-        // Pet usa petType como campo de nombre/raza en el demo
-        Pet pet = new Pet(id, "2020-01-01", name + "@demo.com",
-                          null, null, "admin", "2024-01-01", status, breed);
-
-        MedicSheet medic = new MedicSheet();
-        medic.setEnergyLevel(energy);
-        medic.setTrainingEase(training);
-
-        PetExtraInfo extra = new PetExtraInfo(id, 2);
-        extra.setCurrentStatus(status);
-        extra.setBounty(bounty);
-        extra.setBountyCurrency(currency);
-        extra.setMedicInfo(medic);
-
-        pet.setExtraInfo(extra);
-        return pet;
-    }
-=======
->>>>>>> Stashed changes:Proyecto Bases/src/Components/mainWindow.java
 }
-*/
+

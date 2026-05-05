@@ -6,10 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
  
 public class PetCard extends JPanel {
     
-    //LLamar al get para imagen, status, nombre, petInfo, energyInfo, 
+    //LLamar al get para imagen, status, nombre, petInfo, energyInfo, petType, shelter (rescuer)
  
     // ── Modelo ────────────────────────────────────────────────────
     private final Pet pet;
@@ -25,6 +26,7 @@ public class PetCard extends JPanel {
     private JLabel energyInfo;
     private JLabel petType;
     private JLabel shelter;
+    ArrayList<String> rs;
  
     // ── Hover ─────────────────────────────────────────────────────
     private boolean hovered = false;
@@ -32,6 +34,7 @@ public class PetCard extends JPanel {
     // ─────────────────────────────────────────────────────────────
     public PetCard(Pet pet) {
         this.pet = pet;
+        rs= Pet.getCardItem(pet.getId());
  
         setOpaque(false);
         setPreferredSize(new Dimension(Format.CARD_WIDTH, 370));
@@ -47,7 +50,7 @@ public class PetCard extends JPanel {
             @Override public void mouseExited (MouseEvent e) { hovered = false; onCardHovered(false); repaint(); }
         });
  
-        String url = pet.getPicture();
+        String url = rs.get(0);
         if (url != null && !url.isBlank()) {
             loadImageAsync(url);
         } else {
@@ -118,10 +121,8 @@ public class PetCard extends JPanel {
         imgPanel.setOpaque(false);
  
         // Badge: usa extraInfo si existe, si no el status base
-        String currentStatus = (pet.getExtraInfo() != null && pet.getExtraInfo().getIdCurrentStatus()  != 0)
-                ? pet.getExtraInfo().getCurrentStatus()
-                : pet.getStatus();
-        statusBadge = Format.buildStatusBadge(currentStatus != null ? currentStatus : "Available");
+        String status = rs.get(1);
+        statusBadge = Format.buildStatusBadge(status);
         statusBadge.setBounds(8, 8, 130, 24);
         imgPanel.add(statusBadge);
  
@@ -139,13 +140,13 @@ public class PetCard extends JPanel {
         infoPanel.setBorder(Format.borderCardPadding());
  
         // Tipo de mascota
-        name = new JLabel(nvl(pet.getPetType()));
+        name = new JLabel(rs.get(2));
         name.setFont(Format.FONT_SUBTITLE);
         name.setForeground(Format.COLOR_TEXT_PRIMARY);
         name.setAlignmentX(LEFT_ALIGNMENT);
  
         // Nombre del animal + tamaño si hay extra
-        String sizeStr = (pet.getExtraInfo() != null) ? sizeLabel(pet.getExtraInfo().getSize()) : "";
+        String sizeStr = rs.get(6);
         String petInfoTxt = nvl(pet.getFirstName()) + (sizeStr.isEmpty() ? "" : " • " + sizeStr);
         petInfo = new JLabel(petInfoTxt);
         petInfo.setFont(Format.FONT_BODY_SMALL);
@@ -155,9 +156,9 @@ public class PetCard extends JPanel {
         // Energía y entrenamiento
         String energy   = "—";
         String training = "—";
-        if (pet.getExtraInfo() != null && pet.getExtraInfo().getMedicInfo() != null) {
-            energy   = nvl(pet.getExtraInfo().getMedicInfo().getEnergyLevel());
-            training = nvl(pet.getExtraInfo().getMedicInfo().getTrainingEase());
+        if (rs.get(4)!=null) {
+            energy   = nvl(rs.get(4));
+            training = nvl(rs.get(7));
         }
         energyInfo = new JLabel("⚡ " + energy + "   ✋ " + training);
         energyInfo.setFont(Format.FONT_BODY_SMALL);
@@ -165,16 +166,19 @@ public class PetCard extends JPanel {
         energyInfo.setAlignmentX(LEFT_ALIGNMENT);
  
         // Recompensa
+        /*
         int    bounty   = (pet.getExtraInfo() != null) ? pet.getExtraInfo().getBounty() : 0;
         String currency = (pet.getExtraInfo() != null && pet.getExtraInfo().getBountyCurrency() != null)
                 ? pet.getExtraInfo().getBountyCurrency() : "$";
-        price = new JLabel(currency + " " + bounty);
-        price.setFont(Format.FONT_PRICE);
-        price.setForeground(Format.COLOR_PRIMARY);
-        price.setAlignmentX(LEFT_ALIGNMENT);
+        */
+        petType = new JLabel(rs.get(8));
+        petType.setFont(Format.FONT_PRICE);
+        petType.setForeground(Format.COLOR_PRIMARY);
+        petType.setAlignmentX(LEFT_ALIGNMENT);
+        
  
         //String rescuerName = (pet.getRescuer() != null) ? pet.getRescuer().toString() : "—";
-        shelter = new JLabel("📍 " + rescuerName);
+        shelter = new JLabel("📍 " + rs.get(5));
         shelter.setFont(Format.FONT_BODY_SMALL);
         shelter.setForeground(Format.COLOR_TEXT_SECONDARY);
         shelter.setAlignmentX(LEFT_ALIGNMENT);
@@ -184,7 +188,7 @@ public class PetCard extends JPanel {
         infoPanel.add(Box.createVerticalStrut(Format.GAP_META));
         infoPanel.add(energyInfo);
         infoPanel.add(Box.createVerticalStrut(Format.GAP_META));
-        infoPanel.add(price);
+        infoPanel.add(petType);
  
         return infoPanel;
     }

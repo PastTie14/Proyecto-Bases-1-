@@ -38,6 +38,8 @@ import oracle.jdbc.OracleTypes;
 public class Pet extends DBItem {
  
     private static final Logger LOG = Logger.getLogger(Pet.class.getName());
+
+    
  
     // ── Clave primaria ────────────────────────────────────────────
     private final int id;
@@ -124,6 +126,27 @@ public class Pet extends DBItem {
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — ESTÁTICAS
     // ─────────────────────────────────────────────────────────────
+    
+    public static ArrayList<String> getPopupItem(int id) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getPopUpInfo(?); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.setInt(2, id);
+            stmt.execute();
+            ArrayList<String> arr = new ArrayList();
+            if ((ResultSet) stmt != null && ((ResultSet) stmt).next()) {
+                int cols = ((ResultSet) stmt).getMetaData().getColumnCount();
+                for (int i = 1; i <= cols; i++) {
+                    arr.add(((ResultSet) stmt).getString(i)); // null se guarda como null
+                }
+            }
+            return arr;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
  
     public static ResultSet getAllPets() {
         try {
@@ -169,6 +192,30 @@ public class Pet extends DBItem {
         }
         return null;
     }
+    /*Recibe el id_pet, devuelve los siguientes datos:
+    @return: 0.imagen, 1.statusType, 2.nombre, 3.idExtraInfo, 4.energyLevel, 
+    5. email 6.size, 7.TrainingEase, 8. PetType
+    */
+    public static ArrayList getCardItem(int id){
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getCardInfo(?); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.setInt(2, id);
+            stmt.execute();
+            ArrayList<String> arr = new ArrayList();
+            if ((ResultSet) stmt != null && ((ResultSet) stmt).next()) {
+                int cols = ((ResultSet) stmt).getMetaData().getColumnCount();
+                for (int i = 1; i <= cols; i++) {
+                    arr.add(((ResultSet) stmt).getString(i)); // null se guarda como null
+                }
+            }
+            return arr;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
  
     public void updateItem(String pPicture, String pFirstName, String pBirthDate,
                            String pDateLost, String pDateFound, String pEmail, int pIdStatus) {
@@ -200,6 +247,27 @@ public class Pet extends DBItem {
             if (con  != null) try { con.close();  } catch (SQLException e) { e.printStackTrace(); }
         }
     }
+    
+    public static int insert(String picture, String firstName, String birthdate,
+                         String dateLost, String dateFound, String email,
+                         int idStatus, int idPetType, int idRescuer) {
+    try (Connection con = DriverManager.getConnection(host, uName, uPass);
+         CallableStatement st = con.prepareCall("{ ? = CALL adminPet.insertPet(?,?,?,?,?,?,?,?,?) }")) {
+        st.registerOutParameter(1, OracleTypes.NUMERIC);
+        st.setString(2, picture);
+        st.setString(3, firstName);
+        st.setString(4, birthdate);
+        st.setString(5, dateLost);
+        st.setString(6, dateFound);
+        st.setString(7, email);
+        st.setInt(8, idStatus);
+        st.setInt(9,idPetType);
+        st.setInt(10,idRescuer);
+        st.execute();
+        return st.getInt(1); // id_pet generado por secuencia
+    } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    return -1;
+}
  
     @Override
     public void deleteItem() {

@@ -12,7 +12,7 @@ AS
 BEGIN
     INSERT INTO pet_extra_info (id_pet_extra_info, "size", before_picture, after_picture, id_pet, id_current_status, 
                                 id_energy_level, id_training_ease)
-    VALUES(pIdPetExtraInfo, pSize, pBeforePicture, pAfterPicture, pIdPet,
+    VALUES(s_petExtraInfo.nextVal, pSize, pBeforePicture, pAfterPicture, pIdPet,
             pIdCurrentStatus, pIdEnergyLevel, pIdTrainingEase);
     COMMIT;
     SELECT s_petExtraInfo.CURRVAL INTO n_petExtraInfo_id FROM DUAL;
@@ -23,7 +23,7 @@ PROCEDURE insertCurrentStatus(pIdCurrentStatus IN NUMBER, pStatusType IN VARCHAR
 IS 
 BEGIN
     INSERT INTO current_status (id_current_status, status_type)
-    VALUES(pIdCurrentStatus, pStatusType);
+    VALUES(s_currentStatus.nextVal, pStatusType);
     COMMIT;
 END insertCurrentStatus;
 
@@ -39,7 +39,7 @@ PROCEDURE insertTrainingEase(pIdTrainingEase IN NUMBER, pName IN VARCHAR2)
 AS 
 BEGIN
     INSERT INTO training_ease (id_training_ease, "name")
-    VALUES(pIdTrainingEase, pName);
+    VALUES(s_trainingEase.nextVal, pName);
     COMMIT;
 END insertTrainingEase;
 
@@ -48,7 +48,7 @@ PROCEDURE insertBounty(pIdBounty IN NUMBER, pAmount IN NUMBER,
 AS 
 BEGIN
     INSERT INTO bounty (id_bounty, amount, id_pet_extra_info, id_currency)
-    VALUES(pIdBounty, pAmount, pIdPetExtraInfo, pIdCurrency);
+    VALUES(s_bounty.nextVal, pAmount, pIdPetExtraInfo, pIdCurrency);
     COMMIT;
 END insertBounty;
 
@@ -117,29 +117,17 @@ BEGIN
     RETURN v_cursor;
 END;
 
-<<<<<<< Updated upstream
+
 FUNCTION getPetExtraInfoById(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
-    OPEN v_cursor FOR 
-        SELECT * FROM pet_extra_info p
-        WHERE p.id_pet = pIdPet;
-    RETURN v_cursor;
-END;
-
-
-=======
-FUNCTION getPetExtraInfoById(p_Id_pet IN NUMBER) RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
     OPEN v_cursor FOR SELECT * FROM pet_extra_info
-    WHERE id_pet = p_id_pet;
+    WHERE id_pet = pIdPet;
     RETURN v_cursor;
 END;
 
->>>>>>> Stashed changes
+
 FUNCTION getCurrentStatus RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -148,21 +136,12 @@ BEGIN
     RETURN v_cursor;
 END;
 
-<<<<<<< Updated upstream
 FUNCTION getCurrentStatusById(pIdCurrentStatus IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR SELECT cs.status_type FROM current_status cs 
         WHERE cs.id_current_status = pIdCurrentStatus;
-=======
-FUNCTION getCurrentStatusById(p_id_currStatus IN NUMBER) RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_cursor FOR SELECT * FROM current_status
-    WHERE p_id_currStatus = id_current_status;
->>>>>>> Stashed changes
     RETURN v_cursor;
 END;
 

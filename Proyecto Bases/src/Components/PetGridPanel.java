@@ -1,35 +1,45 @@
 package Components;
  
 import TablesObj.Pet;
+import TablesObj.Status;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  
 public class PetGridPanel extends JPanel {
  
-    private static final Logger LOG    = Logger.getLogger(PetGridPanel.class.getName());
-    private static final int    H_GAP  = 20;
-    private static final int    V_GAP  = 20;
+    private static final Logger LOG     = Logger.getLogger(PetGridPanel.class.getName());
+    private static final int    H_GAP   = 20;
+    private static final int    V_GAP   = 20;
     private static final int    PADDING = 24;
+ 
+    /** Sentinel para la opción "All" en el combo. */
+    private static final int ALL_STATUS_ID = -1;
  
     private final ArrayList<Pet>     pets;
     private final ArrayList<PetCard> cards;
     private final JScrollPane        scrollPane;
     private final JPanel             grid;
  
+    /** Mapa ordenado: label visible → id_status (-1 = All). */
+    private final LinkedHashMap<String, Integer> statusMap = new LinkedHashMap<>();
+    private final FormComboBox statusCombo;
+ 
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTORES
     // ─────────────────────────────────────────────────────────────
  
     /**
-     * Constructor sin argumentos: carga todas las mascotas desde la BD 
+     * Constructor sin argumentos: carga todas las mascotas desde la BD.
      */
     public PetGridPanel() {
-        this(loadFromDB());
+        this(loadPetsByStatusId(1)); // carga inicial con status 1
     }
  
     /**
@@ -43,6 +53,12 @@ public class PetGridPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
  
+        // ── Panel de filtros ──────────────────────────────────────
+        statusCombo = buildStatusCombo();
+        JPanel filterBar = buildFilterBar(statusCombo);
+        add(filterBar, BorderLayout.NORTH);
+ 
+        // ── Grid de tarjetas ──────────────────────────────────────
         grid = new JPanel(new WrapLayout(FlowLayout.LEFT, H_GAP, V_GAP));
         grid.setBackground(Format.COLOR_BG);
         grid.setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
@@ -61,25 +77,109 @@ public class PetGridPanel extends JPanel {
     }
  
     // ─────────────────────────────────────────────────────────────
+    //  CONSTRUCCIÓN DEL COMBO DE ESTADOS
+    // ─────────────────────────────────────────────────────────────
+ 
+    /**
+     * Lee todos los registros de Status, construye el mapa label→id
+     * y devuelve un FormComboBox listo para usar.
+     */
+    private FormComboBox buildStatusCombo() {
+        statusMap.clear();
+        statusMap.put("All", ALL_STATUS_ID);
+ 
+        try {
+            ResultSet rs = Status.getAll();
+            while (rs != null && rs.next()) {
+                int    id   = rs.getInt(1);    // id_status
+                String type = rs.getString(2); // status_type
+                if (type != null) statusMap.put(type, id);
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error cargando estados para el combo", ex);
+        }
+ 
+        FormComboBox combo = new FormComboBox("Filter by status");
+        combo.setOptions(new ArrayList<>(statusMap.keySet()));
+ 
+        // Seleccionar el primer status real (índice 1) si existe, si no "All"
+        if (statusMap.size() > 1) {
+            combo.getCombo().setSelectedIndex(1);
+        }
+ 
+        // Listener: recarga mascotas al cambiar selección
+        combo.getCombo().addActionListener(e -> onStatusChanged(combo.getSelected()));
+ 
+        return combo;
+    }
+ 
+    /**
+     * Construye el panel horizontal de filtros que va al NORTH del layout.
+     */
+    private JPanel buildFilterBar(FormComboBox combo) {
+        JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, PADDING, 10));
+        bar.setBackground(Format.COLOR_BG);
+        bar.setBorder(Format.borderDivider());
+ 
+        // Limitar el ancho del combo para que no ocupe toda la barra
+        combo.setMaximumSize(new Dimension(200, 58));
+        combo.setPreferredSize(new Dimension(200, 58));
+ 
+        bar.add(combo);
+        return bar;
+    }
+ 
+    /**
+     * Se ejecuta cada vez que el usuario cambia el estado en el combo.
+     */
+    private void onStatusChanged(String selectedLabel) {
+        if (selectedLabel == null) return;
+        Integer statusId = statusMap.get(selectedLabel);
+        if (statusId == null) return;
+ 
+        if (statusId == ALL_STATUS_ID) {
+            updatePets(loadAllPets());
+        } else {
+            updatePets(loadPetsByStatusId(statusId));
+        }
+    }
+ 
+    // ─────────────────────────────────────────────────────────────
     //  CARGA DESDE BD
     // ─────────────────────────────────────────────────────────────
  
     /**
-     * Itera el ResultSet de getAllPets() y construye un Pet(id) por fila.
-     * La primera columna debe ser id_pet.
+     * Carga mascotas filtrando por un id_status concreto.
+     * Línea 75 original: Pet.getAllPetsByStatus(1) → ahora parametrizado.
      */
-    private static ArrayList<Pet> loadFromDB() {
+    private static ArrayList<Pet> loadPetsByStatusId(int statusId) {
         ArrayList<Pet> list = new ArrayList<>();
         try {
-            //
-            ResultSet rs = Pet.getAllPetsByStatus(1); //Aqui se puede llamar el getPetsByStatus para obtener por ejemplo solo las que estan perdidas o en adopcion
+            ResultSet rs = Pet.getAllPetsByStatus(statusId);
             if (rs == null) return list;
             while (rs.next()) {
-                int id = rs.getInt(1); // columna 0 → id_pet
-                list.add(new Pet(id));
+                list.add(new Pet(rs.getInt(1))); // columna 1 → id_pet
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error al cargar mascotas desde la BD", ex);
+            LOG.log(Level.SEVERE, "Error al cargar mascotas por status id=" + statusId, ex);
+        }
+        return list;
+    }
+ 
+    /**
+     * Carga todas las mascotas sin filtro de estado.
+     * Usado cuando el usuario selecciona "All".
+     */
+    private static ArrayList<Pet> loadAllPets() {
+        ArrayList<Pet> list = new ArrayList<>();
+        try {
+            ResultSet rs = Pet.getAllPets(); // asume que este método existe en Pet
+            if (rs == null) return list;
+            while (rs.next()) {
+                list.add(new Pet(rs.getInt(1)));
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error al cargar todas las mascotas", ex);
         }
         return list;
     }
@@ -106,9 +206,9 @@ public class PetGridPanel extends JPanel {
     //  API PÚBLICA
     // ─────────────────────────────────────────────────────────────
  
-    /** Recarga las mascotas desde la BD y reconstruye las tarjetas. */
+    /** Recarga las mascotas respetando el filtro actualmente seleccionado. */
     public void reload() {
-        updatePets(loadFromDB());
+        onStatusChanged(statusCombo.getSelected());
     }
  
     /** Reemplaza la lista y reconstruye las tarjetas. */
@@ -118,8 +218,9 @@ public class PetGridPanel extends JPanel {
         buildCards();
     }
  
-    public JScrollPane      getScrollPane() { return scrollPane; }
-    public ArrayList<PetCard> getCards()    { return cards; }
+    public JScrollPane        getScrollPane()  { return scrollPane; }
+    public ArrayList<PetCard> getCards()       { return cards; }
+    public FormComboBox       getStatusCombo() { return statusCombo; }
  
     // ═════════════════════════════════════════════════════════════
     //  INNER CLASS: WrapLayout

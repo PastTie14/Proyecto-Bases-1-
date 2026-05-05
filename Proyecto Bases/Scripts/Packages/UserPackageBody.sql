@@ -48,7 +48,7 @@ PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTab
 IS 
 BEGIN
     INSERT INTO "log" (id_log, changeDate, changeBy, tableName, fieldName, previousValue, currentValue)
-    VALUES(pIdLog, pChangeDate, pChangeBy, pTableName, pFieldName, pPreviousValue, pCurrentValue);
+    VALUES(s_log.nextVal, pChangeDate, pChangeBy, pTableName, pFieldName, pPreviousValue, pCurrentValue);
     COMMIT;
 END;
 

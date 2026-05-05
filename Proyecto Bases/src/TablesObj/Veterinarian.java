@@ -124,6 +124,29 @@ public class Veterinarian extends DBItem {
         }
         return null;
     }
+    /**
+    * Inserta un nuevo veterinario y retorna el id generado por la secuencia.
+    * @return id_veterinarian generado, o -1 si falla.
+    */
+   public static int insert(String firstName, String lastName, String email,
+                            String phone, String specialty, int idStatus) {
+       try (Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall("{ ? = CALL adminMedical.insertVeterinarian(?,?,?,?,?,?) }")) {
+           st.registerOutParameter(1, OracleTypes.NUMERIC);
+           st.setString(2, firstName);
+           st.setString(3, lastName);
+           st.setString(4, email);
+           st.setString(5, phone);
+           st.setString(6, specialty);
+           st.setInt(7, idStatus);
+           st.execute();
+           return st.getInt(1);
+       } catch (SQLException ex) {
+           LOG.log(Level.SEVERE, "Error insertando Veterinarian", ex);
+       }
+       return -1;
+   }
+    
 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — INSTANCIA

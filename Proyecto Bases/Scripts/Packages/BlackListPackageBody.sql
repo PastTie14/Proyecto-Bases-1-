@@ -6,7 +6,7 @@ PROCEDURE insertBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)
 IS 
 BEGIN
     INSERT INTO black_list (id_report, id_user)
-    VALUES(pIdReport, pIdUser);
+    VALUES(s_black_List.nextVal, pIdUser);
     COMMIT;
 END;
 
@@ -35,7 +35,6 @@ BEGIN
     OPEN v_cursor FOR SELECT * FROM user_x_black_list;
     RETURN v_cursor;
 END;
-<<<<<<< Updated upstream
 
 FUNCTION getUsersFromBlackList(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
 IS
@@ -55,9 +54,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
-=======
-  
->>>>>>> Stashed changes
+
 -- ======================================== DELETE ========================================
 
 PROCEDURE deleteUserFromBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)

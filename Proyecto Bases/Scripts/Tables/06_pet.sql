@@ -24,7 +24,8 @@ CREATE TABLE pet
     id_size     NUMBER(1),
     id_status   NUMBER(4),
     id_pet_type NUMBER(4),
-    id_rescuer  NUMBER(8)
+    id_rescuer  NUMBER(8),
+    id_crib_house NUMBER(8)
 )
 TABLESPACE TS_DATA;
 
@@ -71,6 +72,10 @@ ALTER TABLE pet
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_rescuer
     FOREIGN KEY (id_rescuer) REFERENCES rescuer (id_user);
+    
+ALTER TABLE pet
+    ADD CONSTRAINT fk_pet_crib_house
+    FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user);
 
 -- ============================================
 -- IDENTIFICATION CHIP

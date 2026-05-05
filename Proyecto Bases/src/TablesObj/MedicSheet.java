@@ -51,6 +51,58 @@ public class MedicSheet extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return null;
     }
+    
+    /**
+    * Obtiene enfermedades y tratamientos asociados a una mascota.
+    * Llama a: adminPets.getMedicalInfo(id_pet)
+    *
+    * ResultSet esperado (puede tener filas repetidas por enfermedad):
+    *   col 1 → enfermedad   (puede repetirse si tiene múltiples tratamientos)
+    *   col 2 → tratamiento
+    *   col 3 → dosis
+    *
+    * Retorna ArrayList con 3 listas:
+    *   índice 0 → enfermedades  (sin duplicados, orden de aparición)
+    *   índice 1 → tratamientos  (uno por fila)
+    *   índice 2 → dosis         (uno por fila, paralelo a tratamientos)
+    */
+   public static ArrayList<ArrayList<String>> getMedicalData(int idPet) {
+       ArrayList<String> diseases   = new ArrayList<>();
+       ArrayList<String> treatments = new ArrayList<>();
+       ArrayList<String> doses      = new ArrayList<>();
+
+       try {
+           Connection con = DriverManager.getConnection(host, uName, uPass);
+           CallableStatement stmt = con.prepareCall("BEGIN ? := adminMedical.getDiseasesAndTreatments; END;");
+           stmt.registerOutParameter(1, OracleTypes.CURSOR);
+           stmt.setInt(2, idPet);
+           stmt.execute();
+           ResultSet rs = (ResultSet) stmt.getObject(1);
+
+           while (rs != null && rs.next()) {
+               String disease   = rs.getString(1);
+               String treatment = rs.getString(2);
+               String dose      = rs.getString(3);
+
+               // Solo agrega la enfermedad si no existe ya en la lista
+               if (disease != null && !diseases.contains(disease)) {
+                   diseases.add(disease);
+               }
+
+               treatments.add(treatment);
+               doses.add(dose);
+           }
+       } catch (SQLException ex) {
+           LOG.log(Level.SEVERE, "Error cargando datos médicos para pet id=" + idPet, ex);
+       }
+
+       ArrayList<ArrayList<String>> result = new ArrayList<>();
+       result.add(diseases);   // índice 0
+       result.add(treatments); // índice 1
+       result.add(doses);      // índice 2
+       return result;
+   }
+
 
     public static void insert(int id, String abandonDesc, int idVet, int idPetExtraInfo) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
