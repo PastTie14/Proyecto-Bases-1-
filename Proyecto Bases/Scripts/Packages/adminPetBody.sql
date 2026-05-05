@@ -184,19 +184,19 @@ v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR 
         SELECT a.picture,b.Status_Type, a.First_name, c.ID_pet_extra_info, d."name", e.email, f."name", g."name", h."name"   FROM pet a
-        INNER JOIN status b
+        LEFT JOIN status b
         ON b.id_status = a.Id_status
-        INNER JOIN  pet_extra_info c
+        LEFT JOIN  pet_extra_info c
         ON c.ID_pet = a.Id_pet
-        INNER JOIN ENERGY_LEVEL d
+        LEFT JOIN ENERGY_LEVEL d
         ON c.id_energy_level = d.id_energy_level
-        INNER JOIN "user" e
+        LEFT JOIN "user" e
         ON a.id_rescuer = e.id_user
-        INNER JOIN "size" f
+        LEFT JOIN "size" f
         ON a.id_size = f.id_size
-        INNER JOIN TRAINING_EASE g
+        LEFT JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
-        INNER JOIN PET_TYPE h
+        LEFT JOIN PET_TYPE h
         ON a.id_pet_type = h.id_pet_type
         WHERE a.id_pet = p_id_pet; 
     RETURN v_cursor;
@@ -224,27 +224,27 @@ BEGIN
             k.acronym,
             l.abandonment_description
             FROM pet a
-        INNER JOIN status b
+        LEFT JOIN status b
         ON b.id_status = a.Id_status
-        INNER JOIN  pet_extra_info c
+        LEFT JOIN  pet_extra_info c
         ON c.ID_pet = a.Id_pet
-        INNER JOIN ENERGY_LEVEL d
+        LEFT JOIN ENERGY_LEVEL d
         ON c.id_energy_level = d.id_energy_level
-        INNER JOIN "user" e
+        LEFT JOIN "user" e
         ON a.id_rescuer = e.id_user
-        INNER JOIN "size" f
+        LEFT JOIN "size" f
         ON a.id_size = f.id_size
-        INNER JOIN TRAINING_EASE g
+        LEFT JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
-        INNER JOIN PET_TYPE h
+        LEFT JOIN PET_TYPE h
         ON a.id_pet_type = h.id_pet_type
-        INNER JOIN crib_house i
+        LEFT JOIN crib_house i
         ON a.id_crib_House = i.id_user
-        INNER JOIN Bounty j
+        LEFT JOIN Bounty j
         ON c.id_pet_extra_info = j.id_pet_extra_info
-        INNER JOIN currency k
+        LEFT JOIN currency k
         ON j.id_currency = k.id_currency
-        INNER JOIN medic_sheet l
+        LEFT JOIN medic_sheet l
         ON c.id_pet_extra_info = l.id_pet_extra_info
         WHERE a.id_pet = p_id_pet; 
     RETURN v_cursor;
