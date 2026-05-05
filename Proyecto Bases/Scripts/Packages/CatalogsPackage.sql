@@ -53,6 +53,5 @@ create or replace PACKAGE adminCatalogs IS
     
     FUNCTION getSize RETURN SYS_REFCURSOR;
     FUNCTION getSizeById(pIdSize IN NUMBER) RETURN SYS_REFCURSOR;
-    FUNCTION getSizes RETURN SYS_REFCURSOR;
     
 END adminCatalogs;

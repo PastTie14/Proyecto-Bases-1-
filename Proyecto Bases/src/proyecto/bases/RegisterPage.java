@@ -46,6 +46,8 @@ public class RegisterPage {
     private GridBagConstraints gc;
     private List<JCheckBox> sizeList = new ArrayList<>();
     private JPanel sizesPanel;
+    private List<JCheckBox> petTypesList = new ArrayList<>();
+    private JPanel petTypesPanel;
 
     // ─────────────────────────────────────────────────────────────
     public RegisterPage(JFrame loginFrame) {
@@ -124,11 +126,8 @@ public class RegisterPage {
         header.add(Box.createVerticalStrut(20));
         return header;
     }
-
-    /**
-     * Formulario con GridBagLayout — garantiza que labels y campos
-     * estén perfectamente alineados y ocupen todo el ancho disponible.
-     */
+    
+    // Builds the JPanel with a GridBagLayout 
     private JPanel buildForm() {
         form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
@@ -163,7 +162,7 @@ public class RegisterPage {
         form.add(fieldLabel("Contraseña"), gc);
         gc.gridy = 5; gc.insets = new Insets(0, 0, 14, 0);
         form.add(tfPass, gc);
-*/
+        */
         updateFormFields();
         
         return form;
@@ -221,6 +220,9 @@ public class RegisterPage {
             
             addSizesSection(current);
             current+= 2;
+            
+            addPetTypesSection(current);
+            current+= 2;
         }
         
         // adds the email and password text fields
@@ -234,9 +236,9 @@ public class RegisterPage {
         form.repaint();
     }
     
-    // Método para agregar la sección de tamaños
+    // Method for adding size section
     private void addSizesSection(int gridY) {
-        // Label para la sección
+        // section label
         GridBagConstraints labelGc = new GridBagConstraints();
         labelGc.fill = GridBagConstraints.HORIZONTAL;
         labelGc.weightx = 1.0;
@@ -245,7 +247,7 @@ public class RegisterPage {
         labelGc.insets = new Insets(0, 0, 4, 0);
         form.add(fieldLabel("Accepted pet sizes:"), labelGc);
         
-        // Panel para los checkboxes
+        // panel for checkboxes
         sizesPanel = new JPanel();
         sizesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         sizesPanel.setOpaque(false);
@@ -255,10 +257,10 @@ public class RegisterPage {
             BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
         
-        // Cargar tamaños desde la base de datos
+        // loads pet sizes from the database
         loadSizesFromDatabase();
         
-        // Agregar el panel al formulario
+        // add panel to form
         GridBagConstraints fieldGc = new GridBagConstraints();
         fieldGc.fill = GridBagConstraints.HORIZONTAL;
         fieldGc.weightx = 1.0;
@@ -268,27 +270,29 @@ public class RegisterPage {
         form.add(sizesPanel, fieldGc);
     }
     
-    // Método para cargar tamaños desde la base de datos
+    // Method for loading pet sizes from database
     private void loadSizesFromDatabase() {
         sizeList.clear();
         sizesPanel.removeAll();
         
         try (ResultSet rs = DBConnection.getSizes()) {
             while (rs.next()) {
+                // gets the id and name
                 int id = rs.getInt("id_size");
                 String name = rs.getString("name");
                 
+                // creates the checkboxes
                 JCheckBox checkBox = new JCheckBox(name);
                 checkBox.setFont(Format.FONT_BODY_SMALL);
                 checkBox.setForeground(Format.COLOR_TEXT_PRIMARY);
                 checkBox.setOpaque(false);
-                checkBox.putClientProperty("id_size", id); // Guardar el ID
+                checkBox.putClientProperty("id_size", id); // save ID
                 
                 sizeList.add(checkBox);
                 sizesPanel.add(checkBox);
             }
             
-            // Si no hay tamaños, mostrar un mensaje
+            // if no sizes are found, show a message
             if (sizeList.isEmpty()) {
                 JLabel emptyLabel = new JLabel("No hay tamaños disponibles");
                 emptyLabel.setFont(Format.FONT_BODY_SMALL);
@@ -308,7 +312,7 @@ public class RegisterPage {
         sizesPanel.repaint();
     }
     
-    // Método para obtener los tamaños seleccionados
+    // Method for obtaining the id of selected pet sizes
     private List<Integer> getSelectedSizes() {
         List<Integer> selectedIds = new ArrayList<>();
         for (JCheckBox checkBox : sizeList) {
@@ -319,10 +323,97 @@ public class RegisterPage {
         }
         return selectedIds;
     }
+    
 
-    /*
-        Adds form components
-    */
+    // Method for adding the pet types section
+    private void addPetTypesSection(int gridY) {
+        // section label
+        GridBagConstraints labelGc = new GridBagConstraints();
+        labelGc.fill = GridBagConstraints.HORIZONTAL;
+        labelGc.weightx = 1.0;
+        labelGc.gridx = 0;
+        labelGc.gridy = gridY;
+        labelGc.insets = new Insets(0, 0, 4, 0);
+        form.add(fieldLabel("Accepted pet sizes:"), labelGc);
+        
+        // panel for checkboxes
+        petTypesPanel = new JPanel();
+        petTypesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        petTypesPanel.setOpaque(false);
+        petTypesPanel.setBackground(Format.COLOR_BG);
+        petTypesPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Format.COLOR_DIVIDER, 1, true),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        
+        loadPetTypesFromDatabase();
+        
+        // add panel to form
+        GridBagConstraints fieldGc = new GridBagConstraints();
+        fieldGc.fill = GridBagConstraints.HORIZONTAL;
+        fieldGc.weightx = 1.0;
+        fieldGc.gridx = 0;
+        fieldGc.gridy = gridY + 1;
+        fieldGc.insets = new Insets(0, 0, 14, 0);
+        form.add(petTypesPanel, fieldGc);
+    }
+    
+    // Method for loading pet sizes from database
+    private void loadPetTypesFromDatabase() {
+        petTypesList.clear();
+        petTypesPanel.removeAll();
+        
+        try (ResultSet rs = DBConnection.getPetTypes()) {
+            while (rs.next()) {
+                // gets the id and name
+                int id = rs.getInt("id_pet_type");
+                String name = rs.getString("name");
+                
+                // creates the checkboxes
+                JCheckBox checkBox = new JCheckBox(name);
+                checkBox.setFont(Format.FONT_BODY_SMALL);
+                checkBox.setForeground(Format.COLOR_TEXT_PRIMARY);
+                checkBox.setOpaque(false);
+                checkBox.putClientProperty("id_pet_type", id); // save ID
+                
+                petTypesList.add(checkBox);
+                petTypesPanel.add(checkBox);
+            }
+            
+            // if no sizes are found, show a message
+            if (petTypesList.isEmpty()) {
+                JLabel emptyLabel = new JLabel("No hay tipos de mascota disponibles");
+                emptyLabel.setFont(Format.FONT_BODY_SMALL);
+                emptyLabel.setForeground(Format.COLOR_TEXT_SECONDARY);
+                petTypesPanel.add(emptyLabel);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JLabel errorLabel = new JLabel("Error al cargar tipos de mascota");
+            errorLabel.setFont(Format.FONT_BODY_SMALL);
+            errorLabel.setForeground(Color.RED);
+            sizesPanel.add(errorLabel);
+        }
+        
+        petTypesPanel.revalidate();
+        petTypesPanel.repaint();
+    }
+    
+    // Method for obtaining the id of selected pet types
+    private List<Integer> getSelectedPetTypes() {
+        List<Integer> selectedIds = new ArrayList<>();
+        for (JCheckBox checkBox : petTypesList) {
+            if (checkBox.isSelected()) {
+                Integer id = (Integer) checkBox.getClientProperty("id_pet_type");
+                selectedIds.add(id);
+            }
+        }
+        return selectedIds;
+    }    
+    
+    
+    // Adds form components
     private void addFormField(int gridY, String labelText, JComponent field, boolean addBottomMargin) {
         // The label
         GridBagConstraints labelGc = new GridBagConstraints();
@@ -471,7 +562,14 @@ public class RegisterPage {
                 return;
             }
             
-            DBConnection.insertCribHouse(email, pass, name, requiresDonations, selectedSizes);
+            List<Integer> selectedPetTypes = getSelectedPetTypes();
+            if (selectedSizes.isEmpty()){
+                JOptionPane.showMessageDialog(frame, "Select at least one pet type", 
+                        "No pet types selected", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            DBConnection.insertCribHouse(email, pass, name, requiresDonations, selectedPetTypes, selectedSizes);
                     
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
