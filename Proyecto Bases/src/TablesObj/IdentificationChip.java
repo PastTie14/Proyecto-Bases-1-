@@ -9,14 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de chip de identificación de mascota.
- * Columnas (índice en data):
- *   0  id_chip
- *   1  chip_number
- *   2  registration_date
- *   3  id_pet
- */
 public class IdentificationChip extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(IdentificationChip.class.getName());

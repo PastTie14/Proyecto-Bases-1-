@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de estado actual de la mascota.
- * Columnas (índice en data):
- *   0  id_current_status
- *   1  status_type
- */
+
 public class CurrentStatus extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(CurrentStatus.class.getName());

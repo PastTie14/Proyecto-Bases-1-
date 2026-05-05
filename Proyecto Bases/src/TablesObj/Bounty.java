@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Columnas (índice base 0):
- *   0 id_bounty | 1 amount | 2 id_pet_extra_info | 3 id_currency
- */
 public class Bounty extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Bounty.class.getName());

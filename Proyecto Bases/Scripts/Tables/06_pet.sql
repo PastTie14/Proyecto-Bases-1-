@@ -21,7 +21,7 @@ CREATE TABLE pet
     createdAt   DATE,
     modifiedBy  VARCHAR2(20),
     modifiedAt  DATE,
-    id_size     NUMBER(1),
+    id_size     NUMBER(8),
     id_status   NUMBER(4),
     id_pet_type NUMBER(4),
     id_rescuer  NUMBER(8),

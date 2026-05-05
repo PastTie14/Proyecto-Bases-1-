@@ -8,12 +8,7 @@ import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
 
-/**
- * Modelo de provincia.
- * Columnas (índice en data):
- *   0  id_province
- *   1  name
- */
+
 public class Province extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Province.class.getName());

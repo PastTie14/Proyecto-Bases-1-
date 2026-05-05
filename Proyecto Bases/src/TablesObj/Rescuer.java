@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Columnas (índice base 0):
- *   0 id_user | 1 first_name | 2 second_name | 3 first_surname | 4 second_surname
- */
+
 public class Rescuer extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Rescuer.class.getName());

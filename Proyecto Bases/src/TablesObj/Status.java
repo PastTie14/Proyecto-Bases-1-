@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de estado (catálogo general).
- * Columnas (índice en data):
- *   0  id_status
- *   1  status_type
- */
+
 public class Status extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Status.class.getName());

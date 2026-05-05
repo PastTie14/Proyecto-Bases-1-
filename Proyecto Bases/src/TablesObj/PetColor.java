@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de color.
- * Columnas (índice en data):
- *   0  id_color
- *   1  name
- */
+
 public class PetColor extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(PetColor.class.getName());

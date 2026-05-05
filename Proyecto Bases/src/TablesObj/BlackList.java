@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: lista negra (reporte de usuario).
- * Columnas:
- *   id_report (int)
- *   id_user (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class BlackList extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(BlackList.class.getName());

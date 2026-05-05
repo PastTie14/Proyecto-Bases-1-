@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/** 0 id_rating | 1 score | 2 id_user | 3 id_adopter */
 public class Rating extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Rating.class.getName());

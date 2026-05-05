@@ -10,7 +10,7 @@ import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
 /**
- * Columnas (índice base 0):
+ * Columnas 
  *   0 id_user | 1 name | 2 requires_donations | 3 accepted_size
  */
 public class CribHouse extends DBItem {

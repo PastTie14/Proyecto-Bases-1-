@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/** 0 id_parameter | 1 value | 2 id_match | 3 id_value_type */
 public class Parameters extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Parameters.class.getName());

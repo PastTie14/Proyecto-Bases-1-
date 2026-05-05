@@ -16,22 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de veterinario.
- *
- * Los datos de la fila se almacenan en {@code data} (un ArrayList&lt;String&gt;)
- * que se carga desde la BD la primera vez que se necesita.
- * Cada getter extrae su valor por índice de posición.
- *
- * Índices de columna (según SELECT del stored procedure getVeterinarianById / getVeterinarian):
- *   0  id_veterinarian
- *   1  first_name
- *   2  last_name
- *   3  email
- *   4  phone
- *   5  specialty
- *   6  id_status
- */
+
 public class Veterinarian extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Veterinarian.class.getName());
@@ -39,10 +24,6 @@ public class Veterinarian extends DBItem {
     // ── Clave primaria ────────────────────────────────────────────
     private final int id;
 
-    /**
-     * Almacena todos los campos de la fila como Strings.
-     * Se llena la primera vez que se llama a cualquier getter.
-     */
     private ArrayList<String> data;
 
     // ─────────────────────────────────────────────────────────────
@@ -57,10 +38,6 @@ public class Veterinarian extends DBItem {
     //  CARGA LAZY
     // ─────────────────────────────────────────────────────────────
 
-    /**
-     * Carga {@code data} desde la BD si todavía no se ha hecho.
-     * Se invoca automáticamente desde cada getter.
-     */
     private void loadData() {
         if (data != null) return;
 

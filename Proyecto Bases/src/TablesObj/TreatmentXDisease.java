@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: tratamiento asociado a una enfermedad.
- * Columnas:
- *   id_treatment (int)
- *   id_disease (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class TreatmentXDisease extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(TreatmentXDisease.class.getName());

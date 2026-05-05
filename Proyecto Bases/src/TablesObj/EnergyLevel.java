@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de nivel de energía de la mascota.
- * Columnas (índice en data):
- *   0  id_energy_level
- *   1  name
- */
 public class EnergyLevel extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(EnergyLevel.class.getName());

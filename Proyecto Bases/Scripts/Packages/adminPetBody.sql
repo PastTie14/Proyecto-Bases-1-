@@ -3,18 +3,18 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                                        pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdPetType IN NUMBER, 
-                                       pIdRescuer IN NUMBER)
+                                       pIdRescuer IN NUMBER, pIdSize IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
-                    date_lost, date_found, email, id_status, id_pet_type, id_rescuer)
+                    date_lost, date_found, email, id_status, id_pet_type,id_size, id_rescuer,CREATEDBY,CREATEDAT)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdPetType, pIdRescuer);
+            pEmail, pIdStatus, pIdPetType, pIdSize, pIdRescuer,USER,SYSTIMESTAMP);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
-    RETURN (n_pet_id); -- returns the pet id to use it in intermediate tables
+    RETURN (n_pet_id); 
 END insertPet;
 
 
@@ -193,7 +193,7 @@ BEGIN
         INNER JOIN "user" e
         ON a.id_rescuer = e.id_user
         INNER JOIN "size" f
-        ON c."size" = f.id_size
+        ON a.id_size = f.id_size
         INNER JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
         INNER JOIN PET_TYPE h
@@ -233,7 +233,7 @@ BEGIN
         INNER JOIN "user" e
         ON a.id_rescuer = e.id_user
         INNER JOIN "size" f
-        ON c."size" = f.id_size
+        ON a.id_size = f.id_size
         INNER JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
         INNER JOIN PET_TYPE h

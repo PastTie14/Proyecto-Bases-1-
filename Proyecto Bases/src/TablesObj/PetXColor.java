@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: color de mascota.
- * Columnas:
- *   id_pet (int)
- *   id_color (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class PetXColor extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(PetXColor.class.getName());

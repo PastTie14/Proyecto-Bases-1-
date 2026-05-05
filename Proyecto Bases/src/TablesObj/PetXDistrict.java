@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: distrito de mascota (zona encontrada/perdida).
- * Columnas:
- *   id_pet (int)
- *   id_district (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class PetXDistrict extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(PetXDistrict.class.getName());

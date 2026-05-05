@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de facilidad de entrenamiento de la mascota.
- * Columnas (índice en data):
- *   0  id_training_ease
- *   1  name
- */
+
 public class TrainingEase extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(TrainingEase.class.getName());

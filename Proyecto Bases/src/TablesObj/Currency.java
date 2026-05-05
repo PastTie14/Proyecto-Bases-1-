@@ -9,13 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de moneda / divisa.
- * Columnas (índice en data):
- *   0  id_currency
- *   1  name
- *   2  acronym
- */
 public class Currency extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Currency.class.getName());

@@ -12,33 +12,24 @@ public class PetPopup extends JDialog {
  
     /*
      * ══════════════════════════════════════════════════════════════
-     *  QUERY ESPERADO — Pet.getPopupItem(int id)
-     *  Debe devolver UN solo registro con las siguientes columnas
-     *  en este orden exacto:
-     *
-     *  Índice | Columna sugerida          | Ejemplo
-     *  -------|---------------------------|-------------------------
-     *    0    | picture_url               | "https://..."
-     *    1    | status_type               | "Available"
-     *    2    | pet_type                  | "Perro"
-     *    3    | first_name                | "Firulais"
-     *    4    | birthdate                 | "2021-03-15"
-     *    5    | contact_email             | "refugio@mail.com"
-     *    6    | date_lost                 | "2024-01-10"
-     *    7    | date_found                | "2024-01-12"
-     *    8    | size                      | "1" / "2" / "3"
-     *    9    | energy_level              | "Alto"
-     *   10    | training_ease             | "Fácil"
-     *   11    | shelter_name              | "Refugio Esperanza"
-     *   12    | bounty                    | "5000"
-     *   13    | bounty_currency           | "CRC"
-     *   14    | abandonment_description   | "Encontrado en la calle..."
-     *   15    | diseases                  | "Ninguna" / lista separada por comas
-     *   16    | treatments                | "Desparasitación" / lista separada por comas
-     *
-     *  Uso en Pet.java:
-     *    public static ArrayList<String> getPopupItem(int id) { ... }
-     *
+     *  Índice | Columna
+     *  -------|---------------------------
+     *    0    | picture_url               
+     *    1    | status_type             
+     *    2    | pet_type                 
+     *    4    | birthdate            
+     *    5    | contact_email            
+     *    6    | date_lost               
+     *    7    | date_found              
+     *    8    | size                      
+     *    9    | energy_level            
+     *   10    | training_ease             
+     *   11    | shelter_name              
+     *   12    | bounty                  
+     *   13    | bounty_currency          
+     *   14    | abandonment_description   
+     *   15    | diseases                  
+     *   16    | treatments                
      * ══════════════════════════════════════════════════════════════
      */
  
@@ -75,7 +66,7 @@ public class PetPopup extends JDialog {
     public PetPopup(Frame parent, Pet pet) {
         super(parent, true);
         this.pet = pet;
-        this.rs  = Pet.getPopupItem(pet.getId()); // query dedicado para el popup
+        this.rs  = Pet.getPopupItem(pet.getId()); 
         medicArr = MedicSheet.getMedicalData(pet.getId());
  
         setUndecorated(true);

@@ -42,10 +42,7 @@ public class PetGridPanel extends JPanel {
         this(loadPetsByStatusId(1)); // carga inicial con status 1
     }
  
-    /**
-     * Constructor con lista externa.
-     * Útil cuando los datos ya están filtrados.
-     */
+    
     public PetGridPanel(ArrayList<Pet> pets) {
         this.pets  = new ArrayList<>(pets);
         this.cards = new ArrayList<>();
@@ -80,10 +77,7 @@ public class PetGridPanel extends JPanel {
     //  CONSTRUCCIÓN DEL COMBO DE ESTADOS
     // ─────────────────────────────────────────────────────────────
  
-    /**
-     * Lee todos los registros de Status, construye el mapa label→id
-     * y devuelve un FormComboBox listo para usar.
-     */
+    
     private FormComboBox buildStatusCombo() {
         statusMap.clear();
         statusMap.put("All", ALL_STATUS_ID);
@@ -148,10 +142,7 @@ public class PetGridPanel extends JPanel {
     //  CARGA DESDE BD
     // ─────────────────────────────────────────────────────────────
  
-    /**
-     * Carga mascotas filtrando por un id_status concreto.
-     * Línea 75 original: Pet.getAllPetsByStatus(1) → ahora parametrizado.
-     */
+
     private static ArrayList<Pet> loadPetsByStatusId(int statusId) {
         ArrayList<Pet> list = new ArrayList<>();
         try {

@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Columnas (índice base 0):
- *   0 id_pet_extra_info | 1 size | 2 before_picture | 3 after_picture
- *   4 id_pet | 5 id_current_status | 6 id_energy_level | 7 id_training_ease
- */
+
 public class PetExtraInfo extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(PetExtraInfo.class.getName());
@@ -40,13 +36,12 @@ public class PetExtraInfo extends DBItem {
     private int getInt(int i)  { String v = get(i); if (v == null) return 0; try { return Integer.parseInt(v); } catch (NumberFormatException e) { return 0; } }
 
     public int    getId()              { return id; }
-    public String getSize()            { loadData(); return get(1); }
-    public String getBeforePicture()   { loadData(); return get(2); }
-    public String getAfterPicture()    { loadData(); return get(3); }
-    public int    getIdPet()           { loadData(); return getInt(4); }
-    public int    getIdCurrentStatus() { loadData(); return getInt(5); }
-    public int    getIdEnergyLevel()   { loadData(); return getInt(6); }
-    public int    getIdTrainingEase()  { loadData(); return getInt(7); }
+    public String getBeforePicture()   { loadData(); return get(1); }
+    public String getAfterPicture()    { loadData(); return get(2); }
+    public int    getIdPet()           { loadData(); return getInt(3); }
+    public int    getIdCurrentStatus() { loadData(); return getInt(4); }
+    public int    getIdEnergyLevel()   { loadData(); return getInt(5); }
+    public int    getIdTrainingEase()  { loadData(); return getInt(6); }
 
     public static ResultSet getAll() {
         try {
@@ -71,19 +66,18 @@ public class PetExtraInfo extends DBItem {
     }
 
     /** Retorna el id generado por la secuencia s_petExtraInfo. */
-    public static int insert(int id, String size, String beforePic, String afterPic,
+    public static int insert(int id,  String beforePic, String afterPic,
                              int idPet, int idCurrentStatus, int idEnergyLevel, int idTrainingEase) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall("{ ? = CALL adminPetExtraInfo.insertPetExtraInfo(?,?,?,?,?,?,?,?) }")) {
             st.registerOutParameter(1, Types.NUMERIC);
             st.setInt(2, id);
-            st.setString(3, size);
-            st.setString(4, beforePic);
-            st.setString(5, afterPic);
-            st.setInt(6, idPet);
-            st.setInt(7, idCurrentStatus);
-            st.setInt(8, idEnergyLevel);
-            st.setInt(9, idTrainingEase);
+            st.setString(3, beforePic);
+            st.setString(4, afterPic);
+            st.setInt(5, idPet);
+            st.setInt(6, idCurrentStatus);
+            st.setInt(7, idEnergyLevel);
+            st.setInt(8, idTrainingEase);
             st.execute();
             return st.getInt(1);
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
@@ -93,15 +87,14 @@ public class PetExtraInfo extends DBItem {
     public void update(String size, String beforePic, String afterPic,
                        int idCurrentStatus, int idEnergyLevel, int idTrainingEase) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ CALL adminPetExtraInfo.updatePetExtraInfo(?,?,?,?,?,?,?) }")) {
+             CallableStatement st = con.prepareCall("{ CALL adminPetExtraInfo.updatePetExtraInfo(?,?,?,?,?,?) }")) {
             con.setAutoCommit(false);
             st.setInt(1, id);
-            st.setString(2, size);
-            st.setString(3, beforePic);
-            st.setString(4, afterPic);
-            st.setInt(5, idCurrentStatus);
-            st.setInt(6, idEnergyLevel);
-            st.setInt(7, idTrainingEase);
+            st.setString(2, beforePic);
+            st.setString(3, afterPic);
+            st.setInt(4, idCurrentStatus);
+            st.setInt(5, idEnergyLevel);
+            st.setInt(6, idTrainingEase);
             st.execute();
             con.commit();
             data = null;

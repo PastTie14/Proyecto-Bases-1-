@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY adminPetExtraInfo AS
 
 -- ======================================== INSERT ========================================
 
-FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER,
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
                             pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
                             pIdTrainingEase IN NUMBER)
@@ -10,9 +10,9 @@ RETURN NUMBER
 AS 
     n_petExtraInfo_id NUMBER(8);
 BEGIN
-    INSERT INTO pet_extra_info (id_pet_extra_info, "size", before_picture, after_picture, id_pet, id_current_status, 
+    INSERT INTO pet_extra_info (id_pet_extra_info, before_picture, after_picture, id_pet, id_current_status, 
                                 id_energy_level, id_training_ease)
-    VALUES(s_petExtraInfo.nextVal, pSize, pBeforePicture, pAfterPicture, pIdPet,
+    VALUES(s_petExtraInfo.nextVal, pBeforePicture, pAfterPicture, pIdPet,
             pIdCurrentStatus, pIdEnergyLevel, pIdTrainingEase);
     COMMIT;
     SELECT s_petExtraInfo.CURRVAL INTO n_petExtraInfo_id FROM DUAL;
@@ -54,13 +54,13 @@ END insertBounty;
 
 -- ======================================== UPDATE ========================================
 
-PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER,  
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, pIdCurrentStatus IN NUMBER, 
                             pIdEnergyLevel IN NUMBER, pIdTrainingEase IN NUMBER)
 IS
 BEGIN
     UPDATE pet_extra_info
-    SET "size" = pSize,
+    SET 
         before_picture = pBeforePicture,
         after_picture = pAfterPicture,
         id_current_status = pIdCurrentStatus,

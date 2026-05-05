@@ -24,7 +24,7 @@ public class DynamicFieldList extends JPanel {
         add(Box.createVerticalStrut(3));
 
         this.labelPrefix = fieldLabelPrefix;
-        addField(); // primer campo
+        addField(); 
     }
 
     private void addField() {

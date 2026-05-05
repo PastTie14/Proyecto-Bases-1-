@@ -9,13 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de distrito.
- * Columnas (índice en data):
- *   0  id_district
- *   1  name
- *   2  id_canton
- */
+
 public class District extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(District.class.getName());

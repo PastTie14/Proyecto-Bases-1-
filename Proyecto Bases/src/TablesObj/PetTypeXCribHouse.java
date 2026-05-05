@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: tipo de mascota aceptado en hogar temporal.
- * Columnas:
- *   id_pet_type (int)
- *   id_crib_house (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class PetTypeXCribHouse extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(PetTypeXCribHouse.class.getName());

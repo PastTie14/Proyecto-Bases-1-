@@ -9,17 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de registro de auditoría.
- * Columnas (índice en data):
- *   0  id_log
- *   1  changedate
- *   2  changeby
- *   3  tablename
- *   4  fieldname
- *   5  previousvalue
- *   6  currentvalue
- */
+
 public class Log extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Log.class.getName());

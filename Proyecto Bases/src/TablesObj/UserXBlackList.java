@@ -9,15 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: usuario en lista negra (con motivo).
- * Columnas:
- *   reason (String)
- *   id_user (int)
- *   id_report (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class UserXBlackList extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(UserXBlackList.class.getName());

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/** 0 id_match | 1 match_date | 2 similarity_percentage */
 public class Match extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Match.class.getName());

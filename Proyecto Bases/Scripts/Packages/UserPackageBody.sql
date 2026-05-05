@@ -6,8 +6,8 @@ PROCEDURE insertUser(pIdUser OUT NUMBER, pEmail VARCHAR2, pPassword VARCHAR2)
 IS 
 BEGIN
     SELECT s_user.nextVal INTO pIdUser FROM DUAL;
-    INSERT INTO "user" (id_user, email, "password")
-    VALUES(pIdUser, pEmail, pPassword);
+    INSERT INTO "user" (id_user, email, "password", CreatedBY,CREATEDAT)
+    VALUES(pIdUser, pEmail, pPassword,USER,SYSTIMESTAMP);
     COMMIT;
 END;
 
@@ -129,13 +129,20 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION login (p_email IN VARCHAR2, p_password IN VARCHAR2) RETURN SYS_REFCURSOR
+FUNCTION login (
+    p_email IN VARCHAR2,
+    p_password IN VARCHAR2
+) RETURN NUMBER
 IS
-    v_cursor SYS_REFCURSOR;
+    v_id NUMBER;
 BEGIN
-    OPEN v_cursor FOR SELECT * FROM "user"
-    WHERE email = p_email AND "password" = p_password;
-    RETURN v_cursor;
+    SELECT id_user
+    INTO v_id
+    FROM "user"
+    WHERE email = p_email
+      AND "password" = p_password;
+
+    RETURN v_id;
 END;
 
 

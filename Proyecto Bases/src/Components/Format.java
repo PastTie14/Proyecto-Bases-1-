@@ -9,19 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.imageio.ImageIO;
  
-/**
- * Clase centralizada de formato visual para la aplicación "Quiero un Peludo".
- *
- * Contiene todos los colores, fuentes, bordes y dimensiones compartidos
- * entre los componentes de la UI. No se instancia; todo es estático.
- *
- * Uso:
- * <pre>
- *   label.setFont(Format.FONT_TITLE);
- *   panel.setBackground(Format.COLOR_BG);
- *   panel.setBorder(Format.borderCard());
- * </pre>
- */
+
 public final class Format {
  
     private Format() { /* No instanciable */ }
@@ -185,12 +173,6 @@ public final class Format {
                             RenderingHints.VALUE_RENDER_QUALITY);
     }
  
-    /**
-     * Devuelve el par (foreground, background) del color según el estado.
-     * @param status  Texto del estado: "Available", "Pending Adoption",
-     *                "Adopted", "In Treatment".
-     * @return  Color[]{foreground, background}
-     */
     public static Color[] statusColors(String status) {
         return switch (status == null ? "" : status.trim()) {
             case "Available"       -> new Color[]{COLOR_STATUS_AVAILABLE,  COLOR_STATUS_AVAILABLE_BG};
@@ -224,14 +206,7 @@ public final class Format {
         badge.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
         return badge;
     }
- 
-    /**
-     * Escala una imagen manteniendo relación de aspecto para cubrir
-     * el área destino (tipo "cover").
-     * @param img    Imagen original.
-     * @param w      Ancho destino.
-     * @param h      Alto destino.
-     */
+
     public static Image scaleCover(Image img, int w, int h) {
         int iw = img.getWidth(null);
         int ih = img.getHeight(null);

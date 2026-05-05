@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: donación por usuario.
- * Columnas:
- *   id_user (int)
- *   id_donation (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class DonationXUser extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(DonationXUser.class.getName());

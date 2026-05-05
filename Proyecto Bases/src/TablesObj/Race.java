@@ -9,13 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Modelo de raza de mascota.
- * Columnas (índice en data):
- *   0  id_race
- *   1  name
- *   2  id_pet_type
- */
+
 public class Race extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(Race.class.getName());

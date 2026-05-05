@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Tabla intermedia: enfermedad registrada en ficha médica.
- * Columnas:
- *   id_disease (int)
- *   id_medic_sheet (int)
- *
- * Nota: tabla sin clave primaria simple; se usa mediante métodos estáticos.
- */
+
 public class DiseaseXMedicSheet extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(DiseaseXMedicSheet.class.getName());
