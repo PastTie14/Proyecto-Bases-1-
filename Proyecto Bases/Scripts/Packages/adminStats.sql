@@ -1,0 +1,8 @@
+CREATE OR REPLACE PACKAGE BODY adminStats AS
+
+FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER) RETURN SYS_REFCURSOR;
+
+FUNCTION getDonationsByAssociation(pIdDonation IN NUMBER, pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR;
+FUNCTION getDonationsByRescuer(pIdDonation IN NUMBER, pIdRescuer IN NUMBER) RETURN SYS_REFCURSOR;
+
+END adminStats;
