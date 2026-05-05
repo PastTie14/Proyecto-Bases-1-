@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.imageio.ImageIO;
@@ -264,7 +265,7 @@ public final class Format {
             conn.setReadTimeout(10_000);
             conn.connect();
             return ImageIO.read(conn.getInputStream());
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return null;
         }

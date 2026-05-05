@@ -54,4 +54,122 @@ BEGIN
     COMMIT;
 END insertParameters;
 
+
+-- ======================================== UPDATE ========================================
+                            
+PROCEDURE updatePhoto(pIdPhoto IN NUMBER, pDate IN DATE, 
+                        pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER) 
+IS
+BEGIN
+    UPDATE photo
+    SET "date" = pDate, 
+        photo_dir = pPhotoDir
+    
+    WHERE id_photo = pIdPhoto
+    AND id_user = pIdAdopter;
+    COMMIT;
+END;
+
+PROCEDURE updateRating(pIdRating IN NUMBER, pScore IN NUMBER, 
+                        pIdUser IN NUMBER, pIdAdopter IN NUMBER)
+IS
+BEGIN
+    UPDATE rating
+    SET score = pScore
+    
+    WHERE id_rating = pIdRating
+    AND id_user = pIdUser
+    AND id_adopter = pIdAdopter;
+    COMMIT;
+END;                        
+
+PROCEDURE updateMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
+                        pSimilarityPercentage IN NUMBER)
+IS
+BEGIN
+    UPDATE match
+    SET match_date = pMatchDate,
+        similarity_percentage = pSimilarityPercentage
+    
+    WHERE id_match = pIdMatch;
+    COMMIT;
+END;
+
+PROCEDURE updateParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
+                            pIdMatch IN NUMBER, pIdValueType IN NUMBER)
+IS
+BEGIN
+    UPDATE parameters
+    SET "value" = pValue,
+        id_match = pIdMatch,
+        id_value_type = pIdValueType
+    
+    WHERE id_parameter = pIdParameter;
+    COMMIT;
+END;
+
+
+-- ======================================== GET ========================================
+
+FUNCTION getAdoptionForm RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM adoption_form;
+        RETURN v_cursor;
+END;
+
+FUNCTION getPhoto RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM photo;
+        RETURN v_cursor;
+END;
+
+FUNCTION getRating RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM rating;
+        RETURN v_cursor;
+END;
+
+FUNCTION getMatch RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM match;
+        RETURN v_cursor;
+END;
+
+FUNCTION getParameters RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM parameters;
+        RETURN v_cursor;
+END;
+
+-- ======================================== DELETE ========================================
+
+PROCEDURE deletePhoto(pIdPhoto IN NUMBER)
+IS
+BEGIN
+    DELETE FROM photo
+    WHERE id_photo = pIdPhoto;
+END;
+
+PROCEDURE deleteRating(pIdRating IN NUMBER)
+IS
+BEGIN
+    DELETE FROM rating
+    WHERE id_rating = pIdRating;
+END;
+
 END adminAdoptionMatch;

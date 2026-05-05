@@ -4,59 +4,81 @@ create or replace PACKAGE BODY adminCatalogs AS
 
     PROCEDURE insertCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2) IS
     BEGIN
-        INSERT INTO currency VALUES(p_id_currency, p_name, p_acronym);
+        INSERT INTO currency (id_currency, "name", acronym)
+        VALUES(p_id_currency, p_name, p_acronym);
         COMMIT;
     END;
 
     PROCEDURE insertProvince(p_id_province IN NUMBER, p_name VARCHAR2) IS
     BEGIN
-        INSERT INTO province VALUES(p_id_province, p_name);
+        INSERT INTO province (id_province, "name")
+        VALUES(p_id_province, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertCanton(p_id_canton IN NUMBER, p_name VARCHAR2, p_id_province IN NUMBER) IS
     BEGIN
-        INSERT INTO canton VALUES(p_id_canton, p_name, p_id_province);
+        INSERT INTO canton (id_canton, "name", id_province)
+        VALUES(p_id_canton, p_name, p_id_province);
         COMMIT;
     END;
 
     PROCEDURE insertDistrict(p_id_district IN NUMBER, p_name VARCHAR2, p_id_canton IN NUMBER) IS
     BEGIN
-        INSERT INTO district VALUES(p_id_district, p_name, p_id_canton);
+        INSERT INTO district (id_district, "name", id_canton)
+        VALUES(p_id_district, p_name, p_id_canton);
         COMMIT;
     END;
 
     PROCEDURE insertPetType(p_id_pet_type IN NUMBER, p_name VARCHAR2) IS
     BEGIN
-        INSERT INTO pet_type VALUES(p_id_pet_type, p_name);
+        INSERT INTO pet_type (id_pet_type, "name")
+        VALUES(p_id_pet_type, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertRace(p_id_race IN NUMBER, p_name VARCHAR2, p_id_pet_type IN NUMBER) IS
     BEGIN
-        INSERT INTO race VALUES(p_id_race, p_name, p_id_pet_type);
+        INSERT INTO race (id_race, "name", id_pet_type)
+        VALUES(p_id_race, p_name, p_id_pet_type);
         COMMIT;
     END;
 
     PROCEDURE insertStatus(p_id_status IN NUMBER, p_status_type VARCHAR2) IS
     BEGIN
-        INSERT INTO status VALUES(p_id_status, p_status_type);
+        INSERT INTO status (id_status, status_type)
+        VALUES(p_id_status, p_status_type);
         COMMIT;
     END;
 
     PROCEDURE insertColor(p_id_color IN NUMBER, p_name VARCHAR2) IS
     BEGIN
-        INSERT INTO color VALUES(p_id_color, p_name);
+        INSERT INTO color (id_color, "name")
+        VALUES(p_id_color, p_name);
         COMMIT;
     END;
 
     PROCEDURE insertValueType(p_id_value_type IN NUMBER, p_type VARCHAR2) IS
     BEGIN
-        INSERT INTO value_type VALUES(p_id_value_type, p_type);
+        INSERT INTO value_type (id_value_type, "type")
+        VALUES(p_id_value_type, p_type);
         COMMIT;
     END;
 
+    PROCEDURE insertSize(p_id_size IN NUMBER, p_name IN VARCHAR2) IS
+    BEGIN
+        INSERT INTO "size" (id_size, "name")
+        VALUES(p_id_size, p_name);
+        COMMIT;
+    END;
 
+    PROCEDURE insertSizeXCribHouse(p_id_size IN NUMBER, p_id_crib_house IN NUMBER) IS
+    BEGIN
+        INSERT INTO size_x_crib_house (id_size, id_crib_house)
+        VALUES(p_id_size, p_id_crib_house);
+        COMMIT;
+    END;
+    
     -- ==================== UPDATE ====================
 
     PROCEDURE updateCurrency(p_id_currency IN NUMBER, p_name VARCHAR2, p_acronym VARCHAR2) IS
@@ -147,6 +169,16 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
     
+    FUNCTION getCurrencyById(pIdCurrency IN NUMBER) RETURN SYS_REFCURSOR 
+    IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM currency c
+            WHERE c.id_currency = pIdCurrency;
+        RETURN v_cursor;
+    END;    
+    
 
     FUNCTION getProvince RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -155,6 +187,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM province;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getProvinceById(pIdProvince IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT p."name" FROM province p
+            WHERE p.id_province = pIdProvince;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getCanton RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -164,6 +206,16 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
 
+    FUNCTION getCantonById(pIdCanton IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM canton c
+            WHERE c.id_canton = pIdCanton;
+        RETURN v_cursor;
+    END;
+    
+
     FUNCTION getDistrict RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
     BEGIN
@@ -171,6 +223,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM district;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getDistrictById(pIdDistrict IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT d."name" FROM district d
+            WHERE d.id_district = pIdDistrict;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getPetType RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -179,6 +241,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM pet_type;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getPetTypeById(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT pt."name" FROM pet_type pt
+            WHERE pt.id_pet_type = pIdPetType;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getRace RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -187,6 +259,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM race;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getRaceById(pIdRace IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT r."name" FROM race r
+            WHERE r.id_race = pIdRace;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getStatus RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -195,6 +277,16 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM status;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getStatusById(pIdStatus IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT s.status_type FROM status s
+            WHERE s.id_status = pIdStatus;
+        RETURN v_cursor;
+    END;
+    
 
     FUNCTION getColor RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
@@ -203,12 +295,50 @@ create or replace PACKAGE BODY adminCatalogs AS
             SELECT * FROM color;
         RETURN v_cursor;
     END;
+    
+    FUNCTION getColorById(pIdColor IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT c."name" FROM color c
+            WHERE c.id_color = pIdColor;
+        RETURN v_cursor;
+    END;
+
+    
 
     FUNCTION getValueType RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
             SELECT * FROM value_type;
+        RETURN v_cursor;
+    END;
+    
+    FUNCTION getValueTypeById(pIdValueType IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT vt."type" FROM value_type vt
+            WHERE vt.id_value_type = pIdValueType;
+        RETURN v_cursor;
+    END;
+    
+    
+    FUNCTION getSize RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM "size";
+        RETURN v_cursor;
+    END;
+    
+    FUNCTION getSizeById(pIdSize IN NUMBER) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT s."name" FROM "size" s
+            WHERE s.id_size = pIdSize;
         RETURN v_cursor;
     END;
 

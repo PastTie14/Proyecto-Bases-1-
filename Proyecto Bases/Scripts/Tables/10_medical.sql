@@ -56,7 +56,8 @@ ALTER TABLE medic_sheet
 
 ALTER TABLE medic_sheet
     ADD CONSTRAINT fk_ms_pet_extra_info
-    FOREIGN KEY (id_pet_extra_info) REFERENCES pet_extra_info (id_pet_extra_info);
+    FOREIGN KEY (id_pet_extra_info) REFERENCES pet_extra_info (id_pet_extra_info)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- DISEASE X MEDIC SHEET
@@ -74,11 +75,13 @@ ALTER TABLE disease_x_medic_sheet
 
 ALTER TABLE disease_x_medic_sheet
     ADD CONSTRAINT fk_dxms_disease
-    FOREIGN KEY (id_disease) REFERENCES disease (id_disease);
+    FOREIGN KEY (id_disease) REFERENCES disease (id_disease)
+    ON DELETE CASCADE;
 
 ALTER TABLE disease_x_medic_sheet
     ADD CONSTRAINT fk_dxms_medic_sheet
-    FOREIGN KEY (id_medic_sheet) REFERENCES medic_sheet (id_medic_sheet);
+    FOREIGN KEY (id_medic_sheet) REFERENCES medic_sheet (id_medic_sheet)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- TREATMENT X DISEASE
@@ -96,8 +99,10 @@ ALTER TABLE treatment_x_disease
 
 ALTER TABLE treatment_x_disease
     ADD CONSTRAINT fk_txd_treatment
-    FOREIGN KEY (id_treatment) REFERENCES treatment (id_treatment);
+    FOREIGN KEY (id_treatment) REFERENCES treatment (id_treatment)
+    ON DELETE CASCADE;
 
 ALTER TABLE treatment_x_disease
     ADD CONSTRAINT fk_txd_disease
-    FOREIGN KEY (id_disease) REFERENCES disease (id_disease);
+    FOREIGN KEY (id_disease) REFERENCES disease (id_disease)
+    ON DELETE CASCADE;

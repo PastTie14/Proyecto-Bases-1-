@@ -177,7 +177,7 @@ public class PetFormPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUIR OBJETOS DEL MODELO
     // ─────────────────────────────────────────────────────────────
-
+/*
     public Pet buildPet() {
         Pet pet = new Pet(
             0,
@@ -196,7 +196,7 @@ public class PetFormPanel extends JPanel {
             pet.setExtraInfo(buildExtraInfo());
         }
         return pet;
-    }
+    }*/
 
     private PetExtraInfo buildExtraInfo() {
         PetExtraInfo extra = new PetExtraInfo(0, 0);

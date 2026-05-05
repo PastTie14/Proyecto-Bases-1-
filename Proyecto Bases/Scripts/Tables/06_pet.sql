@@ -21,6 +21,7 @@ CREATE TABLE pet
     createdAt   DATE,
     modifiedBy  VARCHAR2(20),
     modifiedAt  DATE,
+    id_size     NUMBER(1),
     id_status   NUMBER(4),
     id_pet_type NUMBER(4),
     id_rescuer  NUMBER(8)
@@ -32,6 +33,9 @@ ALTER TABLE pet
 
 ALTER TABLE pet
     MODIFY first_name CONSTRAINT pet_firstName_nn NOT NULL;
+
+ALTER TABLE pet
+    MODIFY id_size CONSTRAINT pet_idSize_nn NOT NULL;
 
 ALTER TABLE pet
     MODIFY createdBy CONSTRAINT pet_createdBy_nn NOT NULL;
@@ -55,6 +59,10 @@ ALTER TABLE pet
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_status
     FOREIGN KEY (id_status) REFERENCES status (id_status);
+
+ALTER TABLE pet
+    ADD CONSTRAINT fk_pet_size
+    FOREIGN KEY (id_size) REFERENCES "size" (id_size);
 
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_pet_type
@@ -97,7 +105,8 @@ ALTER TABLE identification_chip
 
 ALTER TABLE identification_chip
     ADD CONSTRAINT fk_chip_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet);
+    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- PET X COLOR
@@ -121,11 +130,13 @@ ALTER TABLE pet_x_color
 
 ALTER TABLE pet_x_color
     ADD CONSTRAINT fk_pxc_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet);
+    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
+    ON DELETE CASCADE;
 
 ALTER TABLE pet_x_color
     ADD CONSTRAINT fk_pxc_color
-    FOREIGN KEY (id_color) REFERENCES color (id_color);
+    FOREIGN KEY (id_color) REFERENCES color (id_color)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- PET X DISTRICT
@@ -149,11 +160,13 @@ ALTER TABLE pet_x_district
 
 ALTER TABLE pet_x_district
     ADD CONSTRAINT fk_pxd_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet);
+    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
+    ON DELETE CASCADE;
 
 ALTER TABLE pet_x_district
     ADD CONSTRAINT fk_pxd_district
-    FOREIGN KEY (id_district) REFERENCES district (id_district);
+    FOREIGN KEY (id_district) REFERENCES district (id_district)
+    ON DELETE CASCADE;
 
 -- ============================================
 -- PET TYPE X CRIB HOUSE
@@ -177,8 +190,10 @@ ALTER TABLE pet_type_x_crib_house
 
 ALTER TABLE pet_type_x_crib_house
     ADD CONSTRAINT fk_ptxch_pet_type
-    FOREIGN KEY (id_pet_type) REFERENCES pet_type (id_pet_type);
+    FOREIGN KEY (id_pet_type) REFERENCES pet_type (id_pet_type)
+    ON DELETE CASCADE;
 
 ALTER TABLE pet_type_x_crib_house
     ADD CONSTRAINT fk_ptxch_crib_house
-    FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user);
+    FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user)
+    ON DELETE CASCADE;

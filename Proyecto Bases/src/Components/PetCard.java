@@ -171,8 +171,8 @@ public class PetCard extends JPanel {
         price.setForeground(Format.COLOR_PRIMARY);
         price.setAlignmentX(LEFT_ALIGNMENT);
  
-        String rescuerName = (pet.getRescuer() != null) ? pet.getRescuer().toString() : "—";
-        shelter = new JLabel("📍 " + rescuerName);
+        //String rescuerName = (pet.getRescuer() != null) ? pet.getRescuer().toString() : "—";
+        //shelter = new JLabel("📍 " + rescuerName);
         shelter.setFont(Format.FONT_BODY_SMALL);
         shelter.setForeground(Format.COLOR_TEXT_SECONDARY);
         shelter.setAlignmentX(LEFT_ALIGNMENT);
