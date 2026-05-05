@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY adminPetExtraInfo AS
 
 -- ======================================== INSERT ========================================
 
-FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER,
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
                             pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
                             pIdTrainingEase IN NUMBER)
@@ -10,9 +10,9 @@ RETURN NUMBER
 AS 
     n_petExtraInfo_id NUMBER(8);
 BEGIN
-    INSERT INTO pet_extra_info (id_pet_extra_info, "size", before_picture, after_picture, id_pet, id_current_status, 
+    INSERT INTO pet_extra_info (id_pet_extra_info, before_picture, after_picture, id_pet, id_current_status, 
                                 id_energy_level, id_training_ease)
-    VALUES(pIdPetExtraInfo, pSize, pBeforePicture, pAfterPicture, pIdPet,
+    VALUES(s_petExtraInfo.nextVal, pBeforePicture, pAfterPicture, pIdPet,
             pIdCurrentStatus, pIdEnergyLevel, pIdTrainingEase);
     COMMIT;
     SELECT s_petExtraInfo.CURRVAL INTO n_petExtraInfo_id FROM DUAL;
@@ -23,7 +23,7 @@ PROCEDURE insertCurrentStatus(pIdCurrentStatus IN NUMBER, pStatusType IN VARCHAR
 IS 
 BEGIN
     INSERT INTO current_status (id_current_status, status_type)
-    VALUES(pIdCurrentStatus, pStatusType);
+    VALUES(s_currentStatus.nextVal, pStatusType);
     COMMIT;
 END insertCurrentStatus;
 
@@ -39,7 +39,7 @@ PROCEDURE insertTrainingEase(pIdTrainingEase IN NUMBER, pName IN VARCHAR2)
 AS 
 BEGIN
     INSERT INTO training_ease (id_training_ease, "name")
-    VALUES(pIdTrainingEase, pName);
+    VALUES(s_trainingEase.nextVal, pName);
     COMMIT;
 END insertTrainingEase;
 
@@ -48,19 +48,19 @@ PROCEDURE insertBounty(pIdBounty IN NUMBER, pAmount IN NUMBER,
 AS 
 BEGIN
     INSERT INTO bounty (id_bounty, amount, id_pet_extra_info, id_currency)
-    VALUES(pIdBounty, pAmount, pIdPetExtraInfo, pIdCurrency);
+    VALUES(s_bounty.nextVal, pAmount, pIdPetExtraInfo, pIdCurrency);
     COMMIT;
 END insertBounty;
 
 -- ======================================== UPDATE ========================================
 
-PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER,  
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, pIdCurrentStatus IN NUMBER, 
                             pIdEnergyLevel IN NUMBER, pIdTrainingEase IN NUMBER)
 IS
 BEGIN
     UPDATE pet_extra_info
-    SET "size" = pSize,
+    SET 
         before_picture = pBeforePicture,
         after_picture = pAfterPicture,
         id_current_status = pIdCurrentStatus,
@@ -117,13 +117,13 @@ BEGIN
     RETURN v_cursor;
 END;
 
+
 FUNCTION getPetExtraInfoById(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
-    OPEN v_cursor FOR 
-        SELECT * FROM pet_extra_info p
-        WHERE p.id_pet = pIdPet;
+    OPEN v_cursor FOR SELECT * FROM pet_extra_info
+    WHERE id_pet = pIdPet;
     RETURN v_cursor;
 END;
 

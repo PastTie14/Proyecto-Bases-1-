@@ -32,6 +32,43 @@ END insertMedicSheet;
 
 --=======================================================================================
 
+FUNCTION insertar_veterinario (
+    p_id_veterinarian   IN NUMBER,
+    p_first_name        IN VARCHAR2,
+    p_second_name       IN VARCHAR2,
+    p_first_surname     IN VARCHAR2,
+    p_second_surname    IN VARCHAR2,
+    p_clinic_name       IN VARCHAR2
+) RETURN NUMBER
+IS
+BEGIN
+    INSERT INTO veterinarian (
+        id_veterinarian,
+        first_name,
+        second_name,
+        first_surname,
+        second_surname,
+        clinic_name,
+        created_at,
+        created_by
+    ) VALUES (
+        s_veterinarian.nextVal,
+        p_first_name,
+        p_second_name,
+        p_first_surname,
+        p_second_surname,
+        p_clinic_name,
+        SYSDATE,
+        USER
+    );
+
+    COMMIT;
+
+    RETURN s_veterinarian.currVal;
+END;
+
+--=======================================================================================
+
 PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER)
 IS 
 BEGIN
@@ -87,6 +124,45 @@ BEGIN
 END;
 
 -- ======================================== GET ========================================
+
+FUNCTION getMedicSheetByPetId(p_idPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT * FROM Medic_Sheet a
+            INNER JOIN pet_extra_info b
+            ON a.id_pet_extra_info = b.id_pet_extra_info
+            INNER JOIN pet c
+            ON c.id_pet = b.id_pet
+            WHERE p_idPet = c.id_pet;
+        RETURN v_cursor;
+END;
+
+FUNCTION getDiseasesAndTreatments(p_idPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT e."name", g."name", g.dose FROM Medic_Sheet a
+            INNER JOIN pet_extra_info b
+            ON a.id_pet_extra_info = b.id_pet_extra_info
+            INNER JOIN pet c
+            ON c.id_pet = b.id_pet
+            INNER JOIN DISEASE_X_MEDIC_SHEET d
+            ON a.id_medic_sheet = d.id_medic_sheet
+            INNER JOIN DISEASE e
+            ON d.id_disease = e.id_disease
+            INNER JOIN TREATMENT_X_DISEASE f
+            ON f.id_disease = e.id_disease
+            INNER JOIN TREATMENT g
+            ON f.id_treatment = g.id_treatment
+            WHERE p_idPet = c.id_pet;
+        RETURN v_cursor;
+END;
+
+
+
 
 FUNCTION getTreatment RETURN SYS_REFCURSOR
 IS
@@ -180,6 +256,8 @@ BEGIN
         WHERE dxms.id_medic_sheet = pIdMedicSheet;
     RETURN v_cursor;
 END;
+
+
 
 FUNCTION getTreatmentsForDisease(pIdDisease IN NUMBER) RETURN SYS_REFCURSOR
 IS

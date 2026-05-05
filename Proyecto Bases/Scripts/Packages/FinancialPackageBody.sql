@@ -6,7 +6,7 @@ PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociatio
 IS 
 BEGIN
     INSERT INTO donation (id_donation, amount, id_association, id_currency)
-    VALUES(pIdDonation, pAmount, pIdAssociation, pIdCurrency);
+    VALUES(s_donation.nextVal, pAmount, pIdAssociation, pIdCurrency);
     COMMIT;
 END;
 

@@ -1,6 +1,7 @@
 package proyecto.bases;
 
 import Components.Format;
+import Components.mainWindow;
 import Connect.DBConnection;
 //import Components.mainWindow;
 
@@ -10,16 +11,10 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.event.*;
 import java.sql.ResultSet;
 
-/**
- * Página de inicio de sesión.
- *
- * Flujo:
- *   - "Iniciá sesión"   → si el login devuelve una fila → abre mainWindow.
- *   - "Crear cuenta"    → oculta este frame y abre RegisterPage.
- */
+
 public class LoginPage {
 
-    final JFrame frame;   // package-private para que RegisterPage lo use
+    final JFrame frame;  
 
     private final JTextField     tfEmail = RegisterPage.buildTextField();
     private final JPasswordField tfPass  = RegisterPage.buildPasswordField();
@@ -159,12 +154,12 @@ public class LoginPage {
             // Llama al stored procedure de login.
             // Se espera que devuelva una fila si las credenciales son correctas,
             // o un ResultSet vacío si no coinciden.
-            ResultSet rs = DBConnection.login(email, pass);
+            int id = DBConnection.login(email, pass);
 
-            if (rs != null && rs.next()) {
-                // Login exitoso → cerrar esta ventana y abrir mainWindow
+            if (id != 0 && id>=1) {
                 frame.dispose();
-//                SwingUtilities.invokeLater(() -> mainWindow.main(null));
+                mainWindow win = new mainWindow(id);
+                win.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(frame,
                     "Email o contraseña incorrectos.",

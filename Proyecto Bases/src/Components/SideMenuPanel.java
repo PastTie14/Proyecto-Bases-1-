@@ -5,23 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-/**
- * Panel lateral de navegación con animación de deslizamiento.
- *
- * Incluye un botón de hamburguesa (≡) que abre/cierra el menú
- * con una animación de derecha a izquierda.
- *
- * Uso básico:
- * <pre>
- *   SideMenuPanel menu = new SideMenuPanel(items);
- *
- *   // Agregar el botón al toolbar de tu app:
- *   toolbar.add(menu.getToggleButton());
- *
- *   // Agregar el panel al frame (empieza oculto, ancho = 0):
- *   frame.add(menu, BorderLayout.EAST);
- * </pre>
- */
+
 public class SideMenuPanel extends JPanel {
 
     // ── Paleta ────────────────────────────────────────────

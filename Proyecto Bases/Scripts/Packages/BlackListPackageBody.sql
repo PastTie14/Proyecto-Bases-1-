@@ -6,7 +6,7 @@ PROCEDURE insertBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)
 IS 
 BEGIN
     INSERT INTO black_list (id_report, id_user)
-    VALUES(pIdReport, pIdUser);
+    VALUES(s_black_List.nextVal, pIdUser);
     COMMIT;
 END;
 
@@ -53,6 +53,7 @@ BEGIN
         WHERE bl.id_user = pIdUser;
     RETURN v_cursor;
 END;
+
 
 -- ======================================== DELETE ========================================
 
