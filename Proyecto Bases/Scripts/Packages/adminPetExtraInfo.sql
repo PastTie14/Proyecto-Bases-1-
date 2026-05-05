@@ -1,7 +1,7 @@
 CREATE OR REPLACE PACKAGE adminPetExtraInfo IS
 
 -- INSERT
-FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER, 
                                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
                                             pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
                                             pIdTrainingEase IN NUMBER) RETURN NUMBER;
@@ -16,7 +16,7 @@ PROCEDURE insertBounty(pIdBounty IN NUMBER, pAmount IN NUMBER,
                         pIdPetExtraInfo IN NUMBER, pIdCurrency IN NUMBER);
 
 -- UPDATE
-PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER, pSize IN VARCHAR2, 
+PROCEDURE updatePetExtraInfo(pIdPetExtraInfo IN NUMBER,  
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, pIdCurrentStatus IN NUMBER, 
                             pIdEnergyLevel IN NUMBER, pIdTrainingEase IN NUMBER);
 

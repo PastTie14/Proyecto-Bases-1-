@@ -53,7 +53,6 @@ ALTER TABLE training_ease
 CREATE TABLE pet_extra_info
 (
     id_pet_extra_info   NUMBER(8),
-    "size"              VARCHAR2(20),
     before_picture      VARCHAR2(200),
     after_picture       VARCHAR2(200),
     id_pet              NUMBER(8),

@@ -6,7 +6,7 @@ PROCEDURE insertAdoptionForm(pIdAdoption IN NUMBER, pNotes VARCHAR2,
 IS 
 BEGIN
     INSERT INTO adoption_form
-    VALUES(pIdAdoption, pNotes, pAdoptionDate, pReference, pIdAdopter, pIdPet);
+    VALUES(s_adoption.nextVal, pNotes, pAdoptionDate, pReference, pIdAdopter, pIdPet);
     COMMIT;
 END insertAdoptionForm;
 
@@ -28,7 +28,7 @@ PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER,
 IS 
 BEGIN
     INSERT INTO rating
-    VALUES(pIdRating, pScore, pIdUser, pIdAdopter);
+    VALUES(s_rating.nextVal, pScore, pIdUser, pIdAdopter);
     COMMIT;
 END insertRating;
 
@@ -39,7 +39,7 @@ PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
 IS 
 BEGIN
     INSERT INTO match
-    VALUES(pIdMatch, pMatchDate, pSimilarityPercentage);
+    VALUES(s_match.nextVal, pMatchDate, pSimilarityPercentage);
     COMMIT;
 END insertMatch;
 
@@ -50,7 +50,7 @@ PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
 IS 
 BEGIN
     INSERT INTO parameters
-    VALUES(pIdParameter, pValue, pIdMatch, pIdValueType);
+    VALUES(s_parameter.nextVal, pValue, pIdMatch, pIdValueType);
     COMMIT;
 END insertParameters;
 

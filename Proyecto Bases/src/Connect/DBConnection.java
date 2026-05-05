@@ -16,10 +16,9 @@ import java.util.ArrayList;
 public class DBConnection {
     
     public static String host = "jdbc:oracle:thin:@localhost:1521:Pr1";
-    //public static String uName = "db_user";
-    //public static String  uPass = "1414";
-    public static String uName = "TS";
-    public static String  uPass = "TS";
+    public static String uName = "db_user";
+    public static String  uPass = "1414";
+
     
     public static ResultSet getTuplas(String FunctionName) throws SQLException {
         System.out.println("BEGIN ? := " + FunctionName + "; END;");
@@ -286,15 +285,18 @@ public class DBConnection {
             if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
-    public static ResultSet login(String email, String password) throws SQLException{
-        System.out.println("BEGIN ? := " + "; END;");
+    
+    public static int login(String email, String password) throws SQLException {
         Connection con = DriverManager.getConnection(host, uName, uPass);
-
-        CallableStatement stmt = con.prepareCall("BEGIN ? :=  adminUser.login(" +"'"+email+"'"+","+"'"+ password+"'"+"); END;");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        CallableStatement stmt = con.prepareCall(
+            "BEGIN ? := adminUser.login(?, ?); END;"
+        );
+        stmt.registerOutParameter(1, OracleTypes.INTEGER);
+        stmt.setString(2, email);
+        stmt.setString(3, password);
         stmt.execute();
-
-        return (ResultSet) stmt.getObject(1);
+        int id = stmt.getInt(1);
+        return id == 0 ? -1 : id;
     }
     public static void insertUser(String email, String password) throws SQLException {
 
