@@ -25,7 +25,8 @@ CREATE TABLE pet
     id_status   NUMBER(4),
     id_pet_type NUMBER(4),
     id_rescuer  NUMBER(8),
-    id_crib_house NUMBER(8)
+    id_crib_house NUMBER(8),
+    id_district NUMBER(8)
 )
 TABLESPACE TS_DATA;
 
@@ -76,6 +77,10 @@ ALTER TABLE pet
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_crib_house
     FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user);
+    
+ALTER TABLE pet
+    ADD CONSTRAINT fk_pet_district
+    FOREIGN KEY (id_district) REFERENCES district (id_district);
 
 -- ============================================
 -- IDENTIFICATION CHIP
@@ -141,36 +146,6 @@ ALTER TABLE pet_x_color
 ALTER TABLE pet_x_color
     ADD CONSTRAINT fk_pxc_color
     FOREIGN KEY (id_color) REFERENCES color (id_color)
-    ON DELETE CASCADE;
-
--- ============================================
--- PET X DISTRICT
--- ============================================
-CREATE TABLE pet_x_district
-(
-    id_pet      NUMBER(8),
-    id_district NUMBER(4)
-)
-TABLESPACE TS_DATA;
-
-ALTER TABLE pet_x_district
-    MODIFY id_pet CONSTRAINT petXDistrict_idPet_nn NOT NULL;
-
-ALTER TABLE pet_x_district
-    MODIFY id_district CONSTRAINT petXDistrict_idDistrict_nn NOT NULL;
-
-ALTER TABLE pet_x_district
-    ADD CONSTRAINT pk_pet_x_district PRIMARY KEY (id_pet, id_district)
-    USING INDEX TABLESPACE TS_INDEX;
-
-ALTER TABLE pet_x_district
-    ADD CONSTRAINT fk_pxd_pet
-    FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
-    ON DELETE CASCADE;
-
-ALTER TABLE pet_x_district
-    ADD CONSTRAINT fk_pxd_district
-    FOREIGN KEY (id_district) REFERENCES district (id_district)
     ON DELETE CASCADE;
 
 -- ============================================
