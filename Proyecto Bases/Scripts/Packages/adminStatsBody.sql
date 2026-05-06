@@ -31,10 +31,10 @@ FUNCTION getDonationsByAssociation(pStartDate IN DATE, pEndDate IN DATE) RETURN 
             LEFT JOIN donation d -- LEFT to include associations without donations
             ON a.id_user = d.id_association
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
-            AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+            AND d.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY a."name", donation_count  
-            ORDER BY a."name", donation_count;
+            GROUP BY a."name"  
+            ORDER BY a."name";
         RETURN v_cursor;
     END;
     
@@ -47,10 +47,10 @@ FUNCTION getDonationsByCribHouse(pStartDate IN DATE, pEndDate IN DATE) RETURN SY
             LEFT JOIN donation d -- LEFT to include crib houses without donations
             ON cb.id_user = d.id_crib_house
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
-            AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+            AND d.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY cb."name", donation_count
-            ORDER BY cb."name", donation_count;
+            GROUP BY cb."name"
+            ORDER BY cb."name";
         RETURN v_cursor;
     END;
     
