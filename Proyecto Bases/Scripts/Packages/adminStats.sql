@@ -7,6 +7,8 @@ FUNCTION getDonationsByAssociation(pStartDate IN DATE, pEndDate IN DATE) RETURN 
                                 
 FUNCTION getDonationsByCribHouse(pStartDate IN DATE, pEndDate IN DATE) RETURN SYS_REFCURSOR;
 
+FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_REFCURSOR;
+
 FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR;
 
 END adminStats;

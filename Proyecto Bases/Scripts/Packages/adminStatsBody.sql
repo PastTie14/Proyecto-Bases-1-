@@ -5,8 +5,7 @@ FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER,
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-            SELECT pt.id_pet_type, pt."name", s.id_status, s.status_type,
-                    COUNT(p.id_pet) AS pet_count FROM pet_type pt
+            SELECT pt."name", s.status_type, COUNT(p.id_pet) AS pet_count FROM pet_type pt
                     
             CROSS JOIN status s -- cartesian product
             
@@ -18,8 +17,8 @@ FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER,
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND s.id_status = NVL(pIdStatus, s.id_status)
             
-            GROUP BY pt.id_pet_type, pt."name", s.id_status, s.status_type
-            ORDER BY pt.id_pet_type, pt."name", s.id_status, s.status_type;
+            GROUP BY pt."name", s.status_type, pet_count
+            ORDER BY pt."name", s.status_type, pet_count;
         RETURN v_cursor;
     END;
     
@@ -52,6 +51,50 @@ FUNCTION getDonationsByCribHouse(pStartDate IN DATE, pEndDate IN DATE) RETURN SY
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
             GROUP BY cb.id_user, cb."name"    
             ORDER BY cb."name";
+        RETURN v_cursor;
+    END;
+    
+FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;    
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_adopted FROM pet p
+            
+            INNER JOIN pet_type pt
+            ON p.id_pet_type = pt.id_pet_type
+            
+            INNER JOIN race r
+            ON pt.id_race = r.id_race
+            
+            INNER JOIN status s
+            ON p.id_status = s.id_status
+            
+            WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
+            AND r.id_race = NVL(pIdRace, r.id_race)
+            AND s.id_status = 1
+            
+            GROUP BY s.status_type, pt."name", r."name". count_adopted
+            ORDER BY s.status_type, pt."name", r."name". count_adopted
+            
+            UNION
+            
+            SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_unadopted FROM pet p
+            
+            INNER JOIN pet_type pt
+            ON p.id_pet_type = pt.id_pet_type
+            
+            INNER JOIN race r
+            ON pt.id_race = r.id_race
+            
+            INNER JOIN status s
+            ON p.id_status = s.id_status
+            
+            WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
+            AND r.id_race = NVL(pIdRace, r.id_race)
+            AND s.id_status = 2
+            
+            GROUP BY s.status_type, pt."name", r."name", count_unadopted
+            ORDER BY s.status_type, pt."name", r."name". count_unadopted;
         RETURN v_cursor;
     END;
     
