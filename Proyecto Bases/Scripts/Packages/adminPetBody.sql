@@ -11,7 +11,7 @@ BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
                     date_lost, date_found, email, id_status, id_pet_type,id_size, id_rescuer,CREATEDBY,CREATEDAT)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdPetType, pIdSize, pIdRescuer,USER,SYSTIMESTAMP);
+            pEmail, pIdStatus, pIdPetType, pIdSize, pIdRescuer, USER, SYSTIMESTAMP);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); 

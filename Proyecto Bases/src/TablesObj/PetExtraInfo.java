@@ -69,7 +69,7 @@ public class PetExtraInfo extends DBItem {
     public static int insert(int id,  String beforePic, String afterPic,
                              int idPet, int idCurrentStatus, int idEnergyLevel, int idTrainingEase) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ ? = CALL adminPetExtraInfo.insertPetExtraInfo(?,?,?,?,?,?,?,?) }")) {
+             CallableStatement st = con.prepareCall("{  BEGIN ? := CALL adminPetExtraInfo.insertPetExtraInfo(?,?,?,?,?,?,?,?); END; }")) {
             st.registerOutParameter(1, Types.NUMERIC);
             st.setInt(2, id);
             st.setString(3, beforePic);

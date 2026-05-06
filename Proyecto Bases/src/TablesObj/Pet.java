@@ -9,8 +9,11 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
@@ -79,10 +82,57 @@ public class Pet extends DBItem {
         try { return Integer.parseInt(val); }
         catch (NumberFormatException e) { return 0; }
     }
+    
+    private static void setIntOrNull(CallableStatement st, int idx, int val) throws SQLException {
+        if (val > 0) st.setInt(idx, val);
+        else         st.setNull(idx, Types.NUMERIC);
+    }
 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — ESTÁTICAS
     // ─────────────────────────────────────────────────────────────
+    public static ArrayList<ArrayList<Object>> runSearch(
+            int pIdChip,int pIdRescuer, int pIdStatus, int pIdPetType,
+            int pIdColor,int pIdRace , int pIdProvince, int pIdCanton, int pIdDistrict) {
+
+        ArrayList<ArrayList<Object>> filas = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(host, uName, uPass);
+             CallableStatement st = con.prepareCall("{ call getPetFilters(?,?,?,?,?,?,?,?,?,?) }")) {
+
+            setIntOrNull(st, 1, pIdChip);       
+            setIntOrNull(st, 2, pIdDistrict);   
+            setIntOrNull(st, 3, pIdCanton);     
+            setIntOrNull(st, 4, pIdProvince);   
+            setIntOrNull(st, 5, pIdStatus);     
+            setIntOrNull(st, 6, pIdPetType);    
+            setIntOrNull(st, 7, pIdRescuer);    
+            setIntOrNull(st, 8, pIdRace);       
+            setIntOrNull(st, 9, pIdColor);      
+
+            st.registerOutParameter(10, OracleTypes.CURSOR);
+
+            st.execute();
+
+            try (ResultSet rs = (ResultSet) st.getObject(10)) {
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+
+                while (rs.next()) {
+                    ArrayList<Object> fila = new ArrayList<>();
+                    for (int i = 1; i <= cols; i++) {
+                        fila.add(rs.getObject(i));
+                    }
+                    filas.add(fila);
+                }
+            }
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error en getPetFilters", ex);
+        }
+
+        return filas;
+    }
 
     public static ArrayList<String> getPopupItem(int id) {
         try {
@@ -164,7 +214,6 @@ public class Pet extends DBItem {
             stmt.setInt(2, id);
             stmt.execute();
 
-            // ✅ extraer el cursor del parámetro de salida
             ResultSet rs = (ResultSet) stmt.getObject(1);
             ArrayList<String> arr = new ArrayList<>();
             if (rs != null && rs.next()) {

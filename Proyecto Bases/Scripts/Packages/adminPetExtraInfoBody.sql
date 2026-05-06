@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY adminPetExtraInfo AS
 
 -- ======================================== INSERT ========================================
 
-FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER,
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo OUT NUMBER,
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
                             pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
                             pIdTrainingEase IN NUMBER)
