@@ -23,11 +23,11 @@ ALTER TABLE donation
 ALTER TABLE donation
     MODIFY amount CONSTRAINT donation_amount_nn NOT NULL;
 
-ALTER TABLE donation
-    MODIFY id_association CONSTRAINT donation_idAssociation_nn NOT NULL;
-
-ALTER TABLE donation
-    MODIFY id_crib_house CONSTRAINT donation_idCribHouse_nn NOT NULL;
+ALTER TABLE donation 
+    ADD CONSTRAINT chk_donation_receiver CHECK (
+        (id_association IS NOT NULL AND id_crib_house IS NULL) OR
+        (id_association IS NULL AND id_crib_house IS NOT NULL)
+    );
 
 ALTER TABLE donation
     MODIFY id_currency CONSTRAINT donation_idCurrency_nn NOT NULL;
