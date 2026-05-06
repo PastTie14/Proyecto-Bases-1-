@@ -17,8 +17,8 @@ FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER,
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND s.id_status = NVL(pIdStatus, s.id_status)
             
-            GROUP BY pt."name", s.status_type, pet_count
-            ORDER BY pt."name", s.status_type, pet_count;
+            GROUP BY pt."name", s.status_type
+            ORDER BY pt."name", s.status_type;
         RETURN v_cursor;
     END;
     
@@ -26,15 +26,15 @@ FUNCTION getDonationsByAssociation(pStartDate IN DATE, pEndDate IN DATE) RETURN 
     v_cursor SYS_REFCURSOR;    
     BEGIN
         OPEN v_cursor FOR
-            SELECT a.id_user, a."name", COUNT (d.id_donation) AS donation_count FROM association a
+            SELECT a."name", COUNT (d.id_donation) AS donation_count FROM association a
             
             LEFT JOIN donation d -- LEFT to include associations without donations
             ON a.id_user = d.id_association
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
             AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY a.id_user, a."name"    
-            ORDER BY a."name";
+            GROUP BY a."name", donation_count  
+            ORDER BY a."name", donation_count;
         RETURN v_cursor;
     END;
     
@@ -42,15 +42,15 @@ FUNCTION getDonationsByCribHouse(pStartDate IN DATE, pEndDate IN DATE) RETURN SY
     v_cursor SYS_REFCURSOR;    
     BEGIN
         OPEN v_cursor FOR
-            SELECT cb.id_user, cb."name", COUNT (d.id_donation) AS donation_count FROM crib_house cb
+            SELECT cb."name", COUNT (d.id_donation) AS donation_count FROM crib_house cb
             
             LEFT JOIN donation d -- LEFT to include crib houses without donations
             ON cb.id_user = d.id_crib_house
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
             AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY cb.id_user, cb."name"    
-            ORDER BY cb."name";
+            GROUP BY cb."name", donation_count
+            ORDER BY cb."name", donation_count;
         RETURN v_cursor;
     END;
     
@@ -64,7 +64,7 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             ON p.id_pet_type = pt.id_pet_type
             
             INNER JOIN race r
-            ON pt.id_race = r.id_race
+            ON pt.id_pet_type = r.id_pet_type
             
             INNER JOIN status s
             ON p.id_status = s.id_status
@@ -72,9 +72,6 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
             AND s.id_status = 1
-            
-            GROUP BY s.status_type, pt."name", r."name". count_adopted
-            ORDER BY s.status_type, pt."name", r."name". count_adopted
             
             UNION
             
@@ -84,17 +81,14 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             ON p.id_pet_type = pt.id_pet_type
             
             INNER JOIN race r
-            ON pt.id_race = r.id_race
+            ON pt.id_pet_type = r.id_pet_type
             
             INNER JOIN status s
             ON p.id_status = s.id_status
             
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
-            AND s.id_status = 2
-            
-            GROUP BY s.status_type, pt."name", r."name", count_unadopted
-            ORDER BY s.status_type, pt."name", r."name". count_unadopted;
+            AND s.id_status = 2;
         RETURN v_cursor;
     END;
     
@@ -153,10 +147,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             ON p.id_status = s.id_status
             
             WHERE s.id_status = 2
-            AND TRUNC((SYSDATE - p.birth_date) / 365) > 12
-            
-            GROUP BY p.first_name, age_range, pet_count
-            ORDER BY p.first_name, age_range, pet_count;
+            AND TRUNC((SYSDATE - p.birth_date) / 365) > 12;
         RETURN v_cursor;
     END;
 END adminStats;
