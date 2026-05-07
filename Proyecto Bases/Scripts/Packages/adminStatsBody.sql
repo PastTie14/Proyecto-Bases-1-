@@ -96,7 +96,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-            SELECT p.first_name, '0-1' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '0-1' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -107,7 +107,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '1-5' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '1-5' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -118,7 +118,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '5-9' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '5-9' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -129,7 +129,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '10-12' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '10-12' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -140,7 +140,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '>12' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '>12' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
