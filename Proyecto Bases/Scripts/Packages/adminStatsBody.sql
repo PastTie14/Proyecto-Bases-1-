@@ -73,6 +73,8 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             AND r.id_race = NVL(pIdRace, r.id_race)
             AND s.id_status = 1
             
+            GROUP BY s.status_type, pt."name", r."name"
+            
             UNION
             
             SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_unadopted FROM pet p
@@ -88,7 +90,9 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
-            AND s.id_status = 2;
+            AND s.id_status = 2
+            
+            GROUP BY s.status_type, pt."name", r."name";
         RETURN v_cursor;
     END;
     
