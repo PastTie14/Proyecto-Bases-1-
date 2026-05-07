@@ -150,4 +150,52 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             AND TRUNC((SYSDATE - p.birth_date) / 365) > 12;
         RETURN v_cursor;
     END;
+    
+FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            -- all of them have NVL to include names from both rescuer and adopter
+            SELECT NVL(r.first_name, a.first_name) AS first_name, 
+                NVL(r.second_name, a.second_name) AS second_name,
+                NVL(r.first_surname, a.first_surname) AS first_surname,
+                NVL(r.second_surname, a.second_surname) AS second_surname, 
+                NVL(r.rescues_count, 0) AS rescues, 
+                NVL(a.adoptions_count, 0) AS adoptions
+                
+            FROM
+            -- selects from rescuer
+            (
+            SELECT r.first_name, r.second_name, r.first_surname, r.second_surname, COUNT(p.id_pet) AS rescues_count 
+            FROM rescuer r
+                
+            INNER JOIN pet p
+            ON r.id_user = p.id_rescuer
+            
+            WHERE p.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+                                                    AND NVL(pEndDate, SYSDATE) -- default: today
+            GROUP BY r.first_name, r.second_name, r.first_surname, r.second_surname
+            ) r
+    
+            FULL OUTER JOIN -- outer join for all combinations
+            -- selects from adopter
+            (
+            SELECT a.first_name, a.second_name, a.first_surname, a.second_surname, COUNT(af.id_pet) AS adoptions_count 
+            FROM adopter a
+            
+            INNER JOIN adoption_form af
+            ON a.id_user = af.id_adopter
+            
+            WHERE af.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+                                                    AND NVL(pEndDate, SYSDATE) -- default: today
+            GROUP BY a.first_name, a.second_name, a.first_surname, a.second_surname
+            ) a
+            
+            ON a.first_name = a.first_name
+            AND NVL(r.second_name, '') = NVL(a.second_name, '') -- in cases where the user has no second name
+            AND r.first_surname = a.first_surname 
+            AND r.second_surname = a.second_surname
+            ORDER BY rescues DESC, adoptions DESC;
+        RETURN v_cursor;
+    END;
 END adminStats;
