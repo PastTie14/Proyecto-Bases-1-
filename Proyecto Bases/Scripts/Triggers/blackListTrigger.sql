@@ -4,16 +4,11 @@ ON black_list
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName, previousValue, currentValue)
-        VALUES (s_log.nextval, SYSDATE, USER, 'Black_List', 'id_report', 'empty', :new.id_report);
-
-        INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName, previousValue, currentValue)
-        VALUES (s_log.nextval, SYSDATE, USER, 'Black_List', 'id_user', 'empty', :new.id_user);
+        :new.createdBY := USER;
+        :new.createdAt := SYSTIMESTAMP;
 
     ELSE
-        IF :old.id_user <> :new.id_user THEN
-            INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName, previousValue, currentValue)
-            VALUES (s_log.nextval, SYSDATE, USER, 'Black_List', 'id_user', :old.id_user, :new.id_user);
-        END IF;
+        :new.modifiedBY := USER;
+        :new.modifiedAt := SYSTIMESTAMP;
     END IF;
 END beforeUpdateBlackList;

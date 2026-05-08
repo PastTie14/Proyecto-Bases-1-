@@ -4,10 +4,8 @@ ON district
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
-                        previousValue, currentValue)
-        VALUES (s_log.nextval, SYSDATE, USER, 'District', 'id_district', 'empty', :new.id_district);
-
+        :new.createdBY := USER;
+        :new.createdAt := SYSTIMESTAMP;
         INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
                         previousValue, currentValue)
         VALUES (s_log.nextval, SYSDATE, USER, 'District', 'name', 'empty', :new."name");
@@ -17,6 +15,8 @@ BEGIN
         VALUES (s_log.nextval, SYSDATE, USER, 'District', 'id_canton', 'empty', :new.id_canton);
 
     ELSE
+        :new.modifiedBY := USER;
+        :new.modifiedAt := SYSTIMESTAMP;
         IF :old."name" <> :new."name" THEN
             INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
                             previousValue, currentValue)
