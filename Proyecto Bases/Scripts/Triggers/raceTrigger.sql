@@ -4,10 +4,8 @@ ON race
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
-                        previousValue, currentValue)
-        VALUES (s_log.nextval, SYSDATE, USER, 'Race', 'id_race', 'empty', :new.id_race);
-
+        :new.createdBY := USER;
+        :new.createdAt := SYSTIMESTAMP;
         INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
                         previousValue, currentValue)
         VALUES (s_log.nextval, SYSDATE, USER, 'Race', 'name', 'empty', :new."name");
@@ -17,6 +15,8 @@ BEGIN
         VALUES (s_log.nextval, SYSDATE, USER, 'Race', 'id_pet_type', 'empty', :new.id_pet_type);
 
     ELSE
+        :new.modifiedBY := USER;
+        :new.modifiedAt := SYSTIMESTAMP;
         IF :old."name" <> :new."name" THEN
             INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
                             previousValue, currentValue)
