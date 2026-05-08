@@ -78,6 +78,7 @@ DROP TABLE province;
 DROP TABLE currency;
 
 DROP TABLE CRIB_HOUSE;
+DROP TABLE size_x_cri_house;
 DROP TABLE "size";
 
 DROP TABLE "user";

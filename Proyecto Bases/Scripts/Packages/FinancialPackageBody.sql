@@ -11,14 +11,6 @@ BEGIN
     COMMIT;
 END;
 
-PROCEDURE insertDonationXUser(pIdUser IN NUMBER, pIdDonation IN NUMBER)
-IS 
-BEGIN
-    INSERT INTO donation_x_user (id_user, id_donation)
-    VALUES(pIdUser, pIdDonation);
-    COMMIT;
-END;
-
 -- ======================================== GET ========================================
 
 FUNCTION getDonation RETURN SYS_REFCURSOR
@@ -39,12 +31,4 @@ BEGIN
 END;
 
 
-FUNCTION getDonationXUser RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_cursor FOR SELECT * FROM donation_x_user;
-    RETURN v_cursor;
-END;
-
-END;
+END adminFinancial;
