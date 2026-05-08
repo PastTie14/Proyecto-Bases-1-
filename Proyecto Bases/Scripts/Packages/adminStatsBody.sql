@@ -31,10 +31,10 @@ FUNCTION getDonationsByAssociation(pStartDate IN DATE, pEndDate IN DATE) RETURN 
             LEFT JOIN donation d -- LEFT to include associations without donations
             ON a.id_user = d.id_association
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
-            AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+            AND d.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY a."name", donation_count  
-            ORDER BY a."name", donation_count;
+            GROUP BY a."name"  
+            ORDER BY a."name";
         RETURN v_cursor;
     END;
     
@@ -47,10 +47,10 @@ FUNCTION getDonationsByCribHouse(pStartDate IN DATE, pEndDate IN DATE) RETURN SY
             LEFT JOIN donation d -- LEFT to include crib houses without donations
             ON cb.id_user = d.id_crib_house
             -- WHERE isn't here to avoid invalidating the LEFT JOIN
-            AND d.created_at BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+            AND d.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
-            GROUP BY cb."name", donation_count
-            ORDER BY cb."name", donation_count;
+            GROUP BY cb."name"
+            ORDER BY cb."name";
         RETURN v_cursor;
     END;
     
@@ -73,6 +73,8 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             AND r.id_race = NVL(pIdRace, r.id_race)
             AND s.id_status = 1
             
+            GROUP BY s.status_type, pt."name", r."name"
+            
             UNION
             
             SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_unadopted FROM pet p
@@ -88,7 +90,9 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
-            AND s.id_status = 2;
+            AND s.id_status = 2
+            
+            GROUP BY s.status_type, pt."name", r."name";
         RETURN v_cursor;
     END;
     
@@ -96,7 +100,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-            SELECT p.first_name, '0-1' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '0-1' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -107,7 +111,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '1-5' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '1-5' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -118,7 +122,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '5-9' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '5-9' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -129,7 +133,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '10-12' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '10-12' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -140,7 +144,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             UNION
             
-            SELECT p.first_name, '>12' age_range, COUNT(p.id_pet) AS pet_count
+            SELECT '>12' age_range, COUNT(p.id_pet) AS pet_count
             FROM pet p
             
             INNER JOIN status s
@@ -148,6 +152,54 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             
             WHERE s.id_status = 2
             AND TRUNC((SYSDATE - p.birth_date) / 365) > 12;
+        RETURN v_cursor;
+    END;
+    
+FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            -- all of them have NVL to include names from both rescuer and adopter
+            SELECT NVL(r.first_name, a.first_name) AS first_name, 
+                NVL(r.second_name, a.second_name) AS second_name,
+                NVL(r.first_surname, a.first_surname) AS first_surname,
+                NVL(r.second_surname, a.second_surname) AS second_surname, 
+                NVL(r.rescues_count, 0) AS rescues, 
+                NVL(a.adoptions_count, 0) AS adoptions
+                
+            FROM
+            -- selects from rescuer
+            (
+            SELECT r.first_name, r.second_name, r.first_surname, r.second_surname, COUNT(p.id_pet) AS rescues_count 
+            FROM rescuer r
+                
+            INNER JOIN pet p
+            ON r.id_user = p.id_rescuer
+            
+            WHERE p.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+                                                    AND NVL(pEndDate, SYSDATE) -- default: today
+            GROUP BY r.first_name, r.second_name, r.first_surname, r.second_surname
+            ) r
+    
+            FULL OUTER JOIN -- outer join for all combinations
+            -- selects from adopter
+            (
+            SELECT a.first_name, a.second_name, a.first_surname, a.second_surname, COUNT(af.id_pet) AS adoptions_count 
+            FROM adopter a
+            
+            INNER JOIN adoption_form af
+            ON a.id_user = af.id_adopter
+            
+            WHERE af.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
+                                                    AND NVL(pEndDate, SYSDATE) -- default: today
+            GROUP BY a.first_name, a.second_name, a.first_surname, a.second_surname
+            ) a
+            
+            ON a.first_name = a.first_name
+            AND NVL(r.second_name, '') = NVL(a.second_name, '') -- in cases where the user has no second name
+            AND r.first_surname = a.first_surname 
+            AND r.second_surname = a.second_surname
+            ORDER BY rescues DESC, adoptions DESC;
         RETURN v_cursor;
     END;
 END adminStats;

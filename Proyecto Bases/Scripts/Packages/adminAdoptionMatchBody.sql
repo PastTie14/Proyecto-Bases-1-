@@ -5,7 +5,7 @@ PROCEDURE insertAdoptionForm(pIdAdoption IN NUMBER, pNotes VARCHAR2,
                                         pIdAdopter IN NUMBER, pIdPet IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO adoption_form
+    INSERT INTO adoption_form (id_adoption, notes, adoption_date, "reference", id_adopter, id_pet)
     VALUES(s_adoption.nextVal, pNotes, pAdoptionDate, pReference, pIdAdopter, pIdPet);
     COMMIT;
 END insertAdoptionForm;
@@ -16,7 +16,7 @@ PROCEDURE insertPhoto(pIdPhoto IN NUMBER, pDate IN DATE,
                                     pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO photo
+    INSERT INTO photo (id_photo, "date", photo_dir, id_user)
     VALUES(pIdPhoto, pDate, pPhotoDir, pIdAdopter);
     COMMIT;
 END insertPhoto;
@@ -27,7 +27,7 @@ PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER,
                                         pIdUser IN NUMBER, pIdAdopter IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO rating
+    INSERT INTO rating (id_rating, score, id_user, id_adopter)
     VALUES(s_rating.nextVal, pScore, pIdUser, pIdAdopter);
     COMMIT;
 END insertRating;
@@ -38,7 +38,7 @@ PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
                                         pSimilarityPercentage IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO match
+    INSERT INTO match (id_match, match_date, similarity_percentage)
     VALUES(s_match.nextVal, pMatchDate, pSimilarityPercentage);
     COMMIT;
 END insertMatch;
@@ -49,7 +49,7 @@ PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
                                             pIdMatch IN NUMBER, pIdValueType IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO parameters
+    INSERT INTO parameters (id_parameter, "value", id_match, id_value_type)
     VALUES(s_parameter.nextVal, pValue, pIdMatch, pIdValueType);
     COMMIT;
 END insertParameters;

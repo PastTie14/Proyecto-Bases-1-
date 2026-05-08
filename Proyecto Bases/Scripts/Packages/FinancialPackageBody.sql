@@ -2,11 +2,12 @@ CREATE OR REPLACE PACKAGE BODY adminFinancial AS
 
 -- ======================================== INSERT ========================================
 
-PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, pIdCurrency IN NUMBER)
+PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, 
+                            pIdCurrency IN NUMBER, pIdCribHouse IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO donation (id_donation, amount, id_association, id_currency)
-    VALUES(s_donation.nextVal, pAmount, pIdAssociation, pIdCurrency);
+    INSERT INTO donation (id_donation, amount, id_association, id_currency, id_crib_house)
+    VALUES(s_donation.nextVal, pAmount, pIdAssociation, pIdCurrency, pIdCribHouse);
     COMMIT;
 END;
 
