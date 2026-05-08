@@ -17,8 +17,6 @@ BEGIN
     RETURN (n_pet_id); 
 END insertPet;
 
-
-
 PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
                         pRegistrationDate IN DATE, pIdPet IN NUMBER)
 IS 
@@ -35,15 +33,6 @@ BEGIN
     VALUES(pIdPet, pIdColor);
     COMMIT;
 END insertPetXColor;
-
-PROCEDURE insertPetXDistrict(pIdPet IN NUMBER, pIdDistrict IN NUMBER)
-IS 
-BEGIN
-    INSERT INTO pet_x_district (id_pet, id_district)
-    VALUES(pIdPet, pIdDistrict);
-    
-    COMMIT;
-END insertPetXDistrict;
 
 PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER)
 IS 
@@ -117,14 +106,6 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION getPetXDistrict RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_cursor FOR SELECT * FROM pet_x_district;
-    RETURN v_cursor;
-END;
-
 FUNCTION getPetTypeXCribHouse RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -148,7 +129,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION getDistrictPets(pIdDistrict IN NUMBER) RETURN SYS_REFCURSOR
+/*FUNCTION getDistrictPets(pIdDistrict IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
@@ -161,7 +142,7 @@ BEGIN
         
         WHERE pxd.id_district = pIdDistrict;
     RETURN v_cursor;
-END;
+END;*/
 
 FUNCTION getCribHousePetTypes(pIdCribHouse IN NUMBER) RETURN SYS_REFCURSOR
 IS
@@ -239,7 +220,7 @@ BEGIN
         LEFT JOIN PET_TYPE h
         ON a.id_pet_type = h.id_pet_type
         LEFT JOIN crib_house i
-        ON a.id_crib_House = i.id_user
+        ON a.id_crib_house = i.id_user
         LEFT JOIN Bounty j
         ON c.id_pet_extra_info = j.id_pet_extra_info
         LEFT JOIN currency k
