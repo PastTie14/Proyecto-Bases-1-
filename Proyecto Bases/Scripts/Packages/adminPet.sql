@@ -3,7 +3,7 @@ CREATE OR REPLACE PACKAGE adminPet IS
 -- INSERT
 FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
-                                       pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdPetType IN NUMBER, 
+                                       pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
                                        pIdRescuer IN NUMBER, pIdSize IN NUMBER) RETURN NUMBER;
                                        
 PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
