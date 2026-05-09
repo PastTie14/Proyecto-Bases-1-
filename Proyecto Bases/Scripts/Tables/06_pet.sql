@@ -23,7 +23,7 @@ CREATE TABLE pet
     modifiedAt  DATE,
     id_size     NUMBER(8),
     id_status   NUMBER(4),
-    id_pet_type NUMBER(4),
+    id_race     NUMBER(4),
     id_rescuer  NUMBER(8),
     id_crib_house NUMBER(8),
     id_district NUMBER(8)
@@ -67,8 +67,8 @@ ALTER TABLE pet
     FOREIGN KEY (id_size) REFERENCES "size" (id_size);
 
 ALTER TABLE pet
-    ADD CONSTRAINT fk_pet_pet_type
-    FOREIGN KEY (id_pet_type) REFERENCES pet_type (id_pet_type);
+    ADD CONSTRAINT fk_pet_race
+    FOREIGN KEY (id_race) REFERENCES race (id_race);
 
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_rescuer

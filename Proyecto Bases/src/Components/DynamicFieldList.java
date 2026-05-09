@@ -32,7 +32,6 @@ public class DynamicFieldList extends JPanel {
         FormField f = new FormField(labelPrefix + " " + n);
         f.getField().addFocusListener(new FocusAdapter() {
             @Override public void focusLost(FocusEvent e) {
-                // Si este es el último campo y tiene texto, agrega uno nuevo
                 if (!f.getValue().isBlank() && fields.indexOf(f) == fields.size() - 1) {
                     addField();
                     revalidate();
@@ -53,4 +52,37 @@ public class DynamicFieldList extends JPanel {
         }
         return result;
     }
+
+    void addValue(String n) {
+    FormField lastField = fields.get(fields.size() - 1);
+
+    if (lastField.getValue().isBlank()) {
+        lastField.setValue(n);
+    } else {
+        FormField f = new FormField(labelPrefix + " " + (fields.size() + 1));
+        f.setValue(n);
+
+        f.getField().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!f.getValue().isBlank() &&
+                    fields.indexOf(f) == fields.size() - 1) {
+
+                    addField();
+                    revalidate();
+                    repaint();
+                }
+            }
+        });
+        fields.add(f);
+        if (getComponentCount() > 0) {
+            add(Box.createVerticalStrut(4));
+        }
+        add(f);
+        add(Box.createVerticalStrut(4));
+    }
+
+    revalidate();
+    repaint();
+}
 }

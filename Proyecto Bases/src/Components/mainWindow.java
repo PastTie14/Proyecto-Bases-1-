@@ -13,6 +13,9 @@ public class mainWindow extends JFrame {
 
     private PetGridPanel petGrid;
     private PetFormPanel petForm;
+    private PetSearchPanel petSearch;
+    private ConsultPanel consult;
+    private 
 
     public mainWindow(int idUser) {
         this.idUser = idUser;
@@ -47,7 +50,7 @@ public class mainWindow extends JFrame {
     private void initComponents() {
         petGrid = new PetGridPanel();
         petForm = new PetFormPanel(idUser);
-
+        petSearch = new PetSearchPanel();
         List<MenuItem> items = createMenuItems();
 
         SideMenuPanel menu = new SideMenuPanel(items);
@@ -81,7 +84,14 @@ public class mainWindow extends JFrame {
 
     private List<MenuItem> createMenuItems() {
         return Arrays.asList(
-            createPlaceholderItem("Consultas", "📋  Consultas"),
+            new MenuItem() {
+                public String getName() { return "Buscar Mascota"; }
+                public void show() { setContent(petSearch); }
+            },
+            new MenuItem(){
+                public String getName() { return "Consultas"; }
+                public void show() { setContent(consult); }
+            },
             createPlaceholderItem("Estadísticas", "📊  Estadísticas"),
             createPlaceholderItem("Lista Negra", "🚫  Lista Negra"),
             new MenuItem() {
@@ -114,5 +124,4 @@ public class mainWindow extends JFrame {
         content.revalidate();
         content.repaint();
     }
-    
 }

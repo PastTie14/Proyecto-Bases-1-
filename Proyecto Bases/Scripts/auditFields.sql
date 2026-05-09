@@ -89,12 +89,6 @@ ALTER TABLE donation ADD (
     modifiedAt DATE
 );
 
-ALTER TABLE donation_x_user ADD (
-    createdBy VARCHAR2(20),
-    createdAt DATE,
-    modifiedBy VARCHAR2(20),
-    modifiedAt DATE
-);
 
 ALTER TABLE identification_chip ADD (
     createdBy VARCHAR2(20),

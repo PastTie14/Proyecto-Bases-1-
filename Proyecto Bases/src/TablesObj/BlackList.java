@@ -26,14 +26,53 @@ public class BlackList extends DBItem {
         return null;
     }
 
-    public static void insert(int idReport, int idUser) {
+    public static void insert(int idUser) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement stmt = con.prepareCall("{ CALL adminBlackList.insertBlackList(?, ?) }");
-            stmt.setInt(1, idReport);
-            stmt.setInt(2, idUser);
+            stmt.setInt(1, idUser);
             stmt.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
+    
+    public static int getBlackListId( int idUser){
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall("BEGIN ? := adminBlackList.getBlackListId(?); END;");
+            st.registerOutParameter(1, OracleTypes.NUMBER);
+            st.setInt(2, idUser);
+            st.execute();
+            return (int) st.getObject(1);
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return 0;
+    }
+    
+    public static ArrayList<ArrayList<Object>> getBannedUsers(int idUser){
+        ArrayList<ArrayList<Object>> filas = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(" BEGIN ? :=  adminBlackList.getUsersFromBlackList(?); END; ")) { 
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, idUser);
+            st.execute();
+            try (ResultSet rs = (ResultSet) st.getObject(1)) {
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+
+                while (rs.next()) {
+                    ArrayList<Object> fila = new ArrayList<>();
+                    for (int i = 1; i <= cols; i++) {
+                        fila.add(rs.getObject(i));
+                    }
+                    filas.add(fila);
+                }
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error en getPetFilters", ex);
+        }
+
+        return filas;
+        
     }
 
     // ── DBItem — no aplica para tablas intermedias ────────────────

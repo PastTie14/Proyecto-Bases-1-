@@ -1,0 +1,3 @@
+CREATE OR REPLACE PACKAGE BODY adminConsult AS
+
+END adminConsult;

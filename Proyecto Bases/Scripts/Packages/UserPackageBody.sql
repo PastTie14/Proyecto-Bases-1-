@@ -41,8 +41,9 @@ BEGIN
     INSERT INTO crib_house (id_user, "name", requires_donations)
     VALUES(pIdUser, pName, pRequiresDonations);
     COMMIT;
+    
 END;
-
+ 
 PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
                     pCurrentValue VARCHAR2, pIdUser IN NUMBER)
 IS 
@@ -169,7 +170,9 @@ FUNCTION getAdopter RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
-    OPEN v_cursor FOR SELECT * FROM adopter;
+    OPEN v_cursor FOR SELECT a.id_user, b.email, a.First_name, a.First_surname FROM adopter a
+    INNER JOIN "user" b
+    ON a.id_user = b.id_user;
     RETURN v_cursor;
 END;
 

@@ -9,8 +9,12 @@ FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER,
                     
             CROSS JOIN status s -- cartesian product
             
+            LEFT JOIN race r 
+            ON pt.id_pet_type = r.id_pet_type
+            
             LEFT JOIN pet p 
-            ON pt.id_pet_type = p.id_pet_type
+            ON r.id_race = p.id_race
+            
             AND s.id_status = p.id_status
             AND p.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                      AND NVL(pEndDate, SYSDATE) -- default: today
@@ -60,11 +64,11 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
         OPEN v_cursor FOR
             SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_adopted FROM pet p
             
-            INNER JOIN pet_type pt
-            ON p.id_pet_type = pt.id_pet_type
-            
             INNER JOIN race r
-            ON pt.id_pet_type = r.id_pet_type
+            ON p.id_race = r.id_race
+            
+            INNER JOIN pet_type pt
+            ON r.id_pet_type = pt.id_pet_type
             
             INNER JOIN status s
             ON p.id_status = s.id_status
@@ -79,11 +83,11 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             
             SELECT s.status_type, pt."name", r."name", COUNT(p.id_pet) AS count_unadopted FROM pet p
             
-            INNER JOIN pet_type pt
-            ON p.id_pet_type = pt.id_pet_type
-            
             INNER JOIN race r
-            ON pt.id_pet_type = r.id_pet_type
+            ON p.id_race = r.id_race
+            
+            INNER JOIN pet_type pt
+            ON r.id_pet_type = pt.id_pet_type
             
             INNER JOIN status s
             ON p.id_status = s.id_status

@@ -2,16 +2,16 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 
 FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
-                                       pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdPetType IN NUMBER, 
+                                       pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
                                        pIdRescuer IN NUMBER, pIdSize IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
-                    date_lost, date_found, email, id_status, id_pet_type,id_size, id_rescuer,CREATEDBY,CREATEDAT)
+                    date_lost, date_found, email, id_status, id_race,id_size, id_rescuer,CREATEDBY,CREATEDAT)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdPetType, pIdSize, pIdRescuer,USER,SYSTIMESTAMP);
+            pEmail, pIdStatus, pIdRace, pIdSize, pIdRescuer, USER, SYSTIMESTAMP);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); 
@@ -177,8 +177,8 @@ BEGIN
         ON a.id_size = f.id_size
         LEFT JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
-        LEFT JOIN PET_TYPE h
-        ON a.id_pet_type = h.id_pet_type
+        LEFT JOIN Race h
+        ON a.id_race = h.id_race
         WHERE a.id_pet = p_id_pet; 
     RETURN v_cursor;
 END;
@@ -217,8 +217,8 @@ BEGIN
         ON a.id_size = f.id_size
         LEFT JOIN TRAINING_EASE g
         ON g.id_training_ease = c.id_training_ease
-        LEFT JOIN PET_TYPE h
-        ON a.id_pet_type = h.id_pet_type
+        LEFT JOIN Race h
+        ON a.id_race = h.id_race
         LEFT JOIN crib_house i
         ON a.id_crib_house = i.id_user
         LEFT JOIN Bounty j
