@@ -214,3 +214,38 @@ ALTER TABLE treatment_x_disease ADD (
     modifiedBy VARCHAR2(20),
     modifiedAt DATE
 );
+
+ALTER TABLE association ADD (
+    createdBy VARCHAR2(20),
+    createdAt DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
+);
+
+ALTER TABLE veterinarian ADD (
+    createdBy VARCHAR2(20),
+    createdAt DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
+);
+
+ALTER TABLE crib_house ADD (
+    createdBy VARCHAR2(20),
+    createdAt DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
+);
+
+ALTER TABLE rescuer ADD (
+    createdBy VARCHAR2(20),
+    createdAt DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
+);
+
+ALTER TABLE adopter ADD (
+    createdBy VARCHAR2(20),
+    createdAt DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
+);
