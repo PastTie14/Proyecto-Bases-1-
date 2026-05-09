@@ -1,4 +1,5 @@
 package Connect;
+import TablesObj.BlackList;
 import java.sql.CallableStatement;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -429,7 +430,7 @@ public class DBConnection {
             stmt.setString(3, password);
             stmt.execute();
             
-            Long userId = stmt.getLong(1);
+            int userId = stmt.getInt(1);
             stmt = con.prepareCall("{ CALL adminUser.insertCribHouse(?, ?, ?)}");
             
             stmt.setLong(1, userId);
@@ -451,6 +452,8 @@ public class DBConnection {
                 stmt.setLong(2, userId);
                 stmt.execute();
             }
+            
+            BlackList.insert((int) userId);
             
             con.commit();
 

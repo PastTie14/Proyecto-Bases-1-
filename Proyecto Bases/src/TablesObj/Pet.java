@@ -98,7 +98,7 @@ public class Pet extends DBItem {
         ArrayList<ArrayList<Object>> filas = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ call getPetFilters(?,?,?,?,?,?,?,?,?,?) }")) {
+            CallableStatement st = con.prepareCall("{ call getPetFilters(?,?,?,?,?,?,?,?,?,?) }")) {
 
             setIntOrNull(st, 1, pIdChip);       
             setIntOrNull(st, 2, pIdDistrict);   

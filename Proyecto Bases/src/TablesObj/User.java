@@ -76,12 +76,11 @@ public class User extends DBItem {
             st.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
+    
 
     // ── BD instancia ──────────────────────────────────────────────
     @Override
     public ResultSet getItem() {
-        // No existe getPetById equivalente para user; se reutiliza getAll y filtra
-        // Si el stored procedure expone getUserById, reemplazar aquí.
         return getAll();
     }
 

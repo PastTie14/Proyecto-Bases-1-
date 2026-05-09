@@ -41,13 +41,27 @@ public class Adopter extends DBItem {
 
     private String get(int i) { return (data != null && i < data.size()) ? data.get(i) : null; }
 
-    public static ResultSet getAll() {
+    public static ArrayList<ArrayList<Object>> getAll() {
+        ArrayList<ArrayList<Object>> filas = new ArrayList<>();
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement st = con.prepareCall("BEGIN ? := adminUser.getAdopter(); END;");
             st.registerOutParameter(1, OracleTypes.CURSOR);
             st.execute();
-            return (ResultSet) st.getObject(1);
+            
+            try (ResultSet rs = (ResultSet) st.getObject(1)) {
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+
+                while (rs.next()) {
+                    ArrayList<Object> fila = new ArrayList<>();
+                    for (int i = 1; i <= cols; i++) {
+                        fila.add((String) rs.getObject(i));
+                    }
+                    filas.add(fila);
+                }
+            }
+            return filas;
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return null;
     }
@@ -89,7 +103,5 @@ public class Adopter extends DBItem {
             st.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
-
-    @Override public ResultSet getItem() { return getAll(); }
     @Override public void updateItem()   { throw new UnsupportedOperationException(); }
 }
