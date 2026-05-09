@@ -82,6 +82,60 @@ ALTER TABLE pet
     ADD CONSTRAINT fk_pet_district
     FOREIGN KEY (id_district) REFERENCES district (id_district);
 
+COMMENT ON TABLE pet
+IS 'Stores information about animals registered in the system';
+
+COMMENT ON COLUMN pet.id_pet
+IS 'Primary key, unique identifier for the pet';
+
+COMMENT ON COLUMN pet.picture
+IS 'File path to the pet photograph';
+
+COMMENT ON COLUMN pet.first_name
+IS 'Name of the pet';
+
+COMMENT ON COLUMN pet.birth_date
+IS 'Date when the pet was born';
+
+COMMENT ON COLUMN pet.date_lost
+IS 'Date when the pet went missing';
+
+COMMENT ON COLUMN pet.date_found
+IS 'Date when the pet was found or rescued';
+
+COMMENT ON COLUMN pet.email
+IS 'Contact email address associated with the pet';
+
+COMMENT ON COLUMN pet.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN pet.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN pet.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN pet.ModifiedAt
+IS 'The date the table was modified';
+
+COMMENT ON COLUMN pet.id_size
+IS 'Foreign key, references the size of the pet';
+
+COMMENT ON COLUMN pet.id_status
+IS 'Foreign key, references the current status of the pet';
+
+COMMENT ON COLUMN pet.id_pet_type
+IS 'Foreign key, references the type of pet';
+
+COMMENT ON COLUMN pet.id_rescuer
+IS 'Foreign key, references the rescuer who found the pet';
+
+COMMENT ON COLUMN pet.id_crib_house
+IS 'Foreign key, references the crib house that takes care of the pet';
+
+COMMENT ON COLUMN pet.id_district
+IS 'Foreign key, references the district where the pet was found';
+
 -- ============================================
 -- IDENTIFICATION CHIP
 -- ============================================
@@ -117,6 +171,30 @@ ALTER TABLE identification_chip
     ADD CONSTRAINT fk_chip_pet
     FOREIGN KEY (id_pet) REFERENCES pet (id_pet)
     ON DELETE CASCADE;
+    
+COMMENT ON TABLE identification_chip 
+IS 'Stores the pets identification chip information';
+
+COMMENT ON COLUMN identification_chip.id_chip 
+IS 'Primary key, identifier for the identification chip';
+
+COMMENT ON COLUMN identification_chip.chip_number 
+IS 'Identification chip of the pet. Unique';
+
+COMMENT ON COLUMN identification_chip.registration_date
+IS 'Registration date of the pet';
+
+COMMENT ON COLUMN identification_chip.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN identification_chip.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN identification_chip.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN identification_chip.ModifiedAt
+IS 'The date the table was modified';
 
 -- ============================================
 -- PET X COLOR
@@ -148,6 +226,27 @@ ALTER TABLE pet_x_color
     FOREIGN KEY (id_color) REFERENCES color (id_color)
     ON DELETE CASCADE;
 
+COMMENT ON TABLE pet_x_color 
+IS 'Intermediate table, stores the pets colors';
+
+COMMENT ON COLUMN pet_x_color.id_pet 
+IS 'Composite primary key. Foreign key references the pet id';
+
+COMMENT ON COLUMN pet_x_color.id_color 
+IS 'Composite primary key. Foreign key references the color id';
+
+COMMENT ON COLUMN pet_x_color.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN pet_x_color.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN pet_x_color.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN pet_x_color.ModifiedAt
+IS 'The date the table was modified';
+
 -- ============================================
 -- PET TYPE X CRIB HOUSE
 -- ============================================
@@ -177,3 +276,24 @@ ALTER TABLE pet_type_x_crib_house
     ADD CONSTRAINT fk_ptxch_crib_house
     FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user)
     ON DELETE CASCADE;
+
+COMMENT ON TABLE pet_type_x_crib_house 
+IS 'Intermediate table, stores pet types accepted by a crib house';
+
+COMMENT ON COLUMN pet_type_x_crib_house.id_pet_type 
+IS 'Composite primary key. Foreign key references the pet type id';
+
+COMMENT ON COLUMN pet_type_x_crib_house.id_crib_house 
+IS 'Composite primary key. Foreign key references the crib house id';
+
+COMMENT ON COLUMN pet_type_x_crib_house.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN pet_type_x_crib_house.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN pet_type_x_crib_house.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN pet_type_x_crib_house.ModifiedAt
+IS 'The date the table was modified';

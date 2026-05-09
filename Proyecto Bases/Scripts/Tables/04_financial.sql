@@ -48,6 +48,40 @@ ALTER TABLE donation
     ADD CONSTRAINT fk_donation_currency
     FOREIGN KEY (id_currency) REFERENCES currency (id_currency);
 
+
+COMMENT ON TABLE donation
+IS 'Stores the donation information';
+
+COMMENT ON COLUMN donation.id_donation
+IS 'Primary key, identifier for the donation id';
+
+COMMENT ON COLUMN donation.amount
+IS 'Amount of the donation';
+
+COMMENT ON COLUMN donation.id_association
+IS 'Foreign key, references the receiver association';
+
+COMMENT ON COLUMN donation.id_crib_house
+IS 'Foreign key, references the receiver crib house';
+
+COMMENT ON COLUMN donation.id_currency
+IS 'Foreign key, references the currency';
+
+COMMENT ON COLUMN donation.id_donnor
+IS 'Foreign key, references the donnor';
+
+COMMENT ON COLUMN donation.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN donation.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN donation.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN donation.ModifiedAt
+IS 'The date the table was modified';
+
 -- ============================================
 -- DONATION X USER
 -- ============================================
