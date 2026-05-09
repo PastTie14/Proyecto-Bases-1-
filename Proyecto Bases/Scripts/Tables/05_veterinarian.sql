@@ -37,3 +37,36 @@ ALTER TABLE veterinarian
 ALTER TABLE veterinarian
     ADD CONSTRAINT pk_veterinarian PRIMARY KEY (id_veterinarian)
     USING INDEX TABLESPACE TS_INDEX;
+    
+COMMENT ON TABLE veterinarian
+IS 'Stores veterinarian information';
+
+COMMENT ON COLUMN veterinarian.id_veterinarian
+IS 'Primary key, identifier for the veterinarian';
+
+COMMENT ON COLUMN veterinarian.first_name
+IS 'First name of the veterinarian';
+
+COMMENT ON COLUMN veterinarian.second_name
+IS 'Second name of the veterinarian';
+
+COMMENT ON COLUMN veterinarian.first_surname
+IS 'Paternal surname of the veterinarian';
+
+COMMENT ON COLUMN veterinarian.second_surname
+IS 'Maternal surname of the veterinarian';
+
+COMMENT ON COLUMN veterinarian.clinic_name
+IS 'Name of the clinic';
+
+COMMENT ON COLUMN veterinarian.created_by
+IS 'The user who created the table';
+
+COMMENT ON COLUMN veterinarian.created_at
+IS 'The date the table was created';
+
+COMMENT ON COLUMN veterinarian.modified_by
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN veterinarian.modified_at
+IS 'The date the table was modified';
