@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE adminConsult AS
  
-    FUNCTION getDonations(pStartDate IN DATE, pEndDate IN DATE, pIdDonor IN NUMBER, pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR;
+    --FUNCTION getDonations(pStartDate IN DATE, pEndDate IN DATE, pIdDonor IN NUMBER, pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR;
  
     FUNCTION getBlackListReport RETURN SYS_REFCURSOR;
  

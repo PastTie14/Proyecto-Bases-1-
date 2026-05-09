@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY adminConsult AS
-
+/*
 FUNCTION getDonations(pStartDate IN DATE, pEndDate IN DATE, pIdDonor IN NUMBER, 
                         pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR
 IS
@@ -21,23 +21,23 @@ IS
 
         RETURN v_cursor;
     END;
-
+*/
 FUNCTION getBlackListReport RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT u.email AS Reporter_email, ad.first_name AS Reported_first_name, 
-                NVL(ad.second_name, 'None') AS Reported_second_name, ad.first_surname AS Reported_first_surname, 
-                ad.second_surname AS Reported_second_surname, NVL(r.score, 'None') AS Score, 
-                uxb.reason FROM user_x_black_list uxb
+        SELECT u.email, ad.first_name, NVL(ad.second_name, 'None'), ad.first_surname, 
+                ad.second_surname, NVL(r.score, 0), uxb.reason FROM user_x_black_list uxb
         
         INNER JOIN black_list bl
         ON bl.id_report = uxb.id_report
         
+        -- the user is the reporter
         INNER JOIN "user" u
         ON bl.id_user = u.id_user
         
+        -- adopter the reported
         INNER JOIN adopter ad
         ON uxb.id_user = ad.id_user
         
