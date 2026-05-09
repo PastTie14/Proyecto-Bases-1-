@@ -10,7 +10,7 @@ CREATE OR REPLACE PACKAGE adminConsult AS
 
     --FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR;
 
-    --FUNCTION getCompatibleCribHouses(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getCompatibleCribHouses(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR;
 
     --FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE,pEndDate   IN DATE) RETURN SYS_REFCURSOR;
  

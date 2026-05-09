@@ -47,12 +47,12 @@ IS
         RETURN v_cursor;
     END;
 
-
-/*IS
+/*FUNCTION getMatches(pIdType IN NUMBER,pIdRace IN NUMBER) RETURN SYS_REFCURSOR
+IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT  FROM 
+        SELECT  FROM matches
         
         INNER JOIN 
         ON 
@@ -65,5 +65,47 @@ IS
 
         RETURN v_cursor;
     END;*/
+/*
+FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+        SELECT p.first_name, d."name", t."name" FROM pet p
+        
+        INNER JOIN pet_extra_info pei
+        ON p.id_pet = pei.id_pet
+        
+        INNER JOIN medic_sheet ms
+        ON pei.id_pet_extra_info = ms.id_pet_extra_info
+        
+        INNER JOIN
+        
+        WHERE 
+        AND 
+        
+        GROUP BY 
+        ORDER BY ;
 
+        RETURN v_cursor;
+    END;*/
+
+FUNCTION getCompatibleCribHouses(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+        SELECT cb.id_user, cb."name", cb.requires_donations, pt."name" FROM crib_house cb
+        
+        INNER JOIN pet_type_x_crib_house ptxcb
+        ON cb.id_user = ptxcb.id_crib_house
+        
+        INNER JOIN pet_type pt
+        ON ptxcb.id_pet_type = pt.id_pet_type
+        
+        WHERE pt.id_pet_type = NVL(pIdPetType, pt.id_pet_type)
+
+        ORDER BY cb.id_user;
+        RETURN v_cursor;
+    END;
 END adminConsult;
