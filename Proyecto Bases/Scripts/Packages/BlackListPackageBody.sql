@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY adminBlackList AS
 
 -- ======================================== INSERT ========================================
 
-PROCEDURE insertBlackList(pIdReport IN NUMBER, pIdUser IN NUMBER)
+PROCEDURE insertBlackList(pIdUser IN NUMBER)
 IS 
 BEGIN
     INSERT INTO black_list (id_report, id_user)
@@ -28,6 +28,20 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getBlackListId (pIdUser IN VARCHAR2) RETURN NUMBER
+IS
+    v_id NUMBER;
+BEGIN
+    SELECT id_report
+    INTO v_id
+    FROM black_list
+    WHERE pIdUser = id_user;
+    RETURN v_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+        return -1;
+END;
+
 FUNCTION getUserXBlackList RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -41,15 +55,12 @@ IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR 
-        SELECT u.email, uxbl.reason
+        SELECT  u.email,u."name", uxbl.reason
         FROM black_list bl
-    
-        INNER JOIN user_x_black_list uxbl
+        INNER JOIN user_x_black_list uxbl 
         ON bl.id_report = uxbl.id_report
-        
         INNER JOIN "user" u
         ON uxbl.id_user = u.id_user
-    
         WHERE bl.id_user = pIdUser;
     RETURN v_cursor;
 END;

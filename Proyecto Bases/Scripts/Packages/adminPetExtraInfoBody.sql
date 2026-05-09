@@ -2,21 +2,18 @@ CREATE OR REPLACE PACKAGE BODY adminPetExtraInfo AS
 
 -- ======================================== INSERT ========================================
 
-FUNCTION insertPetExtraInfo(pIdPetExtraInfo OUT NUMBER,
+FUNCTION insertPetExtraInfo(pIdPetExtraInfo IN NUMBER,
                             pBeforePicture IN VARCHAR2, pAfterPicture IN VARCHAR2, 
                             pIdPet IN NUMBER, pIdCurrentStatus IN NUMBER, pIdEnergyLevel IN NUMBER,
                             pIdTrainingEase IN NUMBER)
 RETURN NUMBER
 AS 
-    n_petExtraInfo_id NUMBER(8);
 BEGIN
     INSERT INTO pet_extra_info (id_pet_extra_info, before_picture, after_picture, id_pet, id_current_status, 
                                 id_energy_level, id_training_ease)
     VALUES(s_petExtraInfo.nextVal, pBeforePicture, pAfterPicture, pIdPet,
             pIdCurrentStatus, pIdEnergyLevel, pIdTrainingEase);
-    COMMIT;
-    SELECT s_petExtraInfo.CURRVAL INTO n_petExtraInfo_id FROM DUAL;
-    RETURN (n_petExtraInfo_id);
+    RETURN (s_petExtraInfo.currVal);
 END insertPetExtraInfo;
 
 PROCEDURE insertCurrentStatus(pIdCurrentStatus IN NUMBER, pStatusType IN VARCHAR2)

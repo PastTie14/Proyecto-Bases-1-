@@ -6,8 +6,8 @@ CREATE OR REPLACE PROCEDURE getPetFilters (pIdChip IN NUMBER, pIdDistrict IN NUM
 AS
 BEGIN 
     OPEN petCursor FOR
-        SELECT DISTINCT ic.id_chip, d.id_district, ca.id_canton,
-                        pr.id_province, p.id_status, p.id_pet_type,
+        SELECT DISTINCT ic.id_chip, d."name", ca."name",
+                        pr."name", s.status_type, pt."name",
                         r.id_race, p.id_rescuer, co.id_color, p.createdat
         FROM pet p
         LEFT JOIN identification_chip ic
