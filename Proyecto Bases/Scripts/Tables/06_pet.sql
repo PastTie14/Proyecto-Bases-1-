@@ -86,7 +86,7 @@ COMMENT ON TABLE pet
 IS 'Stores information about animals registered in the system';
 
 COMMENT ON COLUMN pet.id_pet
-IS 'Primary key, unique identifier for the pet';
+IS 'Primary key, identifier for the pet';
 
 COMMENT ON COLUMN pet.picture
 IS 'File path to the pet photograph';
@@ -181,8 +181,8 @@ IS 'Primary key, identifier for the identification chip';
 COMMENT ON COLUMN identification_chip.chip_number 
 IS 'Identification chip of the pet. Unique';
 
-COMMENT ON COLUMN identification_chip.registration_date
-IS 'Registration date of the pet';
+COMMENT ON COLUMN identification_chip.id_pet
+IS 'Foreign key, references the associated pet';
 
 COMMENT ON COLUMN identification_chip.CreatedBy
 IS 'The user who created the table';

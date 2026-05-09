@@ -56,7 +56,7 @@ COMMENT ON TABLE phone_number
 IS 'Stores information about phone numbers registered in the system';
 
 COMMENT ON COLUMN phone_number.id_phone
-IS 'Primary key, unique identifier for the phone number';
+IS 'Primary key, identifier for the phone number';
 
 COMMENT ON COLUMN phone_number."number"
 IS 'The phone number';
