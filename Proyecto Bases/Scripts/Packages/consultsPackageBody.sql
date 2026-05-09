@@ -6,7 +6,7 @@ IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT d.amount, d.id_donnor, d.createdAt, a."name" FROM donation d
+        SELECT d.amount, d.id_donnor, d.createdAt, a."name", COUNT(1) OVER () FROM donation d
         
         INNER JOIN association a
         ON d.id_association = a.id_user
@@ -28,7 +28,7 @@ IS
     BEGIN
         OPEN v_cursor FOR
         SELECT u.email, ad.first_name, NVL(ad.second_name, 'None'), ad.first_surname, 
-                ad.second_surname, NVL(r.score, 0), uxb.reason FROM user_x_black_list uxb
+                ad.second_surname, NVL(r.score, 0), uxb.reason, COUNT(1) OVER () FROM user_x_black_list uxb
         
         INNER JOIN black_list bl
         ON bl.id_report = uxb.id_report
@@ -52,7 +52,7 @@ IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT  FROM matches
+        SELECT , COUNT(1) OVER () FROM matches
         
         INNER JOIN 
         ON 
@@ -65,13 +65,13 @@ IS
 
         RETURN v_cursor;
     END;*/
-/*
-FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR
+
+FUNCTION getPetNecessaryTreatments(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT p.first_name, d."name", t."name" FROM pet p
+        SELECT p.first_name, COUNT(dxms.id_disease), COUNT(*) OVER () FROM pet p
         
         INNER JOIN pet_extra_info pei
         ON p.id_pet = pei.id_pet
@@ -79,23 +79,25 @@ IS
         INNER JOIN medic_sheet ms
         ON pei.id_pet_extra_info = ms.id_pet_extra_info
         
-        INNER JOIN
+        INNER JOIN disease_x_medic_sheet dxms
+        ON ms.id_medic_sheet = dxms.id_medic_sheet
         
-        WHERE 
-        AND 
+        INNER JOIN disease d
+        ON dxms.id_disease = d.id_disease
         
-        GROUP BY 
-        ORDER BY ;
+        WHERE p.id_pet = pIdPet
+        
+        GROUP BY p.first_name;
 
         RETURN v_cursor;
-    END;*/
+    END;
 
 FUNCTION getCompatibleCribHouses(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT cb.id_user, cb."name", cb.requires_donations, pt."name" FROM crib_house cb
+        SELECT cb.id_user, cb."name", cb.requires_donations, pt."name", COUNT(1) OVER () FROM crib_house cb
         
         INNER JOIN pet_type_x_crib_house ptxcb
         ON cb.id_user = ptxcb.id_crib_house
@@ -104,8 +106,10 @@ IS
         ON ptxcb.id_pet_type = pt.id_pet_type
         
         WHERE pt.id_pet_type = NVL(pIdPetType, pt.id_pet_type)
-
+        
+        GROUP BY cb.id_user, cb."name", cb.requires_donations, pt."name"
         ORDER BY cb.id_user;
+        
         RETURN v_cursor;
     END;
 END adminConsult;
