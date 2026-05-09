@@ -23,7 +23,7 @@ CREATE TABLE pet
     modifiedAt  DATE,
     id_size     NUMBER(8),
     id_status   NUMBER(4),
-    id_race NUMBER(4),
+    id_race     NUMBER(4),
     id_rescuer  NUMBER(8),
     id_crib_house NUMBER(8),
     id_district NUMBER(8)
