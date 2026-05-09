@@ -55,7 +55,7 @@ IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR 
-        SELECT  u.email,u."name", uxbl.reason
+        SELECT  u.email, uxbl.reason
         FROM black_list bl
         INNER JOIN user_x_black_list uxbl 
         ON bl.id_report = uxbl.id_report
