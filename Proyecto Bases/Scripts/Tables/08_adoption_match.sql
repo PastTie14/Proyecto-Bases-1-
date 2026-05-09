@@ -207,9 +207,10 @@ IS 'The date the table was modified';
 -- ============================================
 CREATE TABLE match
 (
-    id_match              NUMBER(8),
-    match_date            DATE,
-    similarity_percentage NUMBER(5,2)
+    id_match        NUMBER(8),
+    match_date      DATE,
+    id_pet_lost     NUMBER(8),
+    id_pet_found    NUMBER(8)
 )
 TABLESPACE TS_DATA;
 
@@ -220,11 +221,22 @@ ALTER TABLE match
     MODIFY match_date CONSTRAINT match_matchDate_nn NOT NULL;
 
 ALTER TABLE match
-    MODIFY similarity_percentage CONSTRAINT match_similarityPercentage_nn NOT NULL;
+    MODIFY id_pet_lost CONSTRAINT match_idPetLost_nn NOT NULL;
+
+ALTER TABLE match
+    MODIFY id_pet_found CONSTRAINT match_idPetFound_nn NOT NULL;
 
 ALTER TABLE match
     ADD CONSTRAINT pk_match PRIMARY KEY (id_match)
     USING INDEX TABLESPACE TS_INDEX;
+    
+ALTER TABLE match
+    ADD CONSTRAINT fk_match_pet_lost
+    FOREIGN KEY (id_pet_lost) REFERENCES pet (id_pet);
+
+ALTER TABLE match
+    ADD CONSTRAINT fk_match_pet_found
+    FOREIGN KEY (id_pet_found) REFERENCES pet (id_pet);
 
 COMMENT ON TABLE match
 IS 'Stores information about matches between lost and found pets';
@@ -234,6 +246,12 @@ IS 'Primary key, identifier for the match';
 
 COMMENT ON COLUMN match.match_date
 IS 'The date the match was made';
+
+COMMENT ON COLUMN match.id_pet_lost
+IS 'Foreign key, references the lost pet';
+
+COMMENT ON COLUMN match.id_pet_found
+IS 'Foreign key, references the found pet';
 
 COMMENT ON COLUMN match.CreatedBy
 IS 'The user who created the table';
