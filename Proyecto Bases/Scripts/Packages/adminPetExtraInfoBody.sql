@@ -28,7 +28,7 @@ PROCEDURE insertEnergyLevel(pIdEnergyLevel IN NUMBER, pName IN VARCHAR2)
 IS 
 BEGIN
     INSERT INTO energy_level (id_energy_level, "name")
-    VALUES(pIdEnergyLevel, pName);
+    VALUES(s_energyLevel.nextVal, pName);
     COMMIT;
 END insertEnergyLevel;
 

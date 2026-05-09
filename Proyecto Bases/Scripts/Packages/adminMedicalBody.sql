@@ -5,7 +5,7 @@ PROCEDURE insertTreatment(pIdTreatment IN NUMBER, pName IN VARCHAR2,
 IS 
 BEGIN
     INSERT INTO treatment (id_treatment, "name", dose)
-    VALUES(pIdTreatment, pName, pDose);
+    VALUES(s_treatment.nextVal, pName, pDose);
     COMMIT;
 END insertTreatment;
 
@@ -15,7 +15,7 @@ PROCEDURE insertDisease(pIdDisease IN NUMBER, pName IN VARCHAR2)
 IS 
 BEGIN
     INSERT INTO disease (id_disease, "name")
-    VALUES(pIdDisease, pName);
+    VALUES(s_disease.nextVal, pName);
     COMMIT;
 END insertDisease;
 
@@ -26,7 +26,7 @@ PROCEDURE insertMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN V
 IS 
 BEGIN
     INSERT INTO medic_sheet (id_medic_sheet, abandonment_description, id_veterinarian, id_pet_extra_info)
-    VALUES(pIdMedicSheet, pAbandonmentDescription, pIdVeterinarian, pIdPetExtraInfo);
+    VALUES(s_medicSheet.nextVal, pAbandonmentDescription, pIdVeterinarian, pIdPetExtraInfo);
     COMMIT;
 END insertMedicSheet;
 
