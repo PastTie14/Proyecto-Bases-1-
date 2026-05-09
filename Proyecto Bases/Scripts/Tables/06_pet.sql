@@ -55,6 +55,9 @@ ALTER TABLE pet
     MODIFY id_rescuer CONSTRAINT pet_idRescuer_nn NOT NULL;
 
 ALTER TABLE pet
+    MODIFY id_district CONSTRAINT pet_idDistrict_nn NOT NULL;
+
+ALTER TABLE pet
     ADD CONSTRAINT pk_pet PRIMARY KEY (id_pet)
     USING INDEX TABLESPACE TS_INDEX;
 
@@ -124,8 +127,8 @@ IS 'Foreign key, references the size of the pet';
 COMMENT ON COLUMN pet.id_status
 IS 'Foreign key, references the current status of the pet';
 
-COMMENT ON COLUMN pet.id_pet_type
-IS 'Foreign key, references the type of pet';
+COMMENT ON COLUMN pet.id_race
+IS 'Foreign key, references the race of the pet';
 
 COMMENT ON COLUMN pet.id_rescuer
 IS 'Foreign key, references the rescuer who found the pet';

@@ -3,15 +3,16 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                                        pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
-                                       pIdRescuer IN NUMBER, pIdSize IN NUMBER)
+                                       pIdSize IN NUMBER, pIdRescuer IN NUMBER, pIdCribHouse IN NUMBER,
+                                       pIdDistrict IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
-                    date_lost, date_found, email, id_status, id_race,id_size, id_rescuer,CREATEDBY,CREATEDAT)
+                    date_lost, date_found, email, id_status, id_race, id_rescuer, id_size, id_crib_house, id_district)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdRace, pIdSize, pIdRescuer, USER, SYSTIMESTAMP);
+            pEmail, pIdStatus, pIdRace, pIdRescuer, pIdSize, pIdCribHouse, pIdDistrict);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); 
