@@ -1,3 +1,9 @@
+-- ============================================================
+-- FILE 01 - CATALOGS
+-- Tables: currency, province, canton, district,
+--         pet_type, race, status, color, value_type, size, size_x_crib_house
+-- ============================================================
+
 -- ============================================
 -- CURRENCY
 -- ============================================
@@ -517,7 +523,7 @@ ALTER TABLE size_x_crib_house
     ON DELETE CASCADE;
 
 COMMENT ON TABLE size_x_crib_house 
-IS 'Intermediate table, N to N relationship between size and crib_house';
+IS 'Intermediate table, stores sizes accepted by a crib house';
 
 COMMENT ON COLUMN size_x_crib_house.id_size 
 IS 'Composite primary key. Foreign key references the size id';

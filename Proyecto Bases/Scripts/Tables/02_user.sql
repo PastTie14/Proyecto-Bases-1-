@@ -40,6 +40,30 @@ ALTER TABLE "user"
 ALTER TABLE "user"
     ADD CONSTRAINT uq_user_email UNIQUE (email);
 
+COMMENT ON TABLE "user"
+IS 'Stores user account information';
+
+COMMENT ON COLUMN "user".id_user
+IS 'Primary key, identifier for the user';
+
+COMMENT ON COLUMN "user".email
+IS 'Email address used for login';
+
+COMMENT ON COLUMN "user"."password"
+IS 'Password for user authentication';
+
+COMMENT ON COLUMN "user".CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN "user".CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN "user".ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN "user".ModifiedAt
+IS 'The date the table was modified';
+
 -- ============================================
 -- ASSOCIATION
 -- ============================================
@@ -64,6 +88,27 @@ ALTER TABLE association
     ADD CONSTRAINT fk_association_user
     FOREIGN KEY (id_user) REFERENCES "user" (id_user)
     ON DELETE CASCADE;
+
+COMMENT ON TABLE association
+IS 'Extends user table with organization-specific information';
+
+COMMENT ON COLUMN association.id_user
+IS 'Foreign key, references the user id';
+
+COMMENT ON COLUMN association."name"
+IS 'Official name of the association';
+
+COMMENT ON COLUMN association.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN association.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN association.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN association.ModifiedAt
+IS 'The date the table was modified';
 
 -- ============================================
 -- ADOPTER
@@ -96,6 +141,36 @@ ALTER TABLE adopter
     FOREIGN KEY (id_user) REFERENCES "user" (id_user)
     ON DELETE CASCADE;
 
+COMMENT ON TABLE adopter
+IS 'Extends user table with person-specific information for adopters';
+
+COMMENT ON COLUMN adopter.id_user
+IS 'Foreign key, references the user id';
+
+COMMENT ON COLUMN adopter.first_name
+IS 'First name of the adopter';
+
+COMMENT ON COLUMN adopter.second_name
+IS 'Second name of the adopter';
+
+COMMENT ON COLUMN adopter.first_surname
+IS 'Paternal surname of the adopter';
+
+COMMENT ON COLUMN adopter.second_surname
+IS 'Maternal surname of the adopter';
+
+COMMENT ON COLUMN adopter.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN adopter.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN adopter.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN adopter.ModifiedAt
+IS 'The date the table was modified';
+
 -- ============================================
 -- RESCUER
 -- ============================================
@@ -126,6 +201,36 @@ ALTER TABLE rescuer
     ADD CONSTRAINT fk_rescuer_user
     FOREIGN KEY (id_user) REFERENCES "user" (id_user)
     ON DELETE CASCADE;
+
+COMMENT ON TABLE rescuer
+IS 'Extends user table with person-specific information for rescuers';
+
+COMMENT ON COLUMN rescuer.id_user
+IS 'Foreign key referencing the user id';
+
+COMMENT ON COLUMN rescuer.first_name
+IS 'First name of the rescuer';
+
+COMMENT ON COLUMN rescuer.second_name
+IS 'Second name of the rescuer';
+
+COMMENT ON COLUMN rescuer.first_surname
+IS 'Paternal surname of the rescuer';
+
+COMMENT ON COLUMN rescuer.second_surname
+IS 'Maternal surname of the rescuer';
+
+COMMENT ON COLUMN rescuer.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN rescuer.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN rescuer.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN rescuer.ModifiedAt
+IS 'The date the table was modified';
 
 -- ============================================
 -- CRIB HOUSE
@@ -160,6 +265,30 @@ ALTER TABLE crib_house
     ADD CONSTRAINT chk_requires_donations
     CHECK (requires_donations IN (0, 1));
 
+COMMENT ON TABLE crib_house
+IS 'Extends user table with crib house specific information';
+
+COMMENT ON COLUMN crib_house.id_user
+IS 'Foreign keym, references the user id';
+
+COMMENT ON COLUMN crib_house."name"
+IS 'Name of the crib house';
+
+COMMENT ON COLUMN crib_house.requires_donations
+IS 'Flag indicating if the crib house accepts donations';
+
+COMMENT ON COLUMN crib_house.CreatedBy
+IS 'The user who created the table';
+
+COMMENT ON COLUMN crib_house.CreatedAt
+IS 'The date the table was created';
+
+COMMENT ON COLUMN crib_house.ModifiedBy
+IS 'The user who modified the table';
+
+COMMENT ON COLUMN crib_house.ModifiedAt
+IS 'The date the table was modified';
+
 -- ============================================
 -- LOG
 -- ============================================
@@ -193,3 +322,27 @@ ALTER TABLE "log"
 ALTER TABLE "log"
     ADD CONSTRAINT pk_log PRIMARY KEY (id_log)
     USING INDEX TABLESPACE TS_INDEX;
+
+COMMENT ON TABLE "log"
+IS 'Stores data changes across tables';
+
+COMMENT ON COLUMN "log".id_log
+IS 'Primary key, identifier for the log entry';
+
+COMMENT ON COLUMN "log".changeDate
+IS 'The date when the change occurred';
+
+COMMENT ON COLUMN "log".changeBy
+IS 'The user who made the change';
+
+COMMENT ON COLUMN "log".tableName
+IS 'Name of the table where the change happened';
+
+COMMENT ON COLUMN "log".fieldName
+IS 'Name of the column that was modified';
+
+COMMENT ON COLUMN "log".previousValue
+IS 'Value before the change was applied';
+
+COMMENT ON COLUMN "log".currentValue
+IS 'Value after the change was applied';
