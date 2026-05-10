@@ -52,37 +52,42 @@ public class Pet extends DBItem {
     // ─────────────────────────────────────────────────────────────
     //  GETTERS
     // ─────────────────────────────────────────────────────────────
-    /*
-    Id  | Column            | Extra Info
-    1   | id_pet            |
-    2   | picture           |
-    3   | first_name        |
-    4   | birth_date        |
-    5   | date_lost         |
-    6   | date_found        |
-    7   | email             |
-    8   | createdBy         |
-    9   | createAt          |
-    10  | modifiedBy        |
-    11  | modifiedAt        |
-    12  | id_size           |
-    13  | id_status         |
-    14  | id_race           |
-    15  | id_user           | Se refiere al user que registra la mascota
-    16  | id_current_user   | Se refiere al user el cual posee la mascota actualmente
-    17  | id_district       |
-    */
+    
+    //  Id  | Column            | Extra Info
+    //  1   | id_pet            |
+    //  2   | picture           |
+    //  3   | first_name        |
+    //  4   | birth_date        |
+    //  5   | date_lost         |
+    //  6   | date_found        |
+    //  7   | email             |
+    //  8   | createdBy         |
+    //  9   | createAt          |
+    //  10  | modifiedBy        |
+    //  11  | modifiedAt        |
+    //  12  | id_size           |
+    //  13  | id_status         |
+    //  14  | id_race           |
+    //  15  | id_user           | Se refiere al user que registra la mascota
+    //  16  | id_current_user   | Se refiere al user el cual posee la mascota actualmente
+    //  17  | id_district       |
+    
 
     public int    getId()        { return id; }
-    public String getPicture()   { loadData(); return get(1); }
-    public String getFirstName() { loadData(); return get(2); }
-    public String getBirthdate() { loadData(); return get(3); }
-    public String getDateLost()  { loadData(); return get(4); }
-    public String getDateFound() { loadData(); return get(5); }
-    public String getEmail()     { loadData(); return get(6); }
-    public int    getIdStatus()  { loadData(); return getInt(7); }
-    public int    getIdPetRace() { loadData(); return getInt(8); }
-    public int    getIdRescuer() { loadData(); return getInt(9); }
+    public String getPicture()   { loadData(); return get(2); }
+    public String getFirstName() { loadData(); return get(3); }
+    public String getBirthdate() { loadData(); return get(4); }
+    public String getDateLost()  { loadData(); return get(5); }
+    public String getDateFound() { loadData(); return get(6); }
+    public String getEmail()     { loadData(); return get(7); }
+ 
+    public int    getIdSize()  { loadData(); return getInt(12); }
+    public int    getIdStatus()  { loadData(); return getInt(13); }
+    public int    getIdPetRace() { loadData(); return getInt(14); }
+    public int    getIdUser() { loadData(); return getInt(15); }
+    public int    getIdCurrentUser() { loadData(); return getInt(16); }
+    public int    getIdDistrict() { loadData(); return getInt(17); }
+
     public String getPetType()   { loadData(); return get(2); }
     public String getStatus()    { loadData(); return get(7); }
 
