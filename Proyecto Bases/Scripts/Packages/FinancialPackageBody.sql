@@ -3,21 +3,14 @@ CREATE OR REPLACE PACKAGE BODY adminFinancial AS
 -- ======================================== INSERT ========================================
 
 PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, 
-                            pIdCurrency IN NUMBER, pIdCribHouse IN NUMBER)
+                            pIdCurrency IN NUMBER, pIdCribHouse IN NUMBER, pIdDonnor IN NUMBER)
 IS 
 BEGIN
-    INSERT INTO donation (id_donation, amount, id_association, id_currency, id_crib_house)
-    VALUES(s_donation.nextVal, pAmount, pIdAssociation, pIdCurrency, pIdCribHouse);
+    INSERT INTO donation (id_donation, amount, id_association, id_currency, id_crib_house, id_donnor)
+    VALUES(s_donation.nextVal, pAmount, pIdAssociation, pIdCurrency, pIdCribHouse, pIdDonnor);
     COMMIT;
 END;
 
-PROCEDURE insertDonationXUser(pIdUser IN NUMBER, pIdDonation IN NUMBER)
-IS
-BEGIN
-    INSERT INTO donation_x_user (id_user, id_donation)
-    VALUES(pIdUser, pIDDonation);
-    COMMIT;
-END;
 
 
 -- ======================================== GET ========================================
@@ -39,13 +32,7 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION getDonationXUser RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_cursor FOR SELECT * FROM donation_x_user;
-    RETURN v_cursor;
-END;
+
 
 FUNCTION getRecipients RETURN SYS_REFCURSOR
 IS
@@ -77,6 +64,15 @@ BEGIN
     RETURN v_id;
 END getLastDonationId;
 
+FUNCTION getDonationByUser(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
+    IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT * FROM donation d
+        WHERE d.id_donnor = pIdUser;
+    RETURN v_cursor;
+END;
 
 
 
