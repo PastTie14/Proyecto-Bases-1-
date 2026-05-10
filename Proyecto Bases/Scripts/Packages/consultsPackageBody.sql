@@ -39,7 +39,7 @@ IS
         INNER JOIN "user" u
         ON bl.id_user = u.id_user
         
-        -- adopter the reported
+        -- adopter is the reported
         INNER JOIN adopter ad
         ON uxb.id_user = ad.id_user
         

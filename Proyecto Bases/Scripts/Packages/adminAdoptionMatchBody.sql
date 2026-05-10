@@ -34,12 +34,11 @@ END insertRating;
 
 --=======================================================================================
 
-PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
-                                        pSimilarityPercentage IN NUMBER)
+PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE)
 IS 
 BEGIN
-    INSERT INTO match (id_match, match_date, similarity_percentage)
-    VALUES(s_match.nextVal, pMatchDate, pSimilarityPercentage);
+    INSERT INTO match (id_match, match_date)
+    VALUES(s_match.nextVal, pMatchDate);
     COMMIT;
 END insertMatch;
 

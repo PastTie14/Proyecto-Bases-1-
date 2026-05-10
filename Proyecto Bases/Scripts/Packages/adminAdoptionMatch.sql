@@ -11,8 +11,7 @@ PROCEDURE insertPhoto(pIdPhoto IN NUMBER, pDate IN DATE,
 PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER, 
                         pIdUser IN NUMBER, pIdAdopter IN NUMBER);
 
-PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
-                        pSimilarityPercentage IN NUMBER);
+PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE);
 
 PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
                             pIdMatch IN NUMBER, pIdValueType IN NUMBER);
