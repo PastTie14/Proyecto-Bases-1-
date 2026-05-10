@@ -289,7 +289,7 @@ public class Pet extends DBItem {
 
     public static int insert(String picture, String firstName, String birthdate,
                              String dateLost, String dateFound, String email,
-                             int idStatus, int idPetRace, int idSize, int idRescuer) {
+                             int idStatus, int idPetRace, int idSize, int idRescuer, int idDistrict) {
         final String sql =
             "BEGIN ? := adminPet.insertPet(?,?,TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),?,?,?,?,?,?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -309,7 +309,7 @@ public class Pet extends DBItem {
             st.setInt   (10, idSize);
             st.setInt   (11, idRescuer);
             st.setInt   (12, 37);
-            st.setInt   (13, 1);
+            st.setInt   (13, idDistrict);
             st.execute();
             return st.getInt(1);
         } catch (SQLException ex) {

@@ -404,10 +404,9 @@ public class PetFormPanel extends JPanel {
             idStatus,
             idRace,
             idSize,
-            idUser/*, // rescuer
-            idCribHouse,
-            idDistrict*/
-            
+            idUser, 
+            idDistrito/*, // rescuer
+            idCribHouse*/
         );
  
         if (idPet <= 0) {
@@ -419,7 +418,6 @@ public class PetFormPanel extends JPanel {
  
         // ── Relaciones básicas de la mascota ──────────────────────
         if (idColor    > 0) PetXColor.insert(idPet, idColor);
-        if (idDistrito > 0) PetXDistrict.insert(idPet, idDistrito);
  
         ArrayList<String> petPhoneValues = petPhones.getValues();
         if (!petPhoneValues.isEmpty()) {
