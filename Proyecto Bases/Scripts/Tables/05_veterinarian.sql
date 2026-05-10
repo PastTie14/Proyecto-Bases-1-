@@ -15,10 +15,10 @@ CREATE TABLE veterinarian
     first_surname   VARCHAR2(50),
     second_surname  VARCHAR2(50),
     clinic_name     VARCHAR2(100),
-    created_at      DATE,
-    created_by      VARCHAR2(10),
-    modified_       DATE,
-    modified_by VARCHAR2(10)
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -59,14 +59,14 @@ IS 'Maternal surname of the veterinarian';
 COMMENT ON COLUMN veterinarian.clinic_name
 IS 'Name of the clinic';
 
-COMMENT ON COLUMN veterinarian.created_by
+COMMENT ON COLUMN veterinarian.CreatedBy
 IS 'The user who created the table';
 
-COMMENT ON COLUMN veterinarian.created_at
+COMMENT ON COLUMN veterinarian.CreatedAt
 IS 'The date the table was created';
 
-COMMENT ON COLUMN veterinarian.modified_by
+COMMENT ON COLUMN veterinarian.ModifiedBy
 IS 'The user who modified the table';
 
-COMMENT ON COLUMN veterinarian.modified_at
+COMMENT ON COLUMN veterinarian.ModifiedAt
 IS 'The date the table was modified';

@@ -11,7 +11,11 @@
 CREATE TABLE disease
 (
     id_disease NUMBER(8),
-    "name"     VARCHAR2(100)
+    "name"     VARCHAR2(100),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -47,7 +51,11 @@ CREATE TABLE treatment
 (
     id_treatment NUMBER(8),
     "name"       VARCHAR2(100),
-    dose         VARCHAR2(100)
+    dose         VARCHAR2(100),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -87,7 +95,11 @@ CREATE TABLE medic_sheet
     id_medic_sheet          NUMBER(8),
     abandonment_description VARCHAR2(500),
     id_veterinarian         NUMBER(8),
-    id_pet_extra_info       NUMBER(8)
+    id_pet_extra_info       NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -137,7 +149,11 @@ IS 'The date the table was modified';
 CREATE TABLE disease_x_medic_sheet
 (
     id_disease     NUMBER(8),
-    id_medic_sheet NUMBER(8)
+    id_medic_sheet NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -182,7 +198,11 @@ IS 'The date the table was modified';
 CREATE TABLE treatment_x_disease
 (
     id_treatment NUMBER(8),
-    id_disease   NUMBER(8)
+    id_disease   NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

@@ -10,7 +10,11 @@
 CREATE TABLE black_list
 (
     id_report NUMBER(8),
-    id_user   NUMBER(8)
+    id_user   NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -56,7 +60,11 @@ CREATE TABLE user_x_black_list
 (
     reason    VARCHAR2(200),
     id_user   NUMBER(8),
-    id_report NUMBER(8)
+    id_report NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

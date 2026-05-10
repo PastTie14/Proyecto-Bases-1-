@@ -11,7 +11,11 @@
 CREATE TABLE current_status
 (
     id_current_status NUMBER(8),
-    status_type       VARCHAR2(30)
+    status_type       VARCHAR2(30),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -46,7 +50,11 @@ IS 'The date the table was modified';
 CREATE TABLE energy_level
 (
     id_energy_level   NUMBER(8),
-    "name"            VARCHAR2(50)
+    "name"            VARCHAR2(50),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -81,7 +89,11 @@ IS 'The date the table was modified';
 CREATE TABLE training_ease
 (
     id_training_ease  NUMBER(8),
-    "name"            VARCHAR2(50)
+    "name"            VARCHAR2(50),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -121,7 +133,11 @@ CREATE TABLE pet_extra_info
     id_pet              NUMBER(8),
     id_current_status   NUMBER(8),
     id_energy_level     NUMBER(8),
-    id_training_ease    NUMBER(8)
+    id_training_ease    NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -190,7 +206,11 @@ CREATE TABLE bounty
     id_bounty         NUMBER(8),
     amount            NUMBER(12,2),
     id_pet_extra_info NUMBER(8),
-    id_currency       NUMBER(4)
+    id_currency       NUMBER(4),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

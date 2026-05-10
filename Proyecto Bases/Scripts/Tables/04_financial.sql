@@ -13,7 +13,11 @@ CREATE TABLE donation
     amount         NUMBER(12, 2),
     id_association NUMBER(8),
     id_crib_house  NUMBER(8),
-    id_currency    NUMBER(4)
+    id_currency    NUMBER(4),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

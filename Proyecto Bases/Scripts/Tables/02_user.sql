@@ -70,7 +70,11 @@ IS 'The date the table was modified';
 CREATE TABLE association
 (
     id_user NUMBER(8),
-    "name"  VARCHAR2(100)
+    "name"  VARCHAR2(100),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -119,7 +123,11 @@ CREATE TABLE adopter
     first_name     VARCHAR2(50),
     second_name    VARCHAR2(50),
     first_surname  VARCHAR2(50),
-    second_surname VARCHAR2(50)
+    second_surname VARCHAR2(50),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -180,7 +188,11 @@ CREATE TABLE rescuer
     first_name     VARCHAR2(50),
     second_name    VARCHAR2(50),
     first_surname  VARCHAR2(50),
-    second_surname VARCHAR2(50)
+    second_surname VARCHAR2(50),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -239,7 +251,11 @@ CREATE TABLE crib_house
 (
     id_user            NUMBER(8),
     "name"             VARCHAR2(100),
-    requires_donations NUMBER(1) DEFAULT 0
+    requires_donations NUMBER(1) DEFAULT 0,
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

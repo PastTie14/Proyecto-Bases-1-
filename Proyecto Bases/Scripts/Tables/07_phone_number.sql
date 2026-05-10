@@ -15,7 +15,11 @@ CREATE TABLE phone_number
     "number"        VARCHAR2(20),
     id_user         NUMBER(8),
     id_pet          NUMBER(8),
-    id_veterinarian NUMBER(8)
+    id_veterinarian NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

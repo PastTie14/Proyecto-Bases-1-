@@ -14,7 +14,11 @@ CREATE TABLE adoption_form
     adoption_date DATE,
     "reference"   VARCHAR2(200),
     id_adopter    NUMBER(8),
-    id_pet        NUMBER(8)
+    id_pet        NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -85,7 +89,11 @@ CREATE TABLE photo
     id_photo  NUMBER(8),
     "date"    DATE,
     photo_dir VARCHAR2(200),
-    id_user   NUMBER(8)
+    id_user   NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -145,7 +153,11 @@ CREATE TABLE rating
     id_rating  NUMBER(8),
     score      NUMBER(3,1),
     id_user    NUMBER(8),
-    id_adopter NUMBER(8)
+    id_adopter NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -210,7 +222,11 @@ CREATE TABLE match
     id_match        NUMBER(8),
     match_date      DATE,
     id_pet_lost     NUMBER(8),
-    id_pet_found    NUMBER(8)
+    id_pet_found    NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -273,7 +289,11 @@ CREATE TABLE parameters
     id_parameter  NUMBER(8),
     "value"       VARCHAR2(100),
     id_match      NUMBER(8),
-    id_value_type NUMBER(4)
+    id_value_type NUMBER(4),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 

@@ -147,7 +147,11 @@ CREATE TABLE identification_chip
     id_chip           NUMBER(8),
     chip_number       VARCHAR2(30),
     registration_date DATE,
-    id_pet            NUMBER(8)
+    id_pet            NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -205,7 +209,11 @@ IS 'The date the table was modified';
 CREATE TABLE pet_x_color
 (
     id_pet   NUMBER(8),
-    id_color NUMBER(4)
+    id_color NUMBER(4),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
@@ -256,7 +264,11 @@ IS 'The date the table was modified';
 CREATE TABLE pet_type_x_crib_house
 (
     id_pet_type   NUMBER(4),
-    id_crib_house NUMBER(8)
+    id_crib_house NUMBER(8),
+    createdBy  VARCHAR2(20),
+    createdAt  DATE,
+    modifiedBy VARCHAR2(20),
+    modifiedAt DATE
 )
 TABLESPACE TS_DATA;
 
