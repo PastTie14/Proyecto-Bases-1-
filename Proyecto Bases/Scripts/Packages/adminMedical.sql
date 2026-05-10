@@ -10,13 +10,14 @@ FUNCTION insertDisease(pName IN VARCHAR2) RETURN NUMBER;
                                pIdVeterinarian  IN NUMBER,
                                pIdPetExtraInfo  IN NUMBER);
  
-    FUNCTION insertVeterinarian(
+    PROCEDURE insertVeterinarian(
+        p_id_veterinarian OUT NUMBER,
         p_first_name     IN VARCHAR2,
         p_second_name    IN VARCHAR2,
         p_first_surname  IN VARCHAR2,
         p_second_surname IN VARCHAR2,
         p_clinic_name    IN VARCHAR2
-    ) RETURN NUMBER;
+    );
  
     PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER);
  

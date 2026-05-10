@@ -54,14 +54,16 @@ FUNCTION insertMedicSheetF(pAbandonmentDesc IN VARCHAR2,
 
 --=======================================================================================
 
-FUNCTION insertVeterinarian(
+PROCEDURE insertVeterinarian(
+        p_id_veterinarian OUT NUMBER,
         p_first_name     IN VARCHAR2,
         p_second_name    IN VARCHAR2,
         p_first_surname  IN VARCHAR2,
         p_second_surname IN VARCHAR2,
         p_clinic_name    IN VARCHAR2
-    ) RETURN NUMBER IS
+    ) IS
     BEGIN
+        SELECT s_veterinarian.nextVal INTO p_id_veterinarian FROM DUAL;
         INSERT INTO veterinarian (
             id_veterinarian, first_name, second_name,
             first_surname, second_surname, clinic_name
@@ -72,7 +74,6 @@ FUNCTION insertVeterinarian(
             p_clinic_name
         );
         COMMIT;
-        RETURN s_veterinarian.CURRVAL;
     END insertVeterinarian;
 
 --=======================================================================================
