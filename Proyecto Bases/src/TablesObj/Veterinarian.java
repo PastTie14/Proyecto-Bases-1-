@@ -70,7 +70,7 @@ public class Veterinarian extends DBItem {
                              String clinicName) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(
-                     "{CALL adminMedical.insertVeterinarian(?,?,?,?,?)}")) {
+                     "BEGIN ? := adminMedical.insertVeterinarian(?,?,?,?,?); END;")) {
             st.registerOutParameter(1, OracleTypes.NUMERIC);
             st.setString(2, firstName);
             st.setString(3, secondName);

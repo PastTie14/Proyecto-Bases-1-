@@ -37,7 +37,7 @@ public class MedicSheet extends DBItem {
  
     // ── Static ────────────────────────────────────────────────────
  
-    public static int insert(int pIdMedicSheet, String pAbandonDesc,
+    public static int insert(String pAbandonDesc,
                              int pIdVeterinarian, int pIdPetExtraInfo) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(

@@ -499,7 +499,7 @@ public class PetFormPanel extends JPanel {
                     }
 
                     int idMedicSheet = MedicSheet.insert(
-                        0, abandonDesc.getValue(), idVet, idExtraInfo
+                        abandonDesc.getValue(), idVet, idExtraInfo
                     );
                     if (idMedicSheet > 0) {
                         saveDiseasesAndTreatments(idMedicSheet);
