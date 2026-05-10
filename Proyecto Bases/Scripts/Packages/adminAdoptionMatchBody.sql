@@ -5,7 +5,6 @@ CREATE OR REPLACE PACKAGE BODY adminAdoptionMatch AS
 --  ===============================================================
 
 PROCEDURE insertAdoptionForm(
-    pIdAdoption   IN NUMBER,
     pNotes        IN VARCHAR2,
     pAdoptionDate IN DATE,
     pReference    IN VARCHAR2,

@@ -80,12 +80,12 @@ public class AdoptionForm extends DBItem {
         return null;
     }
 
-    public static void insert(int id, String notes, String adoptionDate,
+    public static void insert(String notes, String adoptionDate,
                                String reference, int idAdopter, int idPet) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ CALL adminAdoptionMatch.insertAdoptionForm(?,?,?,?,?,?) }")) {
-            st.setInt(1, id); st.setString(2, notes); st.setString(3, adoptionDate);
-            st.setString(4, reference); st.setInt(5, idAdopter); st.setInt(6, idPet);
+             CallableStatement st = con.prepareCall("BEGIN adminAdoptionMatch.insertAdoptionForm(?,?,?,?,?); END;")) {
+            st.setString(1, notes); st.setString(2, adoptionDate);
+            st.setString(3, reference); st.setInt(4, idAdopter); st.setInt(5, idPet);
             st.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }

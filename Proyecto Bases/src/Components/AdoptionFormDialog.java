@@ -225,7 +225,6 @@ public class AdoptionFormDialog extends JDialog {
         // ── Persistencia ──────────────────────────────────────────
         try {
             AdoptionForm.insert(
-                0,                          // id
                 notes.getValue(),           // notas (puede estar vacío)
                 dateVal,                    // fecha de adopción
                 reference.getValue(),       // referencia (puede estar vacío)
