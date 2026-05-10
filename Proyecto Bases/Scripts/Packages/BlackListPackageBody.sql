@@ -62,21 +62,30 @@ BEGIN
     RETURN v_cursor;
 END;
 
+--https://www.w3schools.com/sql/func_sqlserver_coalesce.asp
 FUNCTION getUsersFromBlackList(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
 BEGIN
     OPEN v_cursor FOR 
-        SELECT  u.email, uxbl.reason
+        SELECT
+            u.id_user,
+            u.email,
+            COALESCE(a.first_name, r.first_name) as "name",
+            uxbl.reason
         FROM black_list bl
         INNER JOIN user_x_black_list uxbl 
-        ON bl.id_report = uxbl.id_report
+            ON bl.id_report = uxbl.id_report
         INNER JOIN "user" u
-        ON uxbl.id_user = u.id_user
+            ON uxbl.id_user = u.id_user
+        LEFT JOIN adopter a
+            ON u.id_user = a.id_user
+        LEFT JOIN rescuer r
+            ON u.id_user = r.id_user
         WHERE bl.id_user = pIdUser;
+
     RETURN v_cursor;
 END;
-
 
 -- ======================================== DELETE ========================================
 
