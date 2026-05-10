@@ -1,7 +1,10 @@
-package Components;
+package Panels;
 
-import TablesObj.CribHouse;
+import Components.DynamicFieldList;
+import Components.FormField;
+import Components.Format;
 import TablesObj.PhoneNumber;
+import TablesObj.Rescuer;
 import TablesObj.User;
 
 import javax.swing.*;
@@ -9,33 +12,33 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class CribHouseFormPanel extends JPanel {
+public class RescuerFormPanel extends JPanel {
 
     // ── Modo edición ──────────────────────────────────────────────
     private final int     idUser;
-
+    // ── Campos: cuenta de usuario ─────────────────────────────────
     private final FormField email    = new FormField("Correo electrónico");
     private final FormField password = new FormField("Contraseña");
 
-    private final FormField cribName  = new FormField("Nombre de la casa cuna");
+    // ── Campos: datos del rescatista ──────────────────────────────
+    private final FormField firstName     = new FormField("Primer nombre");
+    private final FormField secondName    = new FormField("Segundo nombre (opcional)");
+    private final FormField firstSurname  = new FormField("Primer apellido");
+    private final FormField secondSurname = new FormField("Segundo apellido (opcional)");
 
-    private final JCheckBox requiresDonationsCheck = new JCheckBox("Requiere donaciones");
-
+    // ── Teléfonos dinámicos ───────────────────────────────────────
     private final DynamicFieldList phones = new DynamicFieldList("Teléfonos", "Teléfono");
 
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTORES
     // ─────────────────────────────────────────────────────────────
 
-    public CribHouseFormPanel() { this(0); }
+    public RescuerFormPanel() { this(0); }
 
-    public CribHouseFormPanel(int idUser) {
+    public RescuerFormPanel(int idUser) {
         this.idUser   = idUser;
-
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
-
-        styleCheck(requiresDonationsCheck);
 
         prefill();
 
@@ -50,16 +53,18 @@ public class CribHouseFormPanel extends JPanel {
     }
 
     // ─────────────────────────────────────────────────────────────
-    //  PRECARGA 
+    //  PRECARGA (modo edición)
     // ─────────────────────────────────────────────────────────────
 
     private void prefill() {
-        User      u = new User(idUser);
-        CribHouse c = new CribHouse(idUser);
+        User    u = new User(idUser);
+        Rescuer r = new Rescuer(idUser);
 
         email.setValue(u.getEmail());
-        cribName.setValue(c.getName());
-        requiresDonationsCheck.setSelected(c.getRequiresDonations() == 1);
+        firstName.setValue(r.getFirstName());
+        secondName.setValue(r.getSecondName());
+        firstSurname.setValue(r.getFirstSurname());
+        secondSurname.setValue(r.getSecondSurname());
 
         ArrayList<String> nums = PhoneNumber.getByUser(idUser);
         for (String n : nums) phones.addValue(n);
@@ -75,21 +80,16 @@ public class CribHouseFormPanel extends JPanel {
         inner.setBackground(Format.COLOR_BG);
         inner.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
 
-        // Wrapper alineado para el checkbox
-        JPanel checkRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        checkRow.setOpaque(false);
-        checkRow.setAlignmentX(LEFT_ALIGNMENT);
-        checkRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
-        checkRow.add(requiresDonationsCheck);
-
         inner.add(sectionTitle("Cuenta de usuario"));
         inner.add(gap());  inner.add(email);
         inner.add(gap());  inner.add(password);
 
         inner.add(gap(16));
-        inner.add(sectionTitle("Datos de la casa cuna"));
-        inner.add(gap());  inner.add(cribName);
-        inner.add(gap());  inner.add(checkRow);
+        inner.add(sectionTitle("Datos del rescatista"));
+        inner.add(gap());  inner.add(firstName);
+        inner.add(gap());  inner.add(secondName);
+        inner.add(gap());  inner.add(firstSurname);
+        inner.add(gap());  inner.add(secondSurname);
 
         inner.add(gap(16));
         inner.add(sectionTitle("Contacto"));
@@ -103,8 +103,8 @@ public class CribHouseFormPanel extends JPanel {
         bar.setBackground(Format.COLOR_BG);
         bar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Format.COLOR_PRIMARY.darker()));
 
-        String  label = "Guardar cambios";
-        JButton btn   = styledButton(label);
+        String label = "Guardar cambios";
+        JButton btn  = styledButton(label);
         btn.addActionListener(e -> buildAndSave());
         bar.add(btn);
         return bar;
@@ -115,26 +115,29 @@ public class CribHouseFormPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
 
     public boolean buildAndSave() {
-        if (email.getValue().isBlank() || cribName.getValue().isBlank()) {
+        if (email.getValue().isBlank() || firstName.getValue().isBlank()
+                || firstSurname.getValue().isBlank()) {
             JOptionPane.showMessageDialog(this,
-                "Completa los campos obligatorios: correo y nombre de la casa cuna.",
+                "Completa los campos obligatorios: correo, primer nombre y primer apellido.",
                 "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        int requiresDon = requiresDonationsCheck.isSelected() ? 1 : 0;
-
         try {
             
                 if (!password.getValue().isBlank())
                     new User(idUser).update(email.getValue(), password.getValue());
 
-                new CribHouse(idUser).update(cribName.getValue(), requiresDon, 0);
+                new Rescuer(idUser).update(
+                    firstName.getValue(),
+                    secondName.getValue(),
+                    firstSurname.getValue(),
+                    secondSurname.getValue()
+                );
 
                 ArrayList<String> nums = phones.getValues();
                 if (!nums.isEmpty()) PhoneNumber.insertForUser(idUser, nums);
 
-
-            JOptionPane.showMessageDialog(this,"Casa cuna actualizada correctamente.",
+            JOptionPane.showMessageDialog(this, "Rescatista actualizado correctamente.",
                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
             return true;
 
@@ -150,14 +153,23 @@ public class CribHouseFormPanel extends JPanel {
     //  HELPERS
     // ─────────────────────────────────────────────────────────────
 
-
-    private void styleCheck(JCheckBox cb) {
-        cb.setFont(Format.FONT_BODY);
-        cb.setForeground(Format.COLOR_TEXT_PRIMARY);
-        cb.setBackground(Format.COLOR_BG);
-        cb.setOpaque(false);
-        cb.setFocusPainted(false);
-        cb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    private static int insertUserAndReturn(String email, String password) {
+        try (java.sql.Connection con = java.sql.DriverManager.getConnection(
+                Connect.DBConnection.host,
+                Connect.DBConnection.uName,
+                Connect.DBConnection.uPass);
+             java.sql.CallableStatement st = con.prepareCall(
+                     "{ CALL adminUser.insertUser(?,?,?) }")) {
+            st.registerOutParameter(1, java.sql.Types.NUMERIC);
+            st.setString(2, email);
+            st.setString(3, password);
+            st.execute();
+            return st.getInt(1);
+        } catch (java.sql.SQLException ex) {
+            java.util.logging.Logger.getLogger(RescuerFormPanel.class.getName())
+                .log(java.util.logging.Level.SEVERE, "Error insertUser", ex);
+        }
+        return -1;
     }
 
     private JLabel sectionTitle(String text) {

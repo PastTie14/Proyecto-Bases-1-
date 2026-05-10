@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
 
-/**
- * Columnas (índice base 0):
- *   0 id_user | 1 email | 2 password
- */
+
 public class User extends DBItem {
 
     private static final Logger LOG = Logger.getLogger(User.class.getName());

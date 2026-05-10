@@ -50,6 +50,21 @@ public class Race extends DBItem {
     }
 
     // ── Static — consultas ────────────────────────────────────────
+    
+    public static ResultSet getByPetType(int idPetType) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall(
+                    "BEGIN ? := adminCatalogs.getRaceByPetType(?); END;");
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.setInt(2, idPetType);
+            stmt.execute();
+            return (ResultSet) stmt.getObject(1);
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error en getRaceByPetType id=" + idPetType, ex);
+        }
+        return null;
+    }
     public static ResultSet getAll() {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);

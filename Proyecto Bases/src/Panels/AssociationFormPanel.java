@@ -1,27 +1,29 @@
-package Components;
+package Panels;
 
+import Components.DynamicFieldList;
+import Components.FormField;
+import Components.Format;
+import TablesObj.Association;
 import TablesObj.PhoneNumber;
-import TablesObj.Rescuer;
 import TablesObj.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-
-public class RescuerFormPanel extends JPanel {
+ 
+public class AssociationFormPanel extends JPanel {
 
     // ── Modo edición ──────────────────────────────────────────────
     private final int     idUser;
+    private final boolean editMode;
+
     // ── Campos: cuenta de usuario ─────────────────────────────────
     private final FormField email    = new FormField("Correo electrónico");
     private final FormField password = new FormField("Contraseña");
 
-    // ── Campos: datos del rescatista ──────────────────────────────
-    private final FormField firstName     = new FormField("Primer nombre");
-    private final FormField secondName    = new FormField("Segundo nombre (opcional)");
-    private final FormField firstSurname  = new FormField("Primer apellido");
-    private final FormField secondSurname = new FormField("Segundo apellido (opcional)");
+    // ── Campos: datos de la asociación ────────────────────────────
+    private final FormField assocName = new FormField("Nombre de la asociación");
 
     // ── Teléfonos dinámicos ───────────────────────────────────────
     private final DynamicFieldList phones = new DynamicFieldList("Teléfonos", "Teléfono");
@@ -30,14 +32,15 @@ public class RescuerFormPanel extends JPanel {
     //  CONSTRUCTORES
     // ─────────────────────────────────────────────────────────────
 
-    public RescuerFormPanel() { this(0); }
-
-    public RescuerFormPanel(int idUser) {
+  
+    public AssociationFormPanel(int idUser) {
         this.idUser   = idUser;
+        this.editMode = (idUser > 0);
+
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
 
-        prefill();
+        if (editMode) prefill();
 
         JScrollPane scroll = new JScrollPane(buildInner());
         scroll.setBorder(BorderFactory.createEmptyBorder());
@@ -50,18 +53,15 @@ public class RescuerFormPanel extends JPanel {
     }
 
     // ─────────────────────────────────────────────────────────────
-    //  PRECARGA (modo edición)
+    //  PRECARGA 
     // ─────────────────────────────────────────────────────────────
 
     private void prefill() {
-        User    u = new User(idUser);
-        Rescuer r = new Rescuer(idUser);
+        User        u = new User(idUser);
+        Association a = new Association(idUser);
 
         email.setValue(u.getEmail());
-        firstName.setValue(r.getFirstName());
-        secondName.setValue(r.getSecondName());
-        firstSurname.setValue(r.getFirstSurname());
-        secondSurname.setValue(r.getSecondSurname());
+        assocName.setValue(a.getName());
 
         ArrayList<String> nums = PhoneNumber.getByUser(idUser);
         for (String n : nums) phones.addValue(n);
@@ -82,11 +82,8 @@ public class RescuerFormPanel extends JPanel {
         inner.add(gap());  inner.add(password);
 
         inner.add(gap(16));
-        inner.add(sectionTitle("Datos del rescatista"));
-        inner.add(gap());  inner.add(firstName);
-        inner.add(gap());  inner.add(secondName);
-        inner.add(gap());  inner.add(firstSurname);
-        inner.add(gap());  inner.add(secondSurname);
+        inner.add(sectionTitle("Datos de la asociación"));
+        inner.add(gap());  inner.add(assocName);
 
         inner.add(gap(16));
         inner.add(sectionTitle("Contacto"));
@@ -100,8 +97,8 @@ public class RescuerFormPanel extends JPanel {
         bar.setBackground(Format.COLOR_BG);
         bar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Format.COLOR_PRIMARY.darker()));
 
-        String label = "Guardar cambios";
-        JButton btn  = styledButton(label);
+        String  label = editMode ? "Guardar cambios" : "Registrar asociación";
+        JButton btn   = styledButton(label);
         btn.addActionListener(e -> buildAndSave());
         bar.add(btn);
         return bar;
@@ -112,29 +109,48 @@ public class RescuerFormPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
 
     public boolean buildAndSave() {
-        if (email.getValue().isBlank() || firstName.getValue().isBlank()
-                || firstSurname.getValue().isBlank()) {
+        if (email.getValue().isBlank() || assocName.getValue().isBlank()) {
             JOptionPane.showMessageDialog(this,
-                "Completa los campos obligatorios: correo, primer nombre y primer apellido.",
+                "Completa los campos obligatorios: correo y nombre de la asociación.",
                 "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+
+        if (!editMode && password.getValue().isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                "La contraseña es obligatoria al crear una nueva asociación.",
+                "Campos requeridos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         try {
-            
+            if (editMode) {
                 if (!password.getValue().isBlank())
                     new User(idUser).update(email.getValue(), password.getValue());
 
-                new Rescuer(idUser).update(
-                    firstName.getValue(),
-                    secondName.getValue(),
-                    firstSurname.getValue(),
-                    secondSurname.getValue()
-                );
+                new Association(idUser).update(assocName.getValue());
 
                 ArrayList<String> nums = phones.getValues();
                 if (!nums.isEmpty()) PhoneNumber.insertForUser(idUser, nums);
 
-            JOptionPane.showMessageDialog(this, "Rescatista actualizado correctamente.",
+            } else {
+                int newId = insertUserAndReturn(email.getValue(), password.getValue());
+                if (newId <= 0) {
+                    JOptionPane.showMessageDialog(this,
+                        "Error al crear el usuario. Intenta de nuevo.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+
+                Association.insert(newId, assocName.getValue());
+
+                ArrayList<String> nums = phones.getValues();
+                if (!nums.isEmpty()) PhoneNumber.insertForUser(newId, nums);
+            }
+
+            JOptionPane.showMessageDialog(this,
+                editMode ? "Asociación actualizada correctamente."
+                         : "Asociación registrada correctamente.",
                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
             return true;
 
@@ -163,7 +179,7 @@ public class RescuerFormPanel extends JPanel {
             st.execute();
             return st.getInt(1);
         } catch (java.sql.SQLException ex) {
-            java.util.logging.Logger.getLogger(RescuerFormPanel.class.getName())
+            java.util.logging.Logger.getLogger(AssociationFormPanel.class.getName())
                 .log(java.util.logging.Level.SEVERE, "Error insertUser", ex);
         }
         return -1;

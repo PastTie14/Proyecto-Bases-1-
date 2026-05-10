@@ -48,6 +48,19 @@ public class Rescuer extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return null;
     }
+    
+    public static boolean getRescuerByID(int id) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall("BEGIN ? := adminUser.getRescuerById(?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, id);
+            st.execute();
+            ResultSet rs = (ResultSet) st.getObject(1);
+            return rs != null && rs.next();
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return false;
+    }
 
     public static void insert(int idUser, String firstName, String secondName,
                                String firstSurname, String secondSurname) {

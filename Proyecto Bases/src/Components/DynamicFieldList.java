@@ -53,7 +53,7 @@ public class DynamicFieldList extends JPanel {
         return result;
     }
 
-    void addValue(String n) {
+    public void addValue(String n) {
     FormField lastField = fields.get(fields.size() - 1);
 
     if (lastField.getValue().isBlank()) {

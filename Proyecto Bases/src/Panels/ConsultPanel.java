@@ -1,5 +1,8 @@
-package Components;
+package Panels;
 
+import Components.FormComboBox;
+import Components.FormField;
+import Components.Format;
 import TablesObj.PetType;
 import TablesObj.Race;
 import TablesObj.consult;
@@ -118,7 +121,7 @@ public class ConsultPanel extends JPanel {
     }
 
     // ─────────────────────────────────────────────────────────────
-    //  PANELES DE FILTRO (CardLayout)
+    //  PANELES DE FILTRO 
     // ─────────────────────────────────────────────────────────────
 
     private void buildCardPanel() {

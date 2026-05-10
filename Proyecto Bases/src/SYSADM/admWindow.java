@@ -359,7 +359,7 @@ public class admWindow extends JFrame {
         panelCampos.setLayout(new GridLayout(cols, 2, 8, 8));
         panelCampos.setMaximumSize(new Dimension(Integer.MAX_VALUE, cols * 44));
  
-        for (int i = 1; i <= cols; i++) {
+        for (int i = 1; i <= cols-4; i++) {
             JLabel lbl = new JLabel(meta.getColumnLabel(i) + ":");
             lbl.setFont(Format.FONT_BODY_SMALL);
             lbl.setForeground(Format.COLOR_TEXT_SECONDARY);

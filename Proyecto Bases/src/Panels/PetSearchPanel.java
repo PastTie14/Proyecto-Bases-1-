@@ -1,5 +1,8 @@
-package Components;
+package Panels;
 
+import Components.FormComboBox;
+import Components.FormField;
+import Components.Format;
 import TablesObj.*;
 import static Connect.DBConnection.host;
 import static Connect.DBConnection.uName;
@@ -17,17 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
 
-/**
- * PetSearchPanel — híbrido entre PetFormPanel y admWindow.
- *
- * Panel izquierdo : filtros de búsqueda (solo campos principales, sin imagen ni extra info).
- * Panel central   : tabla de resultados con el mismo estilo de admWindow.
- *
- * Stored procedure: getPetFilters(pIdChip, pIdDistrict, pIdCanton, pIdProvince,
- *                                 pIdStatus, pIdPetType, pIdRescuer, pIdRace,
- *                                 pIdColor, petCursor OUT)
- * Pasar 0 en cualquier parámetro = sin filtro (Oracle usa NVL).
- */
+
+ 
 public class PetSearchPanel extends JPanel {
 
     private static final Logger LOG = Logger.getLogger(PetSearchPanel.class.getName());

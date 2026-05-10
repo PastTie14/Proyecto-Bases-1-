@@ -55,6 +55,20 @@ public class Rating extends DBItem {
             st.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
+    
+    public static ResultSet getByUserAndAdopter(int idUser, int idAdopter) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(
+                    "BEGIN ? := adminAdoptionMatch.getRatingByUserAndAdopter(?,?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, idUser);
+            st.setInt(3, idAdopter);
+            st.execute();
+            return (ResultSet) st.getObject(1);
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return null;
+    }
 
     public void update(int score, int idUser, int idAdopter) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);

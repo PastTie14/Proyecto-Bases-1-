@@ -11,6 +11,7 @@ public class PetCard extends JPanel {
 
     // ── Modelo ────────────────────────────────────────────────────
     private final Pet pet;
+    private final int IdUser;
 
     // ── Imagen ────────────────────────────────────────────────────
     private Image   image;
@@ -34,9 +35,11 @@ public class PetCard extends JPanel {
     //  CONSTRUCTOR
     // ─────────────────────────────────────────────────────────────
 
-    public PetCard(Pet pet) {
+    public PetCard(Pet pet, int idUser) {
         this.pet = pet;
-        this.rs  = Pet.getCardItem(pet.getId()); // puede ser null si no hay datos
+        this.rs  = Pet.getCardItem(pet.getId());
+        this.IdUser = idUser;
+        
 
         setOpaque(false);
         setPreferredSize(new Dimension(Format.CARD_WIDTH, 370));
@@ -230,7 +233,7 @@ public class PetCard extends JPanel {
 
     protected void onCardClicked() {
         Frame parent = (Frame) SwingUtilities.getWindowAncestor(this);
-        new PetPopup(parent, pet).setVisible(true);
+        new PetPopup(parent, pet,IdUser).setVisible(true);
     }
 
     protected void onCardHovered(boolean entering) { }

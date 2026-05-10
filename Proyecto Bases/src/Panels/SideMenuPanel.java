@@ -1,5 +1,6 @@
-package Components;
+package Panels;
 
+import Components.MenuItem;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

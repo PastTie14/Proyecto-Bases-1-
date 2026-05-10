@@ -1,17 +1,21 @@
-package Components;
+package proyecto.bases;
 
-import Panels.ConsultPanel;
-import Panels.StatsPanel;
-import Panels.SideMenuPanel;
 import Panels.PetGridPanel;
+import Components.AdopterFormPanel;
+import Panels.ConsultPanel;
+import Components.MenuItem;
+import Panels.MyPetsPanel;
+import Panels.SideMenuPanel;
+import Panels.StatsPanel;
 import Panels.PetSearchPanel;
 import Panels.PetFormPanel;
+import Panels.RatingPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class mainWindow extends JFrame {
+public class mainWindowAdopter extends JFrame {
 
     private int idUser;
     private JPanel content;
@@ -20,11 +24,13 @@ public class mainWindow extends JFrame {
     private PetGridPanel petGrid;
     private PetFormPanel petForm;
     private PetSearchPanel petSearch;
+    private MyPetsPanel myPets;
+    private RatingPanel rating;
     private ConsultPanel consult;
-    private BlackListPanel blackList;
     private StatsPanel stats;
+    private AdopterFormPanel config;
 
-    public mainWindow(int idUser) {
+    public mainWindowAdopter(int idUser) {
         this.idUser = idUser;
         initUI();
     }
@@ -58,8 +64,12 @@ public class mainWindow extends JFrame {
         petGrid = new PetGridPanel(PetGridPanel.loadPetsByStatusId(1),idUser);
         petForm = new PetFormPanel(idUser);
         petSearch = new PetSearchPanel();
-        blackList = new BlackListPanel(idUser);
         stats = new StatsPanel();
+        consult = new ConsultPanel();
+        config = new AdopterFormPanel(idUser);
+        myPets = new MyPetsPanel(idUser);
+        rating = new RatingPanel(idUser);
+        
         List<MenuItem> items = createMenuItems();
 
         SideMenuPanel menu = new SideMenuPanel(items);
@@ -105,10 +115,6 @@ public class mainWindow extends JFrame {
                 public String getName() { return "Estadisticas"; }
                 public void show() { setContent(stats);}
             },
-            new MenuItem(){
-                public String getName() { return "BlackList"; }
-                public void show() { setContent(blackList);}
-            },
             new MenuItem() {
                 public String getName() { return "Adoptar"; }
                 public void show() { setContent(petGrid); }
@@ -117,9 +123,18 @@ public class mainWindow extends JFrame {
                 public String getName() { return "Da en adopción"; }
                 public void show() { setContent(petForm); }
             },
-            createPlaceholderItem("Donar", "💜  Donar"),
-            createPlaceholderItem("Dar Rating", "⭐  Dar Rating"),
-            createPlaceholderItem("Ver casas refugio", "🏡  Ver casas refugio")
+            new MenuItem() {
+                public String getName() { return "Mis Mascotas"; }
+                public void show() { setContent(myPets); }
+            },
+            new MenuItem() {
+                public String getName() { return "Puntajes"; }
+                public void show() { setContent(rating); }
+            },
+            new MenuItem() {
+                public String getName() { return "Configuración"; }
+                public void show() { setContent(config); }
+            }
         );
     }
 
