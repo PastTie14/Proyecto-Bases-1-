@@ -179,7 +179,7 @@ FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN
             FROM rescuer r
                 
             INNER JOIN pet p
-            ON r.id_user = p.id_rescuer
+            ON r.id_user = p.id_user
             
             WHERE p.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                                     AND NVL(pEndDate, SYSDATE) -- default: today
