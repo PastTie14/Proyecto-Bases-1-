@@ -206,35 +206,34 @@ public class BlackListPanel extends JPanel {
     
     private void onAgregarClicked(){
         String reason = txaRazon.getText();
-        if(reason.isBlank()){
+        if(!reason.isBlank()){
             if(idBanned>0 && idBlacklist>0){
                 UserXBlackList.insert(reason, idBanned, idBlacklist);
             }else
                 JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
         }else
-            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+            JOptionPane.showConfirmDialog(null, "Por favor escriba una razon del baneo");
     }
     
     private void onEliminarClicked(){
         String reason = txaRazon.getText();
-        if(reason.isBlank()){
+        
             if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
                 UserXBlackList.delete(idBlacklist , idBanned);
             }else
                 JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
-        }else
-            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+       
     }
     
     private void onActualizarClicked(){
         String reason = txaRazon.getText();
-        if(reason.isBlank()){
+        if(!reason.isBlank()){
             if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
                 UserXBlackList.update(reason,idBanned,idBlacklist  );
             }else
                 JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
         }else
-            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+            JOptionPane.showConfirmDialog(null, "Por favor escriba una razon del baneo");
     }
  
     // ════════════════════════════════════════════════════════════════
