@@ -49,10 +49,10 @@ ALTER TABLE pet
     MODIFY id_status CONSTRAINT pet_idStatus_nn NOT NULL;
 
 ALTER TABLE pet
-    MODIFY id_pet_type CONSTRAINT pet_idPetType_nn NOT NULL;
+    MODIFY id_race CONSTRAINT pet_idRace_nn NOT NULL;
 
 ALTER TABLE pet
-    MODIFY id_rescuer CONSTRAINT pet_idRescuer_nn NOT NULL;
+    MODIFY id_user CONSTRAINT pet_idUser_nn NOT NULL;
 
 ALTER TABLE pet
     MODIFY id_district CONSTRAINT pet_idDistrict_nn NOT NULL;
