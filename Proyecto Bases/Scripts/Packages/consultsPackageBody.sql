@@ -91,15 +91,26 @@ IS
         RETURN v_cursor;
     END;
 
-FUNCTION getPetNecessaryTreatments(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
+FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT p.first_name, COUNT(dxms.id_disease), COUNT(*) OVER () FROM pet p
+        SELECT p.id_pet, p.first_name, pt."name", cs.status_type, 
+                NVL(COUNT(txd.id_disease), 0), NVL(COUNT(txd.id_treatment), 0) AS treatment_count, 
+                COUNT(*) OVER () FROM pet p
+        
+        INNER JOIN race r
+        ON p.id_race = r.id_race
+        
+        INNER JOIN pet_type pt
+        ON r.id_pet_type = pt.id_pet_type
         
         INNER JOIN pet_extra_info pei
         ON p.id_pet = pei.id_pet
+        
+        INNER JOIN current_status cs
+        ON pei.id_current_status = cs.id_current_status
         
         INNER JOIN medic_sheet ms
         ON pei.id_pet_extra_info = ms.id_pet_extra_info
@@ -110,9 +121,13 @@ IS
         INNER JOIN disease d
         ON dxms.id_disease = d.id_disease
         
-        WHERE p.id_pet = pIdPet
+        INNER JOIN treatment_x_disease txd
+        ON d.id_disease = txd.id_disease
         
-        GROUP BY p.first_name;
+        GROUP BY p.id_pet, p.first_name, pt."name", cs.status_type
+
+        HAVING NVL(COUNT(txd.id_treatment), 0) BETWEEN pMin AND pMax
+        ORDER BY treatment_count;
 
         RETURN v_cursor;
     END;
