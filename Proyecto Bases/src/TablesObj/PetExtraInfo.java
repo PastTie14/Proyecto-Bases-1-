@@ -66,18 +66,18 @@ public class PetExtraInfo extends DBItem {
     }
 
     /** Retorna el id generado por la secuencia s_petExtraInfo. */
-    public static int insert(int id,  String beforePic, String afterPic,
+    public static int insert(String beforePic, String afterPic,
                              int idPet, int idCurrentStatus, int idEnergyLevel, int idTrainingEase) {
+        
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{  BEGIN ? := CALL adminPetExtraInfo.insertPetExtraInfo(?,?,?,?,?,?,?,?); END; }")) {
-            st.registerOutParameter(1, Types.NUMERIC);
-            st.setInt(2, id);
-            st.setString(3, beforePic);
-            st.setString(4, afterPic);
-            st.setInt(5, idPet);
-            st.setInt(6, idCurrentStatus);
-            st.setInt(7, idEnergyLevel);
-            st.setInt(8, idTrainingEase);
+             CallableStatement st = con.prepareCall("BEGIN ? := adminPetExtraInfo.insertPetExtraInfo(?,?,?,?,?,?); END;")) {
+            st.registerOutParameter(1, OracleTypes.NUMERIC);
+            st.setString(2, beforePic);
+            st.setString(3, afterPic);
+            st.setInt(4, idPet);
+            st.setInt(5, idCurrentStatus);
+            st.setInt(6, idEnergyLevel);
+            st.setInt(7, idTrainingEase);
             st.execute();
             return st.getInt(1);
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }

@@ -439,7 +439,7 @@ public class PetFormPanel extends JPanel {
             String afterPicVal  = afterPicture.getValue().isBlank()  ? null : afterPicture.getValue();
  
             int idExtraInfo = PetExtraInfo.insert(
-                0, beforePicVal, afterPicVal,
+                beforePicVal, afterPicVal,
                 idPet, idCurrentSt, idEnergy, idTraining
             );
  
