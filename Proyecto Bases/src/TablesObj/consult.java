@@ -14,10 +14,15 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
- 
+
+
 public class consult {
  
     private static final Logger LOG = Logger.getLogger(consult.class.getName());
+ 
+    // ─────────────────────────────────────────────────────────────
+    //  HELPERS PRIVADOS
+    // ─────────────────────────────────────────────────────────────
  
     private static void setDateOrNull(CallableStatement st, int idx, String dateStr)
             throws SQLException {
@@ -27,7 +32,6 @@ public class consult {
             st.setNull(idx, Types.DATE);
     }
  
-    /** Bindea un NUMBER si val > 0, o NULL si no. */
     private static void setIntOrNull(CallableStatement st, int idx, int val)
             throws SQLException {
         if (val > 0) st.setInt(idx, val);
@@ -46,7 +50,11 @@ public class consult {
         return filas;
     }
  
-    //     Devuelve : donor_email, association_email, earliest_donation,total_donations, total_amount, currency,total_records, grand_total_amount
+    // ─────────────────────────────────────────────────────────────
+    //  getDonations
+    //  SQL: amount | id_donnor | createdAt | association_name | COUNT(1) OVER()
+    // ─────────────────────────────────────────────────────────────
+ 
     public static ArrayList<ArrayList<Object>> getDonations(
             String startDate, String endDate, int idDonor, int idAssociation) {
  
@@ -70,7 +78,12 @@ public class consult {
         return new ArrayList<>();
     }
  
-    //     Devuelve : id_user, user_email, full_name, total_reports, avg_rating, latest_report_date, total_records
+    // ─────────────────────────────────────────────────────────────
+    //  getBlackListReport
+    //  SQL: id_user | email | first_name | NVL(second_name,'None') |
+    //       first_surname | second_surname | NVL(score,0) | reason | COUNT(1) OVER()
+    // ─────────────────────────────────────────────────────────────
+ 
     public static ArrayList<ArrayList<Object>> getBlackListReport() {
  
         final String sql = "BEGIN ? := adminConsult.getBlackListReport(); END;";
@@ -89,37 +102,20 @@ public class consult {
         return new ArrayList<>();
     }
  
-    //     Devuelve : id_report, reason, reported_date, reporter_email,reporter_name, user_rating, total_reports
-    public static ArrayList<ArrayList<Object>> getBlackListReportDetails(int idUser) {
+    // ─────────────────────────────────────────────────────────────
+    //  getMatches
+    //  SQL: similarity_pct (0-100) | COUNT(1) OVER()
+    // ─────────────────────────────────────────────────────────────
  
-        final String sql = "BEGIN ? := adminConsult.getBlackListReportDetails(?); END;";
-        try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall(sql)) {
- 
-            st.registerOutParameter(1, OracleTypes.CURSOR);
-            setIntOrNull(st, 2, idUser);
-            st.execute();
- 
-            try (ResultSet rs = (ResultSet) st.getObject(1)) {
-                return toList(rs);
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error en getBlackListReportDetails", ex);
-        }
-        return new ArrayList<>();
-    }
- 
-
-    //     Devuelve : id_match, match_date, similarity_percentage,id_parameter, parameter_type, parameter_value,created_date, total_records
-    public static ArrayList<ArrayList<Object>> getMatches(int idType, int idRace) {
+    public static ArrayList<ArrayList<Object>> getMatches(int idLostPet, int idFoundPet) {
  
         final String sql = "BEGIN ? := adminConsult.getMatches(?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
  
             st.registerOutParameter(1, OracleTypes.CURSOR);
-            setIntOrNull(st, 2, idType);
-            setIntOrNull(st, 3, idRace);
+            setIntOrNull(st, 2, idLostPet);
+            setIntOrNull(st, 3, idFoundPet);
             st.execute();
  
             try (ResultSet rs = (ResultSet) st.getObject(1)) {
@@ -131,16 +127,20 @@ public class consult {
         return new ArrayList<>();
     }
  
-    //     Devuelve : id_pet, pet_name, pet_type, pet_status, disease_count, treatment_count, total_records
-    public static ArrayList<ArrayList<Object>> getPetNecessaryTreatments(int min, int max) {
+    // ─────────────────────────────────────────────────────────────
+    //  getPetNecessaryTreatments
+    //  SQL: first_name | disease_count | COUNT(*) OVER()
+    // ─────────────────────────────────────────────────────────────
+ 
+    public static ArrayList<ArrayList<Object>> getPetNecessaryTreatments(int minTreatments, int maxTreatments) {
  
         final String sql = "BEGIN ? := adminConsult.getPetNecessaryTreatments(?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
  
             st.registerOutParameter(1, OracleTypes.CURSOR);
-            setIntOrNull(st, 2, min);
-            setIntOrNull(st, 3, max);
+            setIntOrNull(st, 2, minTreatments);
+            setIntOrNull(st, 3, maxTreatments);
             st.execute();
  
             try (ResultSet rs = (ResultSet) st.getObject(1)) {
@@ -152,7 +152,12 @@ public class consult {
         return new ArrayList<>();
     }
  
-    // Devuelve : id_crib_house, crib_house_name, email,requires_donations, accepted_size,sizes_accepted_count, total_records
+    // ─────────────────────────────────────────────────────────────
+    //  getCompatibleCribHouses
+    //  SQL: id_user | name | email | requires_donations |
+    //       pet_type_name | size_name | COUNT(1) OVER()
+    // ─────────────────────────────────────────────────────────────
+ 
     public static ArrayList<ArrayList<Object>> getCompatibleCribHouses(int idPetType) {
  
         final String sql = "BEGIN ? := adminConsult.getCompatibleCribHouses(?); END;";
@@ -172,7 +177,12 @@ public class consult {
         return new ArrayList<>();
     }
  
-    // Devuelve : user_type, id_user, email, full_name, activity_count, total_records
+    // ─────────────────────────────────────────────────────────────
+    //  getBestRescuersAndAdopters
+    //  SQL: id_user | email | first_name | second_name |
+    //       first_surname | second_surname | rescues | adoptions | total_registers
+    // ─────────────────────────────────────────────────────────────
+ 
     public static ArrayList<ArrayList<Object>> getBestRescuersAndAdopters(
             String startDate, String endDate) {
  

@@ -25,7 +25,7 @@ CREATE TABLE pet
     id_status   NUMBER(4),
     id_race     NUMBER(4),
     id_user  NUMBER(8),
-    id_crib_house NUMBER(8),
+    id_adopter NUMBER(8),
     id_district NUMBER(8)
 )
 TABLESPACE TS_DATA;
@@ -78,8 +78,8 @@ ALTER TABLE pet
     FOREIGN KEY (id_user) REFERENCES "user" (id_user);
     
 ALTER TABLE pet
-    ADD CONSTRAINT fk_pet_crib_house
-    FOREIGN KEY (id_crib_house) REFERENCES crib_house (id_user);
+    ADD CONSTRAINT fk_pet_adopter
+    FOREIGN KEY (id_adopter) REFERENCES "user" (id_user);
     
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_district
@@ -130,11 +130,8 @@ IS 'Foreign key, references the current status of the pet';
 COMMENT ON COLUMN pet.id_race
 IS 'Foreign key, references the race of the pet';
 
-COMMENT ON COLUMN pet.id_rescuer
-IS 'Foreign key, references the user who registers the pet';
-
-COMMENT ON COLUMN pet.id_crib_house
-IS 'Foreign key, references the crib house that takes care of the pet';
+COMMENT ON COLUMN pet.id_adopter
+IS 'Foreign key, references the user that owns the pet';
 
 COMMENT ON COLUMN pet.id_district
 IS 'Foreign key, references the district where the pet was found';

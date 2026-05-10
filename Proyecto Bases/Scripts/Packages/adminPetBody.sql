@@ -3,16 +3,16 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 FUNCTION insertPet(pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                                        pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
-                                       pIdSize IN NUMBER, pIdUser IN NUMBER, pIdCribHouse IN NUMBER,
+                                       pIdSize IN NUMBER, pIdUser IN NUMBER, pIdAdopter IN NUMBER,
                                        pIdDistrict IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
-                    date_lost, date_found, email, id_status, id_race, id_size, id_user,  id_crib_house, id_district)
+                    date_lost, date_found, email, id_status, id_race, id_size, id_user,  id_adopter, id_district)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdRace, pIdSize, pIdUser, pIdCribHouse, pIdDistrict);
+            pEmail, pIdStatus, pIdRace, pIdSize, pIdUser, pIdAdopter, pIdDistrict);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); 
@@ -241,7 +241,7 @@ BEGIN
         LEFT JOIN Race h
         ON a.id_race = h.id_race
         LEFT JOIN crib_house i
-        ON a.id_crib_house = i.id_user
+        ON a.id_adopter = i.id_user
         LEFT JOIN Bounty j
         ON c.id_pet_extra_info = j.id_pet_extra_info
         LEFT JOIN currency k

@@ -1,12 +1,11 @@
 package Panels;
-
+ 
 import Components.FormComboBox;
 import Components.FormField;
 import Components.Format;
 import TablesObj.PetType;
-import TablesObj.Race;
 import TablesObj.consult;
-
+ 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -16,153 +15,147 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+ 
 public class ConsultPanel extends JPanel {
-
+ 
     private static final Logger LOG = Logger.getLogger(ConsultPanel.class.getName());
-
+ 
     // ── Constantes de reporte ─────────────────────────────────────
-    private static final String R_DONATIONS        = "Donaciones";
-    private static final String R_BLACKLIST        = "Lista Negra";
-    private static final String R_MATCHES          = "Matches";
-    private static final String R_TREATMENTS       = "Tratamientos Necesarios";
-    private static final String R_CRIB_HOUSES      = "Casas Cuna Compatibles";
-    private static final String R_BEST_USERS       = "Mejores Rescatistas / Adoptantes";
-
+    private static final String R_DONATIONS   = "Donaciones";
+    private static final String R_BLACKLIST   = "Lista Negra";
+    private static final String R_MATCHES     = "Matches";
+    private static final String R_TREATMENTS  = "Tratamientos Necesarios";
+    private static final String R_CRIB_HOUSES = "Casas Cuna Compatibles";
+    private static final String R_BEST_USERS  = "Mejores Rescatistas / Adoptantes";
+ 
     private static final String[] REPORT_NAMES = {
-        R_DONATIONS, R_BLACKLIST, R_MATCHES, 
+        R_DONATIONS, R_BLACKLIST, R_MATCHES,
         R_TREATMENTS, R_CRIB_HOUSES, R_BEST_USERS
     };
-
-    // ── Mapas label → id para combos ─────────────────────────────
+ 
+    // ── Mapa label → id para tipo de mascota ─────────────────────
     private final LinkedHashMap<String, Integer> petTypeMap = new LinkedHashMap<>();
-    private final LinkedHashMap<String, Integer> raceMap    = new LinkedHashMap<>();
-
+ 
     // ── Selector de reporte ───────────────────────────────────────
     private final JComboBox<String> reportCombo = new JComboBox<>(REPORT_NAMES);
-
+ 
     // ── CardLayout para los paneles de filtros ────────────────────
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel     cardPanel  = new JPanel(cardLayout);
-
+ 
     // ── Filtros: Donaciones ───────────────────────────────────────
+    // SQL: getDonations(startDate, endDate, idDonor, idAssociation)
     private final FormField donStartDate     = new FormField("Fecha inicio (YYYY-MM-DD)");
     private final FormField donEndDate       = new FormField("Fecha fin   (YYYY-MM-DD)");
-    private final FormField donIdDonor       = new FormField("ID Donante");
-    private final FormField donIdAssociation = new FormField("ID Asociación");
-
-    // ── Filtros: Detalle Lista Negra ──────────────────────────────
-    private final FormField blIdUser = new FormField("ID Usuario");
-
+    private final FormField donIdDonor       = new FormField("ID Donante  (opcional)");
+    private final FormField donIdAssociation = new FormField("ID Asociación (opcional)");
+ 
     // ── Filtros: Matches ──────────────────────────────────────────
-    private final FormComboBox matchPetType = new FormComboBox("Tipo de mascota");
-    private final FormComboBox matchRace    = new FormComboBox("Raza");
-
+    // SQL: getMatches(idLostPet, idFoundPet)
+    private final FormField matchIdLostPet  = new FormField("ID Mascota Perdida");
+    private final FormField matchIdFoundPet = new FormField("ID Mascota Encontrada");
+ 
     // ── Filtros: Tratamientos ─────────────────────────────────────
-    private final FormField treatMin = new FormField("Mín. enfermedades");
-    private final FormField treatMax = new FormField("Máx. enfermedades");
-
+    // SQL: getPetNecessaryTreatments(minTreatments, maxTreatments)
+    private final FormField treatMin = new FormField("Mín. tratamientos");
+    private final FormField treatMax = new FormField("Máx. tratamientos");
+ 
     // ── Filtros: Casas Cuna ───────────────────────────────────────
+    // SQL: getCompatibleCribHouses(idPetType)
     private final FormComboBox cribPetType = new FormComboBox("Tipo de mascota");
-
+ 
     // ── Filtros: Mejores Rescatistas / Adoptantes ─────────────────
+    // SQL: getBestRescuersAndAdopters(startDate, endDate)
     private final FormField bestStartDate = new FormField("Fecha inicio (YYYY-MM-DD)");
     private final FormField bestEndDate   = new FormField("Fecha fin   (YYYY-MM-DD)");
-
+ 
     // ── Tabla de resultados ───────────────────────────────────────
     private final JTable      resultsTable = new JTable();
     private final JScrollPane scrollTabla  = new JScrollPane(resultsTable);
     private final JLabel      lblResults   = new JLabel("Resultados");
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTOR
     // ─────────────────────────────────────────────────────────────
-
+ 
     public ConsultPanel() {
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
-
+ 
         loadCombos();
         buildCardPanel();
-
-        // Cambio de reporte → cambiar panel de filtros
+ 
         reportCombo.addActionListener(e -> {
             String sel = (String) reportCombo.getSelectedItem();
             if (sel != null) cardLayout.show(cardPanel, sel);
         });
-
+ 
         add(buildLeft(),   BorderLayout.WEST);
         add(buildCenter(), BorderLayout.CENTER);
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  CARGA DE COMBOS
     // ─────────────────────────────────────────────────────────────
-
+ 
     private void loadCombos() {
-        petTypeMap.put("—", 0);
+        petTypeMap.put("— Todos —", 0);
         try {
             ResultSet rs = PetType.getAll();
             while (rs != null && rs.next())
                 petTypeMap.put(rs.getString(2), rs.getInt(1));
         } catch (SQLException ex) { LOG.log(Level.SEVERE, "Error cargando petType", ex); }
-
-        raceMap.put("—", 0);
-        try {
-            ResultSet rs = Race.getAll();
-            while (rs != null && rs.next())
-                raceMap.put(rs.getString(2), rs.getInt(1));
-        } catch (SQLException ex) { LOG.log(Level.SEVERE, "Error cargando race", ex); }
-
-        matchPetType.setOptions(new ArrayList<>(petTypeMap.keySet()));
-        matchRace.setOptions(new ArrayList<>(raceMap.keySet()));
+ 
         cribPetType.setOptions(new ArrayList<>(petTypeMap.keySet()));
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
-    //  PANELES DE FILTRO 
+    //  PANELES DE FILTRO
     // ─────────────────────────────────────────────────────────────
-
+ 
     private void buildCardPanel() {
         cardPanel.setOpaque(false);
-
-        // 1. Donaciones
+ 
+        // 1. Donaciones — rango fechas + IDs opcionales
         cardPanel.add(filterCard(
             sectionLabel("Rango de fechas"),
             donStartDate, donEndDate,
-            sectionLabel("Participantes"),
+            sectionLabel("Participantes (opcionales)"),
             donIdDonor, donIdAssociation
         ), R_DONATIONS);
-
-        // 2. Lista Negra (sin filtros)
-        cardPanel.add(emptyCard("Sin filtros — se muestran todos los registros."), R_BLACKLIST);
-
-        // 4. Matches
+ 
+        // 2. Lista Negra — sin filtros
+        cardPanel.add(
+            emptyCard("Sin filtros — se muestran todos los registros."),
+            R_BLACKLIST
+        );
+ 
+        // 3. Matches — ID mascota perdida e ID mascota encontrada
         cardPanel.add(filterCard(
-            sectionLabel("Características"),
-            matchPetType, matchRace
+            sectionLabel("Mascotas a comparar"),
+            matchIdLostPet,
+            matchIdFoundPet
         ), R_MATCHES);
-
-        // 5. Tratamientos Necesarios
+ 
+        // 4. Tratamientos — rango de cantidad de tratamientos
         cardPanel.add(filterCard(
-            sectionLabel("Cantidad de enfermedades"),
+            sectionLabel("Rango de tratamientos"),
             treatMin, treatMax
         ), R_TREATMENTS);
-
-        // 6. Casas Cuna Compatibles
+ 
+        // 5. Casas Cuna — tipo de mascota
         cardPanel.add(filterCard(
             sectionLabel("Tipo de mascota"),
             cribPetType
         ), R_CRIB_HOUSES);
-
-        // 7. Mejores Rescatistas / Adoptantes
+ 
+        // 6. Mejores Rescatistas / Adoptantes — rango de fechas
         cardPanel.add(filterCard(
             sectionLabel("Rango de fechas"),
             bestStartDate, bestEndDate
         ), R_BEST_USERS);
     }
-
-    /** Construye un panel de filtros vertical a partir de componentes arbitrarios. */
+ 
     private JPanel filterCard(JComponent... components) {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -174,8 +167,7 @@ public class ConsultPanel extends JPanel {
         }
         return p;
     }
-
-    /** Panel vacío con mensaje informativo. */
+ 
     private JPanel emptyCard(String msg) {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 4));
         p.setOpaque(false);
@@ -185,11 +177,11 @@ public class ConsultPanel extends JPanel {
         p.add(lbl);
         return p;
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
-    //  PANEL IZQUIERDO — selector + filtros dinámicos
+    //  PANEL IZQUIERDO
     // ─────────────────────────────────────────────────────────────
-
+ 
     private JPanel buildLeft() {
         JPanel left = new JPanel();
         left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
@@ -199,38 +191,34 @@ public class ConsultPanel extends JPanel {
             BorderFactory.createMatteBorder(0, 0, 0, 1, Format.COLOR_DIVIDER),
             BorderFactory.createEmptyBorder(24, 20, 24, 20)
         ));
-
-        // Título
+ 
         JLabel title = new JLabel("Consultas");
         title.setFont(Format.FONT_SUBTITLE);
         title.setForeground(Format.COLOR_PRIMARY);
         title.setAlignmentX(LEFT_ALIGNMENT);
-
-        // Selector de reporte
+ 
         JLabel reportLabel = new JLabel("Tipo de reporte");
         reportLabel.setFont(Format.FONT_BODY_SMALL);
         reportLabel.setForeground(Format.COLOR_TEXT_SECONDARY);
         reportLabel.setAlignmentX(LEFT_ALIGNMENT);
-
+ 
         reportCombo.setFont(Format.FONT_BODY);
         reportCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
         reportCombo.setAlignmentX(LEFT_ALIGNMENT);
-
-        // Separador "Filtros"
+ 
         JLabel filterLabel = sectionLabel("Filtros");
         cardPanel.setAlignmentX(LEFT_ALIGNMENT);
         cardPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-
-        // Scroll para los filtros dinámicos
+ 
         JScrollPane filterScroll = new JScrollPane(cardPanel);
         filterScroll.setBorder(BorderFactory.createEmptyBorder());
         filterScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         filterScroll.getVerticalScrollBar().setUnitIncrement(12);
         filterScroll.getViewport().setBackground(Format.COLOR_BG_SURFACE);
         filterScroll.setAlignmentX(LEFT_ALIGNMENT);
-
+ 
         JButton searchBtn = buildSearchButton();
-
+ 
         left.add(title);
         left.add(Box.createVerticalStrut(16));
         left.add(reportLabel);
@@ -244,7 +232,7 @@ public class ConsultPanel extends JPanel {
         left.add(searchBtn);
         return left;
     }
-
+ 
     private JButton buildSearchButton() {
         JButton btn = new JButton("Buscar") {
             @Override protected void paintComponent(Graphics g) {
@@ -269,16 +257,16 @@ public class ConsultPanel extends JPanel {
         btn.addActionListener(e -> runSelectedConsult());
         return btn;
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  PANEL CENTRAL — tabla de resultados
     // ─────────────────────────────────────────────────────────────
-
+ 
     private JPanel buildCenter() {
         JPanel area = new JPanel(new BorderLayout());
         area.setBackground(Format.COLOR_BG);
         area.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
+ 
         resultsTable.setFont(Format.FONT_BODY_SMALL);
         resultsTable.setForeground(Format.COLOR_TEXT_PRIMARY);
         resultsTable.setBackground(Format.COLOR_BG);
@@ -287,38 +275,39 @@ public class ConsultPanel extends JPanel {
         resultsTable.setSelectionBackground(Format.COLOR_PRIMARY_LIGHT);
         resultsTable.setSelectionForeground(Format.COLOR_TEXT_PRIMARY);
         resultsTable.setAutoCreateRowSorter(true);
-
+ 
         resultsTable.getTableHeader().setFont(Format.FONT_BODY_SMALL);
         resultsTable.getTableHeader().setBackground(Format.COLOR_BG_SURFACE);
         resultsTable.getTableHeader().setForeground(Format.COLOR_TEXT_SECONDARY);
         resultsTable.getTableHeader().setBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, Format.COLOR_DIVIDER));
-
+ 
         scrollTabla.setBorder(BorderFactory.createLineBorder(Format.COLOR_DIVIDER));
         scrollTabla.getViewport().setBackground(Format.COLOR_BG);
-
+ 
         lblResults.setFont(Format.FONT_SUBTITLE);
         lblResults.setForeground(Format.COLOR_TEXT_PRIMARY);
         lblResults.setBorder(BorderFactory.createEmptyBorder(0, 0, 12, 0));
-
+ 
         area.add(lblResults, BorderLayout.NORTH);
         area.add(scrollTabla, BorderLayout.CENTER);
         return area;
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
-    //  LÓGICA DE CONSULTA — despacha según reporte seleccionado
+    //  LÓGICA DE CONSULTA
     // ─────────────────────────────────────────────────────────────
-
+ 
     private void runSelectedConsult() {
         String report = (String) reportCombo.getSelectedItem();
         if (report == null) return;
-
+ 
         ArrayList<ArrayList<Object>> rows;
         String[] columns;
-
+ 
         switch (report) {
-
+ 
+            // SQL devuelve: amount | id_donnor | createdAt | association_name | total_records
             case R_DONATIONS:
                 rows = consult.getDonations(
                     donStartDate.getValue(),
@@ -327,56 +316,58 @@ public class ConsultPanel extends JPanel {
                     parseIntField(donIdAssociation.getValue())
                 );
                 columns = new String[]{
-                    "Monto", "Moneda", "Email Donante", "Fecha",
-                    "Asociación", "Total Donaciones", "Monto Total"
+                    "Monto", "ID Donante", "Fecha", "Asociación", "Total Registros"
                 };
                 break;
-
+ 
+            // SQL devuelve: id_user | email | first_name | second_name |
+            //              first_surname | second_surname | score | reason | total_records
             case R_BLACKLIST:
                 rows = consult.getBlackListReport();
                 columns = new String[]{
                     "ID Usuario", "Email",
-                    "Primer nombre", "Segundo nombre", 
-                    "Primer apellido","Segundo apellido",
+                    "Primer Nombre", "Segundo Nombre",
+                    "Primer Apellido", "Segundo Apellido",
                     "Calificación", "Razón", "Total Registros"
                 };
                 break;
-
+ 
+            // SQL devuelve: similarity_pct | total_records
             case R_MATCHES:
                 rows = consult.getMatches(
-                    resolveId(petTypeMap, matchPetType.getSelected()),
-                    resolveId(raceMap,    matchRace.getSelected())
+                    parseIntField(matchIdLostPet.getValue()),
+                    parseIntField(matchIdFoundPet.getValue())
                 );
-                columns = new String[]{
-                    "ID Match", "Fecha Match", "% Similitud",
-                    "ID Parámetro", "Tipo Parámetro",
-                    "Valor Parámetro", "Creado", "Total Registros"
-                };
+                columns = new String[]{ "% Similitud", "Total Registros" };
                 break;
-
+ 
+            // id_pet | first_name | pet_type | status_type | disease_count | treatment_count | total_records
             case R_TREATMENTS:
                 rows = consult.getPetNecessaryTreatments(
                     parseIntField(treatMin.getValue()),
                     parseIntField(treatMax.getValue())
                 );
                 columns = new String[]{
-                    "ID Mascota", "Nombre Mascota", "Tipo",
-                    "Estado", "Nº Enfermedades",
-                    "Nº Tratamientos", "Total Registros"
+                    "ID Mascota", "Nombre", "Tipo Mascota", "Estado Actual",
+                    "Nº Enfermedades", "Nº Tratamientos", "Total Registros"
                 };
                 break;
-
+ 
+            // SQL devuelve: id_user | name | email | requires_donations |
+            //              pet_type_name | size_name | total_records
             case R_CRIB_HOUSES:
                 rows = consult.getCompatibleCribHouses(
                     resolveId(petTypeMap, cribPetType.getSelected())
                 );
                 columns = new String[]{
                     "ID Casa Cuna", "Nombre", "Email",
-                    "Requiere Donaciones", "Mascota Aceptada",
+                    "Requiere Donaciones", "Tipo Mascota",
                     "Tamaño Aceptado", "Total Registros"
                 };
                 break;
-
+ 
+            // SQL devuelve: id_user | email | first_name | second_name |
+            //              first_surname | second_surname | rescues | adoptions | total_registers
             case R_BEST_USERS:
                 rows = consult.getBestRescuersAndAdopters(
                     bestStartDate.getValue(),
@@ -384,24 +375,24 @@ public class ConsultPanel extends JPanel {
                 );
                 columns = new String[]{
                     "ID Usuario", "Email",
-                    "Primer nombre", "Segundo nombre", 
-                    "Primer apellido","Segundo apellido", 
+                    "Primer Nombre", "Segundo Nombre",
+                    "Primer Apellido", "Segundo Apellido",
                     "Rescates", "Adopciones", "Total Registros"
                 };
                 break;
-
+ 
             default:
                 return;
         }
-
+ 
         if (rows.isEmpty()) clearTable("Sin resultados");
         else                populateTable(rows, columns);
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  TABLA — render
     // ─────────────────────────────────────────────────────────────
-
+ 
     private void populateTable(ArrayList<ArrayList<Object>> rows, String[] columns) {
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -412,30 +403,30 @@ public class ConsultPanel extends JPanel {
             lblResults.setText("Resultados (" + rows.size() + ")");
         });
     }
-
+ 
     private void clearTable(String msg) {
         SwingUtilities.invokeLater(() -> {
             resultsTable.setModel(new DefaultTableModel());
             lblResults.setText(msg);
         });
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  HELPERS
     // ─────────────────────────────────────────────────────────────
-
+ 
     private static int parseIntField(String val) {
         if (val == null || val.isBlank()) return 0;
         try { return Integer.parseInt(val.trim()); }
         catch (NumberFormatException e) { return 0; }
     }
-
+ 
     private static int resolveId(LinkedHashMap<String, Integer> map, String sel) {
         if (sel == null) return 0;
         Integer id = map.get(sel);
         return id != null ? id : 0;
     }
-
+ 
     private JLabel sectionLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(Format.FONT_BODY_SMALL);
