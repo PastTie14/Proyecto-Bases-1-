@@ -327,9 +327,8 @@ public class ConsultPanel extends JPanel {
                     parseIntField(donIdAssociation.getValue())
                 );
                 columns = new String[]{
-                    "ID Donante", "Email Donante", "Email Asociación",
-                    "Primera Donación", "Total Donaciones", "Monto Total",
-                    "Moneda", "Total Registros", "Gran Total"
+                    "Monto", "Moneda", "Email Donante", "Fecha",
+                    "Asociación", "Total Donaciones", "Monto Total"
                 };
                 break;
 
