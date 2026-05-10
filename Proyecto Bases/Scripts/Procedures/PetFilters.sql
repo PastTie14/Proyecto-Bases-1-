@@ -13,11 +13,8 @@ BEGIN
         LEFT JOIN identification_chip ic
         ON p.id_pet = ic.id_pet
         
-        INNER JOIN pet_x_district pxd
-        ON p.id_pet = pxd.id_pet
-        
         INNER JOIN district d
-        ON pxd.id_district = d.id_district
+        ON p.id_district = d.id_district
         
         INNER JOIN canton ca
         ON d.id_canton = ca.id_canton
@@ -28,11 +25,11 @@ BEGIN
         INNER JOIN status s
         ON p.id_status = s.id_status
         
-        INNER JOIN pet_type pt
-        ON p.id_pet_type = pt.id_pet_type
-        
         INNER JOIN race r
-        ON pt.id_pet_type = r.id_pet_type
+        ON p.id_race = r.id_race
+        
+        INNER JOIN pet_type pt 
+        ON r.id_pet_type = pt.id_pet_type
         
         INNER JOIN pet_x_color pxc
         ON p.id_pet = pxc.id_pet
@@ -45,7 +42,7 @@ BEGIN
         AND   (pIdCanton   IS NULL OR ca.id_canton    = pIdCanton)
         AND   (pIdProvince IS NULL OR pr.id_province  = pIdProvince)
         AND   (pIdStatus   IS NULL OR s.id_status     = pIdStatus)
-        AND   (pIdPetType  IS NULL OR p.id_pet_type   = pIdPetType)
+        AND   (pIdPetType  IS NULL OR pt.id_pet_type   = pIdPetType)
         AND   (pIdRace     IS NULL OR r.id_race       = pIdRace)
         AND   (pIdRescuer  IS NULL OR p.id_rescuer    = pIdRescuer)
         AND   (pIdColor    IS NULL OR co.id_color     = pIdColor)

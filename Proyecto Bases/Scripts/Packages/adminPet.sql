@@ -1,7 +1,7 @@
 CREATE OR REPLACE PACKAGE adminPet IS
               
 -- INSERT
-FUNCTION insertPet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
+FUNCTION insertPet(pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                                        pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
                                        pIdSize IN NUMBER, pIdRescuer IN NUMBER, pIdCribHouse IN NUMBER,
