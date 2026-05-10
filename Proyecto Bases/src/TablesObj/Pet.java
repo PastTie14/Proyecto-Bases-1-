@@ -174,7 +174,7 @@ public class Pet extends DBItem {
             Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement stmt = con.prepareCall("BEGIN ? := adminPet.getPetByStatus(?); END;");
             stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setInt(2, p_IdStatus);   // ✅ bind en lugar de concatenar en el string
+            stmt.setInt(2, p_IdStatus);   
             stmt.execute();
             return (ResultSet) stmt.getObject(1);
         } catch (SQLException ex) {
@@ -308,7 +308,7 @@ public class Pet extends DBItem {
             st.setInt   (9,  idPetRace);
             st.setInt   (10, idSize);
             st.setInt   (11, idRescuer);
-            st.setInt   (12, 37);
+            st.setNull(12, 0);
             st.setInt   (13, idDistrict);
             st.execute();
             return st.getInt(1);
