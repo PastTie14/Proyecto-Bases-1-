@@ -143,26 +143,7 @@ public class RegisterPage {
         form.add(fieldLabel("User Type"), gc);
         gc.gridy = 1; gc.insets = new Insets(0, 0, 4, 0);
         form.add(comboBoxUsers, gc);
-        
-        /*
-        // Nombre
-        gc.gridy = 2; form.add(fieldLabel("Nombre de usuario"), gc);
-        gc.gridy = 3; gc.insets = new Insets(0, 0, 14, 0);
-        form.add(tfNombre, gc);
-        
-        
-        // Email
-        gc.gridy = 2; gc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Email"), gc);
-        gc.gridy = 3; gc.insets = new Insets(0, 0, 0, 0);
-        form.add(tfEmail, gc);
-        
-        // Contraseña
-        gc.gridy = 4; gc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Contraseña"), gc);
-        gc.gridy = 5; gc.insets = new Insets(0, 0, 14, 0);
-        form.add(tfPass, gc);
-        */
+
         updateFormFields();
         
         return form;

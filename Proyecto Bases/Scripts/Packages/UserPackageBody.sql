@@ -6,8 +6,8 @@ PROCEDURE insertUser(pIdUser OUT NUMBER, pEmail VARCHAR2, pPassword VARCHAR2)
 IS 
 BEGIN
     SELECT s_user.nextVal INTO pIdUser FROM DUAL;
-    INSERT INTO "user" (id_user, email, "password", CreatedBY,CREATEDAT)
-    VALUES(pIdUser, pEmail, pPassword,USER,SYSTIMESTAMP);
+    INSERT INTO "user" (id_user, email, "password")
+    VALUES(pIdUser, pEmail, pPassword);
     COMMIT;
 END;
 
