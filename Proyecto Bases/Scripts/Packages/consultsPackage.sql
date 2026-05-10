@@ -6,7 +6,7 @@ CREATE OR REPLACE PACKAGE adminConsult AS
 
     FUNCTION getMatches(pIdLostPet IN NUMBER, pIdFoundPet IN NUMBER) RETURN SYS_REFCURSOR;
 
-    FUNCTION getPetNecessaryTreatments(pIdPet IN NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR;
 
     FUNCTION getCompatibleCribHouses(pIdPetType IN NUMBER) RETURN SYS_REFCURSOR;
 
