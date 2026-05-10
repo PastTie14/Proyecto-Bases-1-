@@ -316,7 +316,8 @@ public class ConsultPanel extends JPanel {
                     parseIntField(donIdAssociation.getValue())
                 );
                 columns = new String[]{
-                    "Monto", "ID Donante", "Fecha", "Asociación", "Total Registros"
+                    "Monto", "Moneda", "Email Donante", "Fecha",
+                    "Asociación", "Total Donaciones", "Monto Total"
                 };
                 break;
  
@@ -326,8 +327,8 @@ public class ConsultPanel extends JPanel {
                 rows = consult.getBlackListReport();
                 columns = new String[]{
                     "ID Usuario", "Email",
-                    "Primer Nombre", "Segundo Nombre",
-                    "Primer Apellido", "Segundo Apellido",
+                    "Primer nombre", "Segundo nombre", 
+                    "Primer apellido", "Segundo apellido",
                     "Calificación", "Razón", "Total Registros"
                 };
                 break;
@@ -348,8 +349,9 @@ public class ConsultPanel extends JPanel {
                     parseIntField(treatMax.getValue())
                 );
                 columns = new String[]{
-                    "ID Mascota", "Nombre", "Tipo Mascota", "Estado Actual",
-                    "Nº Enfermedades", "Nº Tratamientos", "Total Registros"
+                    "ID Mascota", "Nombre", "Tipo",
+                    "Estado actual", "Nº Enfermedades",
+                    "Nº Tratamientos", "Total Registros"
                 };
                 break;
  
@@ -361,7 +363,7 @@ public class ConsultPanel extends JPanel {
                 );
                 columns = new String[]{
                     "ID Casa Cuna", "Nombre", "Email",
-                    "Requiere Donaciones", "Tipo Mascota",
+                    "Requiere Donaciones", "Mascota Aceptada",
                     "Tamaño Aceptado", "Total Registros"
                 };
                 break;
@@ -375,8 +377,8 @@ public class ConsultPanel extends JPanel {
                 );
                 columns = new String[]{
                     "ID Usuario", "Email",
-                    "Primer Nombre", "Segundo Nombre",
-                    "Primer Apellido", "Segundo Apellido",
+                    "Primer nombre", "Segundo nombre", 
+                    "Primer apellido", "Segundo apellido", 
                     "Rescates", "Adopciones", "Total Registros"
                 };
                 break;

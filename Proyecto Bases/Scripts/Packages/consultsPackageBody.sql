@@ -6,19 +6,22 @@ IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT d.amount, d.id_donnor, d.createdAt, a."name", COUNT(1) OVER () FROM donation d
+        SELECT d.amount, u.email, d.createdAt, a."name", COUNT(1) OVER (), SUM(amount) FROM donation d
         -- COUNT(1) OVER () to count all registers
         -- https://learnsql.com/blog/count-over-partition-by/
         
         INNER JOIN association a
         ON d.id_association = a.id_user
         
+        INNER JOIN "user" u
+        ON d.id_donnor = u.id_user
+        
         WHERE d.createdAt BETWEEN NVL(pStartDate, TRUNC(SYSDATE, 'YYYY')) -- default: start of this year
                                      AND NVL(pEndDate, SYSDATE) -- default: today
         AND d.id_donnor = NVL(pIdDonor, d.id_donnor)
         AND d.id_association = NVL(pIdAssociation, d.id_association)
         
-        GROUP BY d.amount, d.id_donnor, d.createdAt, a."name"
+        GROUP BY d.amount, u.email, d.createdAt, a."name"
         ORDER BY d.amount;
 
         RETURN v_cursor;
