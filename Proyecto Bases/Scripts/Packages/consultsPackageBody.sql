@@ -7,6 +7,8 @@ IS
     BEGIN
         OPEN v_cursor FOR
         SELECT d.amount, d.id_donnor, d.createdAt, a."name", COUNT(1) OVER () FROM donation d
+        -- COUNT(1) OVER () to count all registers
+        -- https://learnsql.com/blog/count-over-partition-by/
         
         INNER JOIN association a
         ON d.id_association = a.id_user
