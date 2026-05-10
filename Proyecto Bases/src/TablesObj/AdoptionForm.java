@@ -83,7 +83,7 @@ public class AdoptionForm extends DBItem {
     public static void insert(String notes, String adoptionDate,
                                String reference, int idAdopter, int idPet) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("BEGIN adminAdoptionMatch.insertAdoptionForm(?,?,?,?,?); END;")) {
+             CallableStatement st = con.prepareCall("BEGIN adminAdoptionMatch.insertAdoptionForm(?,TO_DATE(?,'YYYY-MM-DD'),?,?,?); END;")) {
             st.setString(1, notes); st.setString(2, adoptionDate);
             st.setString(3, reference); st.setInt(4, idAdopter); st.setInt(5, idPet);
             st.execute();
