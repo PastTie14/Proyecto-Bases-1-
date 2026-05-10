@@ -11,6 +11,4 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
 
 FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR;
 
-FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN SYS_REFCURSOR;
-
 END adminStats;

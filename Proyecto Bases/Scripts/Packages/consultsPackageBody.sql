@@ -29,7 +29,7 @@ IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT u.email, ad.first_name, NVL(ad.second_name, 'None'), ad.first_surname, 
+        SELECT ad.id_user, ua.email, ad.first_name, NVL(ad.second_name, 'None'), ad.first_surname, 
                 ad.second_surname, NVL(r.score, 0), uxb.reason, COUNT(1) OVER () FROM user_x_black_list uxb
         
         INNER JOIN black_list bl
@@ -42,6 +42,9 @@ IS
         -- adopter is the reported
         INNER JOIN adopter ad
         ON uxb.id_user = ad.id_user
+        
+        INNER JOIN "user" ua
+        ON ad.id_user = ua.id_user
         
         LEFT JOIN rating r
         ON ad.id_user = r.id_adopter;
@@ -143,4 +146,58 @@ IS
         
         RETURN v_cursor;
     END;
+    
+FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            -- all of them have NVL to include names from both rescuer and adopter
+            SELECT NVL(r.id_user, a.id_user) AS id_user,
+                NVL(r.email, a.email) AS email,
+                NVL(r.first_name, a.first_name) AS first_name, 
+                NVL(r.second_name, a.second_name) AS second_name,
+                NVL(r.first_surname, a.first_surname) AS first_surname,
+                NVL(r.second_surname, a.second_surname) AS second_surname, 
+                NVL(r.rescues_count, 0) AS rescues, 
+                NVL(a.adoptions_count, 0) AS adoptions,
+                NVL(r.rescues_count, 0) + NVL(a.adoptions_count, 0) AS total_registers
+                
+            FROM
+            -- selects from rescuer
+            (
+            SELECT r.id_user, u.email, r.first_name, r.second_name, r.first_surname, r.second_surname, COUNT(p.id_pet) AS rescues_count 
+            FROM rescuer r
+                
+            INNER JOIN pet p
+            ON r.id_user = p.id_user
+            
+            INNER JOIN "user" u
+            ON r.id_user = u.id_user
+            
+            GROUP BY r.id_user, u.email, r.first_name, r.second_name, r.first_surname, r.second_surname
+            ) r
+    
+            FULL OUTER JOIN -- outer join for all combinations
+            -- selects from adopter
+            (
+            SELECT a.id_user, u.email, a.first_name, a.second_name, a.first_surname, a.second_surname, COUNT(af.id_pet) AS adoptions_count 
+            FROM adopter a
+            
+            INNER JOIN adoption_form af
+            ON a.id_user = af.id_adopter
+            
+            INNER JOIN "user" u
+            ON a.id_user = u.id_user
+            
+            GROUP BY a.id_user, u.email, a.first_name, a.second_name, a.first_surname, a.second_surname
+            ) a
+            
+            ON a.first_name = a.first_name
+            AND NVL(r.second_name, '') = NVL(a.second_name, '') -- in cases where the user has no second name
+            AND r.first_surname = a.first_surname 
+            AND r.second_surname = a.second_surname
+            ORDER BY rescues DESC, adoptions DESC;
+        RETURN v_cursor;
+    END;
+
 END adminConsult;
