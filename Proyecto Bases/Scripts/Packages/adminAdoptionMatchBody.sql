@@ -58,12 +58,11 @@ END insertRating;
 
 PROCEDURE insertMatch(
     pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE,
-    pSimilarityPercentage IN NUMBER
+    pMatchDate            IN DATE
 ) IS
 BEGIN
-    INSERT INTO match (id_match, match_date, similarity_percentage)
-    VALUES (s_match.NEXTVAL, pMatchDate, pSimilarityPercentage);
+    INSERT INTO match (id_match, match_date)
+    VALUES (s_match.NEXTVAL, pMatchDate);
     COMMIT;
 END insertMatch;
 
@@ -138,13 +137,11 @@ END updateRating;
 
 PROCEDURE updateMatch(
     pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE,
-    pSimilarityPercentage IN NUMBER
+    pMatchDate            IN DATE
 ) IS
 BEGIN
     UPDATE match
-    SET    match_date             = pMatchDate,
-           similarity_percentage  = pSimilarityPercentage
+    SET    match_date             = pMatchDate
     WHERE  id_match               = pIdMatch;
     COMMIT;
 END updateMatch;
