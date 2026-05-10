@@ -15,6 +15,8 @@ BEGIN
         VALUES (s_log.nextval, SYSDATE, USER, 'Pet_Type', 'name', 'empty', :new."name");
 
     ELSE
+        :new.modifiedBY := USER;
+        :new.modifiedAt := SYSTIMESTAMP;
         IF :old."name" <> :new."name" THEN
             INSERT INTO "log"(id_log, changeDate, changeBy, tableName, fieldName,
                             previousValue, currentValue)

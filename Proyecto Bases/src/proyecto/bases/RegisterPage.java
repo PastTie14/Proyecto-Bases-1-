@@ -32,14 +32,14 @@ public class RegisterPage {
     private final JTextField tfFirstSurname = buildTextField();
     private final JTextField tfSecondSurname = buildTextField();
     
-    private final JCheckBox donationsCheckBox = buildCheckBox("Requires donations");
+    private final JCheckBox donationsCheckBox = buildCheckBox("Necesita donaciones");
     private final JPasswordField tfPass  = buildPasswordField();
     private final JTextField tfEmail  = buildTextField();
 
     private final JButton btnRegistrar  = buildPrimaryButton("Registrarse");
     private final JButton btnIrALogin   = buildLinkButton("¿Ya tenés cuenta? Iniciá sesión");
     
-    private final String[] userTypes = {"Adopter", "Association", "Crib house", "Rescuer"};
+    private final String[] userTypes = {"Adoptante", "Asociación", "Casa cuna", "Rescatista"};
     private final JComboBox comboBoxUsers = buildComboBox(userTypes);
     
     private JPanel form;
@@ -140,7 +140,7 @@ public class RegisterPage {
 
         // User types
         gc.gridy = 0; gc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("User Type"), gc);
+        form.add(fieldLabel("Tipo de usuario"), gc);
         gc.gridy = 1; gc.insets = new Insets(0, 0, 4, 0);
         form.add(comboBoxUsers, gc);
 
@@ -173,30 +173,30 @@ public class RegisterPage {
         int current = 2;
         
         // depending on what user type is selected, different components are shown
-        if (comboBoxUsers.getSelectedItem().equals("Adopter") || comboBoxUsers.getSelectedItem().equals("Rescuer")) {
-            addFormField(current, "First name", tfFirstName, true);
+        if (comboBoxUsers.getSelectedItem().equals("Adoptante") || comboBoxUsers.getSelectedItem().equals("Rescatista")) {
+            addFormField(current, "Primer nombre", tfFirstName, true);
             current+= 2;
             
-            addFormField(current, "Second name", tfSecondName, true);
+            addFormField(current, "Segundo nombre", tfSecondName, true);
             current+= 2;
             
-            addFormField(current, "First surname", tfFirstSurname, true);
+            addFormField(current, "Primer apellido", tfFirstSurname, true);
             current+= 2;
             
-            addFormField(current, "Second surname", tfSecondSurname, true);   
+            addFormField(current, "Segundo apellido", tfSecondSurname, true);   
             current+= 2;
         }
         
-        if (comboBoxUsers.getSelectedItem().equals("Association")) {
-            addFormField(current, "Name", tfName, true);
+        if (comboBoxUsers.getSelectedItem().equals("Asociación")) {
+            addFormField(current, "Nombre", tfName, true);
             current+= 2;
         }
         
-        if (comboBoxUsers.getSelectedItem().equals("Crib house")) {
-            addFormField(current, "Name", tfName, true);
+        if (comboBoxUsers.getSelectedItem().equals("Casa cuna")) {
+            addFormField(current, "Nombre", tfName, true);
             current+= 2;
             
-            addFormField(current, "Requires donations", donationsCheckBox, true);
+            addFormField(current, "Necesita donaciones", donationsCheckBox, true);
             current+= 2;
             
             addSizesSection(current);
@@ -210,7 +210,7 @@ public class RegisterPage {
         addFormField(current, "Email", tfEmail, true);   
         current+= 2;
             
-        addFormField(current, "Password", tfPass, true);
+        addFormField(current, "Contraseña", tfPass, true);
         
         // updates the window
         form.revalidate();
@@ -226,7 +226,7 @@ public class RegisterPage {
         labelGc.gridx = 0;
         labelGc.gridy = gridY;
         labelGc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Accepted pet sizes:"), labelGc);
+        form.add(fieldLabel("Tamaños de mascota aceptados:"), labelGc);
         
         // panel for checkboxes
         sizesPanel = new JPanel();
@@ -315,7 +315,7 @@ public class RegisterPage {
         labelGc.gridx = 0;
         labelGc.gridy = gridY;
         labelGc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Accepted pet sizes:"), labelGc);
+        form.add(fieldLabel("Tamaños de mascota aceptados:"), labelGc);
         
         // panel for checkboxes
         petTypesPanel = new JPanel();
@@ -453,7 +453,7 @@ public class RegisterPage {
         String email  = tfEmail.getText().trim();
         
         // they share attributes
-        if (comboBoxUsers.getSelectedItem().equals("Adopter") || comboBoxUsers.getSelectedItem().equals("Rescuer")) {
+        if (comboBoxUsers.getSelectedItem().equals("Adoptante") || comboBoxUsers.getSelectedItem().equals("Rescatista")) {
             
             String firstName = tfFirstName.getText().trim();
             String secondName = tfSecondName.getText().trim();
@@ -470,10 +470,10 @@ public class RegisterPage {
 
         try {
             
-            if (comboBoxUsers.getSelectedItem().equals("Adopter"))
+            if (comboBoxUsers.getSelectedItem().equals("Adoptante"))
                 DBConnection.insertAdopter(email, pass, firstName, secondName, firstSurname, secondSurname);
 
-            if (comboBoxUsers.getSelectedItem().equals("Rescuer"))
+            if (comboBoxUsers.getSelectedItem().equals("Rescatista"))
                 DBConnection.insertRescuer(email, pass, firstName, secondName, firstSurname, secondSurname);
                     
             JOptionPane.showMessageDialog(frame,
@@ -490,7 +490,7 @@ public class RegisterPage {
             }
         } // end of adopter and rescuer
         
-        if (comboBoxUsers.getSelectedItem().equals("Association")) {
+        if (comboBoxUsers.getSelectedItem().equals("Asociación")) {
             
             String name = tfName.getText().trim();
             
@@ -521,7 +521,7 @@ public class RegisterPage {
         } // end of association
         
         
-        if (comboBoxUsers.getSelectedItem().equals("Crib house")) {
+        if (comboBoxUsers.getSelectedItem().equals("Casa cuna")) {
             
             String name = tfName.getText().trim();
             
@@ -538,15 +538,15 @@ public class RegisterPage {
         try {
             List<Integer> selectedSizes = getSelectedSizes();
             if (selectedSizes.isEmpty()){
-                JOptionPane.showMessageDialog(frame, "Select at least one pet size", 
-                        "No sizes selected", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Seleccione al menos 1 tamaño de mascota", 
+                        "Ningún tamaño seleccionado", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
             List<Integer> selectedPetTypes = getSelectedPetTypes();
             if (selectedSizes.isEmpty()){
-                JOptionPane.showMessageDialog(frame, "Select at least one pet type", 
-                        "No pet types selected", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Seleccione al menos 1 tipo de mascota", 
+                        "Ningún tipo de mascota seleccionado", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
