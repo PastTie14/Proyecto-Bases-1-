@@ -145,13 +145,6 @@ public class Size extends DBItem {
         }
         return null;
     }
-
-    // adminCatalogs no expone updateSize ni deleteSize en el paquete actual
-    @Override
-    public void deleteItem() {
-        throw new UnsupportedOperationException("deleteSize no está implementado en adminCatalogs.");
-    }
-
     @Override
     public void updateItem() {
         throw new UnsupportedOperationException("updateSize no está implementado en adminCatalogs.");

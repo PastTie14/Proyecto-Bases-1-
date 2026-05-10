@@ -95,13 +95,7 @@ public class Status extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
 
-    @Override
-    public void deleteItem() { throw new UnsupportedOperationException("No delete SP for Status."); }
-
-    @Override
-    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
-
-    public void deleteItem(int selectedId) {
+        public void deleteItem(int selectedId) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.deleteStatus(?) }");
@@ -109,4 +103,8 @@ public class Status extends DBItem {
             stmt.execute();
             data = null;
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }    }
+    @Override
+    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+
 }

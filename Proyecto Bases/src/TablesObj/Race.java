@@ -113,12 +113,6 @@ public class Race extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
 
-    @Override
-    public void deleteItem() { throw new UnsupportedOperationException("No delete SP for Race."); }
-
-    @Override
-    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
-
     public void deleteItem(int selectedId) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -127,4 +121,8 @@ public class Race extends DBItem {
             stmt.execute();
             data = null;
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }    }
+    @Override
+    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+    
 }

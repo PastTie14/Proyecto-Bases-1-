@@ -98,12 +98,6 @@ public class District extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
 
-    @Override
-    public void deleteItem() { throw new UnsupportedOperationException("No delete SP for District."); }
-
-    @Override
-    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
-
     public void deleteItem(int selectedId) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -112,4 +106,8 @@ public class District extends DBItem {
             stmt.execute();
             data = null;
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }    }
+    @Override
+    public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+    
 }
