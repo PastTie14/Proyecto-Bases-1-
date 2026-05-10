@@ -7,7 +7,8 @@ FUNCTION getPetsByTypeAndStatus(pIdType IN NUMBER, pIdStatus IN NUMBER,
         OPEN v_cursor FOR
             SELECT pt."name", s.status_type, COUNT(p.id_pet) AS pet_count FROM pet_type pt
                     
-            CROSS JOIN status s -- cartesian product
+            CROSS JOIN status s -- cartesian product to get all combinations 
+            -- https://www.datacamp.com/tutorial/cartesian-product
             
             LEFT JOIN race r 
             ON pt.id_pet_type = r.id_pet_type

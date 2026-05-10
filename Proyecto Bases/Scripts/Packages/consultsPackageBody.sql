@@ -47,24 +47,44 @@ IS
         RETURN v_cursor;
     END;
 
-/*FUNCTION getMatches(pIdType IN NUMBER,pIdRace IN NUMBER) RETURN SYS_REFCURSOR
+FUNCTION getMatches(pIdLostPet IN NUMBER, pIdFoundPet IN NUMBER) RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT , COUNT(1) OVER () FROM matches
+        SELECT (
+                (
+                -- inspired by these posts: https://forums.oracle.com/ords/apexds/post/calculating-percentages-3532
+                -- https://stackoverflow.com/questions/77622815/create-a-percentage-formula-with-using-a-case-when-expression
+                
+                -- if the ids are the same, add 1 and sum the next one, then divide
+                -- by the total (3) and multiply by 100 to get the percentage
+                CASE WHEN p1.id_size = p2.id_size 
+                THEN 1 ELSE 0 END + 
+                
+                CASE WHEN p1.id_race = p2.id_race
+                THEN 1 ELSE 0 END +
+                
+                CASE WHEN p1.id_district = p2.id_district
+                THEN 1 ELSE 0 END
+                ) / 3
+            ) * 100, COUNT(1) OVER () FROM pet p1
         
-        INNER JOIN 
-        ON 
+        CROSS JOIN pet p2 -- cartesian product to get all combinations
+        -- https://www.datacamp.com/tutorial/cartesian-product
         
-        WHERE 
-        AND 
+        /*
+        INNER JOIN color_x_pet cxp1
+        ON p1.id_pet = cxp.id_pet
         
-        GROUP BY 
-        ORDER BY ;
+        INNER JOIN color_x_pet cxp2
+        ON p2.id_pet = cxp2.id_pet
+        */
+        WHERE p1.id_pet = pIdLostPet
+        AND p2.id_pet = pIdFoundPet;
 
         RETURN v_cursor;
-    END;*/
+    END;
 
 FUNCTION getPetNecessaryTreatments(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
 IS

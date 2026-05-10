@@ -6,7 +6,7 @@ CREATE OR REPLACE PACKAGE adminConsult AS
  
     --FUNCTION getBlackListReportDetails(pIdUser IN NUMBER) RETURN SYS_REFCURSOR;
 
-    --FUNCTION getMatches(pIdType IN NUMBER,pIdRace IN NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getMatches(pIdLostPet IN NUMBER, pIdFoundPet IN NUMBER) RETURN SYS_REFCURSOR;
 
     FUNCTION getPetNecessaryTreatments(pIdPet IN NUMBER) RETURN SYS_REFCURSOR;
 
