@@ -338,7 +338,6 @@ public class admWindow extends JFrame {
         if (confirm != JOptionPane.YES_OPTION) return;
  
         switch (selectedCB) {
-            // Solo Association tiene deleteItem() implementado en los modelos actuales
             case "Currency"      -> new Currency(selectedId).deleteItem(selectedId);
             case "Province"      -> new Province(selectedId).deleteItem(selectedId);
             case "Canton"        -> new Canton(selectedId).deleteItem(selectedId);
@@ -436,7 +435,7 @@ public class admWindow extends JFrame {
         for (String item : new String[]{
                 "Currency", "Province", "Canton", "District",
                 "PetType", "Race", "Status", "Color",
-                "TrainingEase", "EnergyLevel", "CurrentStatus", "Association"}) {
+                "TrainingEase", "EnergyLevel", "CurrentStatus", "Size"}) {
             jComboBox1.addItem(item);
         }
     }
