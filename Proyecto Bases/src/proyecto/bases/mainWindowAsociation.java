@@ -1,7 +1,7 @@
 package proyecto.bases;
 
 import Panels.PetGridPanel;
-import Components.BlackListPanel;
+import Panels.BlackListPanel;
 import Panels.ConsultPanel;
 import Components.MenuItem;
 import Panels.AssociationFormPanel;

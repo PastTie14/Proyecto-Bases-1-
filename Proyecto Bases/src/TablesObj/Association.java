@@ -50,7 +50,7 @@ public class Association extends DBItem {
     public static boolean getAssociationById(int id) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement st = con.prepareCall("BEGIN ? := adminUser.getAssociation(?); END;");
+            CallableStatement st = con.prepareCall("BEGIN ? := adminUser.getAssociationById(?); END;");
             st.registerOutParameter(1, OracleTypes.CURSOR);
             st.setInt(2, id);
             st.execute();

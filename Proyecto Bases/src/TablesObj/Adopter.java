@@ -59,7 +59,7 @@ public class Adopter extends DBItem {
                 while (rs.next()) {
                     ArrayList<Object> fila = new ArrayList<>();
                     for (int i = 1; i <= cols; i++) {
-                        fila.add((String) rs.getObject(i));
+                        fila.add(rs.getObject(i));
                     }
                     filas.add(fila);
                 }

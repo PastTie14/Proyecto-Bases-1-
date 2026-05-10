@@ -29,7 +29,7 @@ public class BlackList extends DBItem {
     public static void insert(int idUser) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement stmt = con.prepareCall("{ CALL adminBlackList.insertBlackList(?, ?) }");
+            CallableStatement stmt = con.prepareCall("{ CALL adminBlackList.insertBlackList( ?) }");
             stmt.setInt(1, idUser);
             stmt.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
@@ -42,7 +42,7 @@ public class BlackList extends DBItem {
             st.registerOutParameter(1, OracleTypes.NUMBER);
             st.setInt(2, idUser);
             st.execute();
-            return (int) st.getObject(1);
+            return  st.getInt(1);
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return 0;
     }

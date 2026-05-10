@@ -1,5 +1,6 @@
 package Components;
 
+import Panels.BlackListPanel;
 import Panels.ConsultPanel;
 import Panels.StatsPanel;
 import Panels.SideMenuPanel;

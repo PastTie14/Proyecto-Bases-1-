@@ -1,7 +1,7 @@
 package proyecto.bases;
 
 import Panels.PetGridPanel;
-import Components.BlackListPanel;
+import Panels.BlackListPanel;
 import Panels.ConsultPanel;
 import Panels.CribHouseFormPanel;
 import Components.MenuItem;
@@ -20,7 +20,6 @@ public class mainWindowCrib extends JFrame {
     private JPanel content;
     private JLabel placeholder;
 
-    private PetGridPanel petGrid;
     private PetFormPanel petForm;
     private PetSearchPanel petSearch;
     private ConsultPanel consult;
@@ -60,7 +59,6 @@ public class mainWindowCrib extends JFrame {
     }
 
     private void initComponents() {
-        petGrid = new PetGridPanel(PetGridPanel.loadPetsByStatusId(1),idUser);
         petForm = new PetFormPanel(idUser);
         petSearch = new PetSearchPanel();
         blackList = new BlackListPanel(idUser);
@@ -115,10 +113,6 @@ public class mainWindowCrib extends JFrame {
             new MenuItem(){
                 public String getName() { return "BlackList"; }
                 public void show() { setContent(blackList);}
-            },
-            new MenuItem() {
-                public String getName() { return "Adoptar"; }
-                public void show() { setContent(petGrid); }
             },
             new MenuItem() {
                 public String getName() { return "Da en adopción"; }
