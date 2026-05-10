@@ -217,4 +217,26 @@ BEGIN
     WHERE id_bounty = pIdBounty;
 END;
 
+PROCEDURE deleteTrainingEase ( pIdTrainingEase IN NUMBER)
+IS
+BEGIN
+    DELETE FROM training_ease
+    WHERE id_training_ease = pIdTrainingEase;
+END;
+
+PROCEDURE deleteEnergyLevel ( pIdEnergyLevel IN NUMBER)
+IS
+BEGIN
+    DELETE FROM energy_level
+    WHERE id_energy_level = pIdEnergyLevel;
+END;
+
+PROCEDURE deleteCurrentStatus ( pIDCurrStatus IN NUMBER)
+IS
+BEGIN
+    DELETE FROM current_status
+    WHERE id_current_status = pidcurrstatus;
+END;
+
+
 END adminPetExtraInfo;

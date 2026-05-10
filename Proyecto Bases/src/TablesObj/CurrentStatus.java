@@ -100,4 +100,14 @@ public class CurrentStatus extends DBItem {
 
     @Override
     public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+    public void deleteItem(int selectedId) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.deleteCurrentStatus(?) }");
+            stmt.setInt(1, selectedId);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 }

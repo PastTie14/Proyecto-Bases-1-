@@ -104,6 +104,27 @@ public class Size extends DBItem {
             LOG.log(Level.SEVERE, "Error al insertar Size name=" + name, ex);
         }
     }
+    
+    public void updateItem(int idSize, String name) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.updateSize(?, ?) }");
+            stmt.setInt(1, idSize);
+            stmt.setString(2, name);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
+    
+    public void deleteItem(int idSize){
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.deleteSize(?) }");
+            stmt.setInt(1, idSize);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — INSTANCIA

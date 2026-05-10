@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  *   TrainingEase  → name
  *   EnergyLevel   → name
  *   CurrentStatus → status_type
- *   Association   → name
+ *   Size   → name
  */
 public class admWindow extends JFrame {
  
@@ -219,7 +219,7 @@ public class admWindow extends JFrame {
             case "TrainingEase"  -> TrainingEase.getAll();
             case "EnergyLevel"   -> EnergyLevel.getAll();
             case "CurrentStatus" -> CurrentStatus.getAll();
-            case "Association"   -> Association.getAll();
+            case "Size"   -> Size.getAll();
             default              -> null;
         };
     }
@@ -281,8 +281,8 @@ public class admWindow extends JFrame {
             // CurrentStatus: col1=id, col2=status_type
             case "CurrentStatus"-> CurrentStatus.insert(0, f1);
  
-            // Association: col1=id_user, col2=name
-            case "Association"  -> Association.insert(0, f1);
+            // Size: name
+            case "Size"  -> Size.insert(f1);
  
             default -> JOptionPane.showMessageDialog(this,
                 "Insert no implementado para: " + selectedCB,
@@ -315,7 +315,7 @@ public class admWindow extends JFrame {
             case "TrainingEase"  -> new TrainingEase(selectedId).updateItem(selectedId, f1);
             case "EnergyLevel"   -> new EnergyLevel(selectedId).updateItem(selectedId, f1);
             case "CurrentStatus" -> new CurrentStatus(selectedId).updateItem(selectedId, f1);
-            case "Association"   -> new Association(selectedId).update(f1);
+            case "Size"   -> new Size(selectedId).updateItem(selectedId, f1);
             default -> JOptionPane.showMessageDialog(this,
                 "Update no implementado para: " + selectedCB,
                 "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -339,7 +339,18 @@ public class admWindow extends JFrame {
  
         switch (selectedCB) {
             // Solo Association tiene deleteItem() implementado en los modelos actuales
-            case "Association" -> new Association(selectedId).deleteItem();
+            case "Currency"      -> new Currency(selectedId).deleteItem(selectedId);
+            case "Province"      -> new Province(selectedId).deleteItem(selectedId);
+            case "Canton"        -> new Canton(selectedId).deleteItem(selectedId);
+            case "District"      -> new District(selectedId).deleteItem(selectedId);
+            case "PetType"       -> new PetType(selectedId).deleteItem(selectedId);
+            case "Race"          -> new Race(selectedId).deleteItem(selectedId);
+            case "Status"        -> new Status(selectedId).deleteItem(selectedId);
+            case "Color"         -> new PetColor(selectedId).deleteItem(selectedId);
+            case "TrainingEase"  -> new TrainingEase(selectedId).deleteItem(selectedId);
+            case "EnergyLevel"   -> new EnergyLevel(selectedId).deleteItem(selectedId);
+            case "CurrentStatus" -> new CurrentStatus(selectedId).deleteItem(selectedId);
+            case "Size"          -> new Size(selectedId).deleteItem(selectedId);
             default -> JOptionPane.showMessageDialog(this,
                 "Delete no disponible para: " + selectedCB + ".\nNo existe SP de eliminación.",
                 "Aviso", JOptionPane.WARNING_MESSAGE);

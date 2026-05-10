@@ -46,5 +46,8 @@ FUNCTION getBountyByPet(pIdPet IN NUMBER) RETURN SYS_REFCURSOR;
 
 -- DELETE
 PROCEDURE deleteBounty(pIdBounty IN NUMBER);
+PROCEDURE deleteTrainingEase ( pIdTrainingEase IN NUMBER);
+PROCEDURE deleteEnergyLevel ( pIdEnergyLevel IN NUMBER);
+PROCEDURE deleteCurrentStatus ( pIDCurrStatus IN NUMBER);
 
 END adminPetExtraInfo;
