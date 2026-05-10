@@ -27,8 +27,7 @@ PROCEDURE insertRating(
  
 PROCEDURE insertMatch(
     pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE,
-    pSimilarityPercentage IN NUMBER
+    pMatchDate            IN DATE
 );
  
 PROCEDURE insertParameters(
@@ -63,8 +62,7 @@ PROCEDURE updateRating(
  
 PROCEDURE updateMatch(
     pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE,
-    pSimilarityPercentage IN NUMBER
+    pMatchDate            IN DATE
 );
  
 PROCEDURE updateParameters(
