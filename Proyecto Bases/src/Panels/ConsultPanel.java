@@ -24,15 +24,14 @@ public class ConsultPanel extends JPanel {
     // ── Constantes de reporte ─────────────────────────────────────
     private static final String R_DONATIONS        = "Donaciones";
     private static final String R_BLACKLIST        = "Lista Negra";
-    private static final String R_BLACKLIST_DETAIL = "Detalle Lista Negra";
     private static final String R_MATCHES          = "Matches";
     private static final String R_TREATMENTS       = "Tratamientos Necesarios";
     private static final String R_CRIB_HOUSES      = "Casas Cuna Compatibles";
     private static final String R_BEST_USERS       = "Mejores Rescatistas / Adoptantes";
 
     private static final String[] REPORT_NAMES = {
-        R_DONATIONS, R_BLACKLIST, R_BLACKLIST_DETAIL,
-        R_MATCHES, R_TREATMENTS, R_CRIB_HOUSES, R_BEST_USERS
+        R_DONATIONS, R_BLACKLIST, R_MATCHES, 
+        R_TREATMENTS, R_CRIB_HOUSES, R_BEST_USERS
     };
 
     // ── Mapas label → id para combos ─────────────────────────────
@@ -137,12 +136,6 @@ public class ConsultPanel extends JPanel {
 
         // 2. Lista Negra (sin filtros)
         cardPanel.add(emptyCard("Sin filtros — se muestran todos los registros."), R_BLACKLIST);
-
-        // 3. Detalle Lista Negra
-        cardPanel.add(filterCard(
-            sectionLabel("Usuario"),
-            blIdUser
-        ), R_BLACKLIST_DETAIL);
 
         // 4. Matches
         cardPanel.add(filterCard(
@@ -343,20 +336,10 @@ public class ConsultPanel extends JPanel {
             case R_BLACKLIST:
                 rows = consult.getBlackListReport();
                 columns = new String[]{
-                    "ID Usuario", "Email", "Nombre Completo",
-                    "Total Reportes", "Calif. Promedio",
-                    "Último Reporte", "Total Registros"
-                };
-                break;
-
-            case R_BLACKLIST_DETAIL:
-                rows = consult.getBlackListReportDetails(
-                    parseIntField(blIdUser.getValue())
-                );
-                columns = new String[]{
-                    "ID Reporte", "Razón", "Fecha Reporte",
-                    "Email Reportador", "Nombre Reportador",
-                    "Calificación", "Total Reportes"
+                    "ID Usuario", "Email",
+                    "Primer nombre", "Segundo nombre", 
+                    "Primer apellido","Segundo apellido",
+                    "Calificación", "Razón", "Total Registros"
                 };
                 break;
 
@@ -390,8 +373,8 @@ public class ConsultPanel extends JPanel {
                 );
                 columns = new String[]{
                     "ID Casa Cuna", "Nombre", "Email",
-                    "Requiere Donaciones", "Tamaño Aceptado",
-                    "Tamaños Aceptados", "Total Registros"
+                    "Requiere Donaciones", "Mascota Aceptada",
+                    "Tamaño Aceptado", "Total Registros"
                 };
                 break;
 
@@ -401,8 +384,10 @@ public class ConsultPanel extends JPanel {
                     bestEndDate.getValue()
                 );
                 columns = new String[]{
-                    "Tipo", "ID Usuario", "Email",
-                    "Nombre Completo", "Actividad", "Total Registros"
+                    "ID Usuario", "Email",
+                    "Primer nombre", "Segundo nombre", 
+                    "Primer apellido","Segundo apellido", 
+                    "Rescates", "Adopciones", "Total Registros"
                 };
                 break;
 

@@ -315,7 +315,7 @@ public class RegisterPage {
         labelGc.gridx = 0;
         labelGc.gridy = gridY;
         labelGc.insets = new Insets(0, 0, 4, 0);
-        form.add(fieldLabel("Tamaños de mascota aceptados:"), labelGc);
+        form.add(fieldLabel("Tipos de mascota aceptados:"), labelGc);
         
         // panel for checkboxes
         petTypesPanel = new JPanel();
