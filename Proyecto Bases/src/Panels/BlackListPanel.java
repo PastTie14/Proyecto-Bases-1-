@@ -21,13 +21,20 @@ public class BlackListPanel extends JPanel {
     //  IDs SELECCIONADOS
     // ════════════════════════════════════════════════════════════════
  
-    public int idBanned;
+    public int idBanned; // id del user que se va a banear
  
-    public int idBlacklistRow;
+    public int idBlacklistRow; //id del user ya baneado seleccionado
     
-    public int idBlacklist;
+    public int idBlacklist; // id de la blackList perteneciente a mi user
     
-    public int idUser;
+    public int idUser; // id de mi user
+    
+    // ════════════════════════════════════════════════════════════════
+    //  Datos
+    // ════════════════════════════════════════════════════════════════
+ 
+    ArrayList<String> userCol;
+    ArrayList<String> blackCol;
  
     // ════════════════════════════════════════════════════════════════
     //  COMPONENTES
@@ -57,12 +64,12 @@ public class BlackListPanel extends JPanel {
         setBackground(Format.COLOR_BG);
         add(buildCenter(),  BorderLayout.CENTER);
         add(buildSouth(),   BorderLayout.SOUTH);
-        ArrayList<String> userCol = new ArrayList();
+        userCol= new ArrayList();
         userCol.add("Id");userCol.add("email"); userCol.add("Nombre"); userCol.add("Apellido");
         fillUsersTable(userCol, Adopter.getAll());
         
-        ArrayList<String> blackCol = new ArrayList();
-        blackCol.add("email");blackCol.add("Nombre");blackCol.add("Motivo");
+        blackCol = new ArrayList();
+        blackCol.add("Id");blackCol.add("email");blackCol.add("Nombre");blackCol.add("Motivo");
         fillBlacklistTable(blackCol, BlackList.getBannedUsers(idUser));
  
         wireEvents();
@@ -209,31 +216,38 @@ public class BlackListPanel extends JPanel {
         if(!reason.isBlank()){
             if(idBanned>0 && idBlacklist>0){
                 UserXBlackList.insert(reason, idBanned, idBlacklist);
+                fillUsersTable(userCol, Adopter.getAll());
+                fillBlacklistTable(blackCol, BlackList.getBannedUsers(idUser));
             }else
-                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+                JOptionPane.showMessageDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
         }else
-            JOptionPane.showConfirmDialog(null, "Por favor escriba una razon del baneo");
+            JOptionPane.showMessageDialog(null, "Por favor escriba una razon del baneo");
     }
     
     private void onEliminarClicked(){
-        String reason = txaRazon.getText();
-        
-            if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
-                UserXBlackList.delete(idBlacklist , idBanned);
+            if(idBlacklist > 0 && idBlacklistRow>0){
+                UserXBlackList.delete(idBlacklist , idBlacklistRow);
+                idBlacklistRow = -1;
+                fillUsersTable(userCol, Adopter.getAll());
+                fillBlacklistTable(blackCol, BlackList.getBannedUsers(idUser));
             }else
-                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+                JOptionPane.showMessageDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
        
     }
     
     private void onActualizarClicked(){
         String reason = txaRazon.getText();
         if(!reason.isBlank()){
-            if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
-                UserXBlackList.update(reason,idBanned,idBlacklist  );
+            if(idBlacklist > 0 && idBanned>0){
+                UserXBlackList.update(reason,idBlacklistRow,idBlacklist  );
+                idBlacklistRow = -1;
+                txaRazon.setText("");
+                fillUsersTable(userCol, Adopter.getAll());
+                fillBlacklistTable(blackCol, BlackList.getBannedUsers(idUser));
             }else
-                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+                JOptionPane.showMessageDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
         }else
-            JOptionPane.showConfirmDialog(null, "Por favor escriba una razon del baneo");
+            JOptionPane.showMessageDialog(null, "Por favor escriba una razon del baneo");
     }
  
     // ════════════════════════════════════════════════════════════════
@@ -252,7 +266,7 @@ public class BlackListPanel extends JPanel {
  
     public void fillBlacklistTable(ArrayList<String> columns,
                                    ArrayList<ArrayList<Object>> data) {
-        idBlacklist = -1;
+        idBlacklistRow = -1;
         SwingUtilities.invokeLater(() -> {
             tblBlacklist.setModel(buildModel(columns, data));
             lblBlacklist.setText("Lista Negra (" + data.size() + ")");
@@ -277,7 +291,7 @@ public class BlackListPanel extends JPanel {
  
     private void refreshStatusLabel() {
         String userTxt  = idBanned      == -1 ? "—" : String.valueOf(idBanned);
-        String blTxt    = idBlacklist == -1 ? "—" : String.valueOf(idBlacklist);
+        String blTxt    = idBlacklistRow == -1 ? "—" : String.valueOf(idBlacklistRow);
         lblStatus.setText("  Usuario: " + userTxt + "   |   Lista Negra: " + blTxt);
     }
  
