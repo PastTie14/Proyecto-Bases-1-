@@ -207,7 +207,7 @@ FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN
             GROUP BY a.id_user, u.email, a.first_name, a.second_name, a.first_surname, a.second_surname
             ) a
             
-            ON a.first_name = a.first_name
+            ON r.first_name = a.first_name
             AND NVL(r.second_name, '') = NVL(a.second_name, '') -- in cases where the user has no second name
             AND r.first_surname = a.first_surname 
             AND r.second_surname = a.second_surname

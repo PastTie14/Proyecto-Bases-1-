@@ -14,32 +14,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
- 
-/**
- * Capa de acceso a datos para el paquete adminConsult (PL/SQL).
- *
- * Columnas devueltas por cada cursor (en orden):
- *
- *  getDonations(startDate, endDate, idDonor, idAssociation)
- *      amount | id_donnor | createdAt | association_name | COUNT(1) OVER()
- *
- *  getBlackListReport()
- *      id_user | email | first_name | NVL(second_name,'None') |
- *      first_surname | second_surname | NVL(score,0) | reason | COUNT(1) OVER()
- *
- *  getMatches(idLostPet, idFoundPet)
- *      similarity_pct (0-100) | COUNT(1) OVER()
- *
- *  getPetNecessaryTreatments(idPet)
- *      first_name | disease_count | COUNT(*) OVER()
- *
- *  getCompatibleCribHouses(idPetType)
- *      id_user | name | email | requires_donations | pet_type_name | size_name | COUNT(1) OVER()
- *
- *  getBestRescuersAndAdopters(startDate, endDate)
- *      id_user | email | first_name | second_name | first_surname |
- *      second_surname | rescues | adoptions | total_registers
- */
+
+
 public class consult {
  
     private static final Logger LOG = Logger.getLogger(consult.class.getName());
@@ -156,14 +132,15 @@ public class consult {
     //  SQL: first_name | disease_count | COUNT(*) OVER()
     // ─────────────────────────────────────────────────────────────
  
-    public static ArrayList<ArrayList<Object>> getPetNecessaryTreatments(int idPet) {
+    public static ArrayList<ArrayList<Object>> getPetNecessaryTreatments(int minTreatments, int maxTreatments) {
  
-        final String sql = "BEGIN ? := adminConsult.getPetNecessaryTreatments(?); END;";
+        final String sql = "BEGIN ? := adminConsult.getPetNecessaryTreatments(?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
  
             st.registerOutParameter(1, OracleTypes.CURSOR);
-            setIntOrNull(st, 2, idPet);
+            setIntOrNull(st, 2, minTreatments);
+            setIntOrNull(st, 3, maxTreatments);
             st.execute();
  
             try (ResultSet rs = (ResultSet) st.getObject(1)) {

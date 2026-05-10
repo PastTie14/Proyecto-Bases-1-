@@ -56,8 +56,9 @@ public class ConsultPanel extends JPanel {
     private final FormField matchIdFoundPet = new FormField("ID Mascota Encontrada");
  
     // ── Filtros: Tratamientos ─────────────────────────────────────
-    // SQL: getPetNecessaryTreatments(idPet)
-    private final FormField treatIdPet = new FormField("ID Mascota");
+    // SQL: getPetNecessaryTreatments(minTreatments, maxTreatments)
+    private final FormField treatMin = new FormField("Mín. tratamientos");
+    private final FormField treatMax = new FormField("Máx. tratamientos");
  
     // ── Filtros: Casas Cuna ───────────────────────────────────────
     // SQL: getCompatibleCribHouses(idPetType)
@@ -136,10 +137,10 @@ public class ConsultPanel extends JPanel {
             matchIdFoundPet
         ), R_MATCHES);
  
-        // 4. Tratamientos — ID de mascota
+        // 4. Tratamientos — rango de cantidad de tratamientos
         cardPanel.add(filterCard(
-            sectionLabel("Mascota"),
-            treatIdPet
+            sectionLabel("Rango de tratamientos"),
+            treatMin, treatMax
         ), R_TREATMENTS);
  
         // 5. Casas Cuna — tipo de mascota
@@ -340,12 +341,16 @@ public class ConsultPanel extends JPanel {
                 columns = new String[]{ "% Similitud", "Total Registros" };
                 break;
  
-            // SQL devuelve: first_name | disease_count | total_records
+            // id_pet | first_name | pet_type | status_type | disease_count | treatment_count | total_records
             case R_TREATMENTS:
                 rows = consult.getPetNecessaryTreatments(
-                    parseIntField(treatIdPet.getValue())
+                    parseIntField(treatMin.getValue()),
+                    parseIntField(treatMax.getValue())
                 );
-                columns = new String[]{ "Nombre Mascota", "Nº Enfermedades", "Total Registros" };
+                columns = new String[]{
+                    "ID Mascota", "Nombre", "Tipo Mascota", "Estado Actual",
+                    "Nº Enfermedades", "Nº Tratamientos", "Total Registros"
+                };
                 break;
  
             // SQL devuelve: id_user | name | email | requires_donations |
