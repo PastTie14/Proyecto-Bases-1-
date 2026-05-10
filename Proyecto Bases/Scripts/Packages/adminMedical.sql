@@ -1,27 +1,26 @@
 CREATE OR REPLACE PACKAGE adminMedical IS
 
 -- INSERT
-PROCEDURE insertTreatment(pIdTreatment IN NUMBER, pName IN VARCHAR2, pDose IN VARCHAR2);
-
-PROCEDURE insertDisease(pIdDisease IN NUMBER, pName IN VARCHAR2);
-
-PROCEDURE insertMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN VARCHAR2,
-                                pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER);
-
-PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER);
-
-PROCEDURE insertTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
-
-FUNCTION insertar_veterinario (
-    p_id_veterinarian   IN NUMBER,
-    p_first_name        IN VARCHAR2,
-    p_second_name       IN VARCHAR2,
-    p_first_surname     IN VARCHAR2,
-    p_second_surname    IN VARCHAR2,
-    p_clinic_name       IN VARCHAR2
-) RETURN NUMBER;
-
-
+FUNCTION insertDisease(pName IN VARCHAR2) RETURN NUMBER;
+ 
+    FUNCTION insertTreatment(pName IN VARCHAR2, pDose IN VARCHAR2) RETURN NUMBER;
+ 
+    PROCEDURE insertMedicSheet(pIdMedicSheet    IN NUMBER,
+                               pAbandonmentDescription IN VARCHAR2,
+                               pIdVeterinarian  IN NUMBER,
+                               pIdPetExtraInfo  IN NUMBER);
+ 
+    FUNCTION insertVeterinarian(
+        p_first_name     IN VARCHAR2,
+        p_second_name    IN VARCHAR2,
+        p_first_surname  IN VARCHAR2,
+        p_second_surname IN VARCHAR2,
+        p_clinic_name    IN VARCHAR2
+    ) RETURN NUMBER;
+ 
+    PROCEDURE insertDiseaseXMedicSheet(pIdDisease IN NUMBER, pIdMedicSheet IN NUMBER);
+ 
+    PROCEDURE insertTreatmentXDisease(pIdTreatment IN NUMBER, pIdDisease IN NUMBER);
 -- UPDATE
 PROCEDURE updateTreatment(pIdTreatment IN NUMBER, pName IN VARCHAR2, pDose IN VARCHAR2);
 

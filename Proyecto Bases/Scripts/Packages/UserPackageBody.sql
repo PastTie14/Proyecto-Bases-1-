@@ -226,6 +226,16 @@ BEGIN
     RETURN v_cursor;
 END;
 
+FUNCTION getDonnableCrib RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT ch.id_user, ch."name" FROM crib_house ch
+        WHERE ch.Requires_donations = 1;
+    RETURN v_cursor;
+END;
+
 -- ======================================== DELETE ========================================
 PROCEDURE deleteUser(pidUser IN NUMBER)
 IS

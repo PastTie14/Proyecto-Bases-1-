@@ -60,8 +60,17 @@ BEGIN
         id_status = pIdStatus
     WHERE id_pet = pIdPet;
     COMMIT;
-END;                                       
+END;                   
 
+PROCEDURE petFound(pIdPet IN NUMBER)
+IS
+BEGIN
+    UPDATE pet
+    SET 
+        id_status = 2
+    WHERE id_pet = pIdPet AND id_status = 1;
+    COMMIT;
+END;
 -- ======================================== GET ========================================
 
 FUNCTION getPet RETURN SYS_REFCURSOR

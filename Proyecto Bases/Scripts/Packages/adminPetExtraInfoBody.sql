@@ -28,7 +28,7 @@ PROCEDURE insertEnergyLevel(pIdEnergyLevel IN NUMBER, pName IN VARCHAR2)
 IS 
 BEGIN
     INSERT INTO energy_level (id_energy_level, "name")
-    VALUES(pIdEnergyLevel, pName);
+    VALUES(s_energyLevel.nextVal, pName);
     COMMIT;
 END insertEnergyLevel;
 
@@ -195,6 +195,20 @@ BEGIN
         WHERE b.id_bounty= pIdBounty;
     RETURN v_cursor;
 END;
+
+FUNCTION getBountyByPet(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT b.id_bounty FROM bounty b
+    INNER JOIN PET_EXTRA_INFO pex
+    ON pex.id_pet_extra_info = b.id_pet_extra_info
+    INNER JOIN pet p
+    ON p.id_pet = pex.id_pet
+        WHERE p.id_pet= pIdPet;
+    RETURN v_cursor;
+END;
+
 
 -- DELETE
 PROCEDURE deleteBounty(pIdBounty IN NUMBER)

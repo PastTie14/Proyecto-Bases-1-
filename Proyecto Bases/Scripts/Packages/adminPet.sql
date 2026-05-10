@@ -17,6 +17,7 @@ PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER);
 PROCEDURE updatePet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                     pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                     pEmail IN VARCHAR2, pIdStatus IN NUMBER);
+PROCEDURE petFound(pIdPet IN NUMBER);
 
 -- GET 
 FUNCTION getPet RETURN SYS_REFCURSOR;

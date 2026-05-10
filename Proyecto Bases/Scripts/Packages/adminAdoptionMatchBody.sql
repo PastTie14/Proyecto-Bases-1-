@@ -1,175 +1,300 @@
 CREATE OR REPLACE PACKAGE BODY adminAdoptionMatch AS
 
-PROCEDURE insertAdoptionForm(pIdAdoption IN NUMBER, pNotes VARCHAR2,
-                                        pAdoptionDate IN DATE, pReference IN VARCHAR2,
-                                        pIdAdopter IN NUMBER, pIdPet IN NUMBER)
-IS 
+--  ===============================================================
+--  INSERT
+--  ===============================================================
+
+PROCEDURE insertAdoptionForm(
+    pIdAdoption   IN NUMBER,
+    pNotes        IN VARCHAR2,
+    pAdoptionDate IN DATE,
+    pReference    IN VARCHAR2,
+    pIdAdopter    IN NUMBER,
+    pIdPet        IN NUMBER
+) IS
 BEGIN
-    INSERT INTO adoption_form (id_adoption, notes, adoption_date, "reference", id_adopter, id_pet)
-    VALUES(s_adoption.nextVal, pNotes, pAdoptionDate, pReference, pIdAdopter, pIdPet);
+    INSERT INTO adoption_form (
+        id_adoption, notes, adoption_date, "reference", id_adopter, id_pet
+    ) VALUES (
+        s_adoption.NEXTVAL,   
+        pNotes,
+        pAdoptionDate,
+        pReference,
+        pIdAdopter,
+        pIdPet
+    );
     COMMIT;
 END insertAdoptionForm;
 
---=======================================================================================
+--  ===============================================================
 
-PROCEDURE insertPhoto(pIdPhoto IN NUMBER, pDate IN DATE, 
-                                    pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER)
-IS 
+PROCEDURE insertPhoto(
+    pIdPhoto   IN NUMBER,
+    pDate      IN DATE,
+    pPhotoDir  IN VARCHAR2,
+    pIdAdopter IN NUMBER
+) IS
 BEGIN
     INSERT INTO photo (id_photo, "date", photo_dir, id_user)
-    VALUES(pIdPhoto, pDate, pPhotoDir, pIdAdopter);
+    VALUES (pIdPhoto, pDate, pPhotoDir, pIdAdopter);
     COMMIT;
 END insertPhoto;
 
---=======================================================================================
+--  ===============================================================
 
-PROCEDURE insertRating(pIdRating IN NUMBER, pScore IN NUMBER, 
-                                        pIdUser IN NUMBER, pIdAdopter IN NUMBER)
-IS 
+PROCEDURE insertRating(
+    pIdRating  IN NUMBER,
+    pScore     IN NUMBER,
+    pIdUser    IN NUMBER,
+    pIdAdopter IN NUMBER
+) IS
 BEGIN
     INSERT INTO rating (id_rating, score, id_user, id_adopter)
-    VALUES(s_rating.nextVal, pScore, pIdUser, pIdAdopter);
+    VALUES (s_rating.NEXTVAL, pScore, pIdUser, pIdAdopter);
     COMMIT;
 END insertRating;
 
---=======================================================================================
+--  ===============================================================
 
-PROCEDURE insertMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
-                                        pSimilarityPercentage IN NUMBER)
-IS 
+PROCEDURE insertMatch(
+    pIdMatch              IN NUMBER,
+    pMatchDate            IN DATE,
+    pSimilarityPercentage IN NUMBER
+) IS
 BEGIN
     INSERT INTO match (id_match, match_date, similarity_percentage)
-    VALUES(s_match.nextVal, pMatchDate, pSimilarityPercentage);
+    VALUES (s_match.NEXTVAL, pMatchDate, pSimilarityPercentage);
     COMMIT;
 END insertMatch;
 
---=======================================================================================
+--  ===============================================================
 
-PROCEDURE insertParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
-                                            pIdMatch IN NUMBER, pIdValueType IN NUMBER)
-IS 
+PROCEDURE insertParameters(
+    pIdParameter IN NUMBER,
+    pValue       IN VARCHAR2,
+    pIdMatch     IN NUMBER,
+    pIdValueType IN NUMBER
+) IS
 BEGIN
     INSERT INTO parameters (id_parameter, "value", id_match, id_value_type)
-    VALUES(s_parameter.nextVal, pValue, pIdMatch, pIdValueType);
+    VALUES (s_parameter.NEXTVAL, pValue, pIdMatch, pIdValueType);
     COMMIT;
 END insertParameters;
 
 
--- ======================================== UPDATE ========================================
-                            
-PROCEDURE updatePhoto(pIdPhoto IN NUMBER, pDate IN DATE, 
-                        pPhotoDir IN VARCHAR2, pIdAdopter IN NUMBER) 
-IS
+--  ===============================================================
+--  UPDATE
+--  ===============================================================
+PROCEDURE updateAdoptionForm(
+    pIdAdoption   IN NUMBER,
+    pNotes        IN VARCHAR2,
+    pAdoptionDate IN DATE,
+    pReference    IN VARCHAR2
+) IS
+BEGIN
+    UPDATE adoption_form
+    SET    notes         = pNotes,
+           adoption_date = pAdoptionDate,
+           "reference"   = pReference
+    WHERE  id_adoption   = pIdAdoption;
+    COMMIT;
+END updateAdoptionForm;
+
+--  ===============================================================
+
+PROCEDURE updatePhoto(
+    pIdPhoto   IN NUMBER,
+    pDate      IN DATE,
+    pPhotoDir  IN VARCHAR2,
+    pIdAdopter IN NUMBER
+) IS
 BEGIN
     UPDATE photo
-    SET "date" = pDate, 
-        photo_dir = pPhotoDir
-    
-    WHERE id_photo = pIdPhoto
-    AND id_user = pIdAdopter;
+    SET    "date"    = pDate,
+           photo_dir = pPhotoDir
+    WHERE  id_photo  = pIdPhoto
+    AND    id_user   = pIdAdopter;
     COMMIT;
-END;
+END updatePhoto;
 
-PROCEDURE updateRating(pIdRating IN NUMBER, pScore IN NUMBER, 
-                        pIdUser IN NUMBER, pIdAdopter IN NUMBER)
-IS
+--  ===============================================================
+
+PROCEDURE updateRating(
+    pIdRating  IN NUMBER,
+    pScore     IN NUMBER,
+    pIdUser    IN NUMBER,
+    pIdAdopter IN NUMBER
+) IS
 BEGIN
     UPDATE rating
-    SET score = pScore
-    
-    WHERE id_rating = pIdRating
-    AND id_user = pIdUser
-    AND id_adopter = pIdAdopter;
+    SET    score      = pScore
+    WHERE  id_rating  = pIdRating
+    AND    id_user    = pIdUser
+    AND    id_adopter = pIdAdopter;
     COMMIT;
-END;                        
+END updateRating;
 
-PROCEDURE updateMatch(pIdMatch IN NUMBER, pMatchDate IN DATE,
-                        pSimilarityPercentage IN NUMBER)
-IS
+--  ===============================================================
+
+PROCEDURE updateMatch(
+    pIdMatch              IN NUMBER,
+    pMatchDate            IN DATE,
+    pSimilarityPercentage IN NUMBER
+) IS
 BEGIN
     UPDATE match
-    SET match_date = pMatchDate,
-        similarity_percentage = pSimilarityPercentage
-    
-    WHERE id_match = pIdMatch;
+    SET    match_date             = pMatchDate,
+           similarity_percentage  = pSimilarityPercentage
+    WHERE  id_match               = pIdMatch;
     COMMIT;
-END;
+END updateMatch;
 
-PROCEDURE updateParameters(pIdParameter IN NUMBER, pValue IN VARCHAR2,
-                            pIdMatch IN NUMBER, pIdValueType IN NUMBER)
-IS
+--  ===============================================================
+
+PROCEDURE updateParameters(
+    pIdParameter IN NUMBER,
+    pValue       IN VARCHAR2,
+    pIdMatch     IN NUMBER,
+    pIdValueType IN NUMBER
+) IS
 BEGIN
     UPDATE parameters
-    SET "value" = pValue,
-        id_match = pIdMatch,
-        id_value_type = pIdValueType
-    
-    WHERE id_parameter = pIdParameter;
+    SET    "value"       = pValue,
+           id_match      = pIdMatch,
+           id_value_type = pIdValueType
+    WHERE  id_parameter  = pIdParameter;
     COMMIT;
-END;
+END updateParameters;
 
 
--- ======================================== GET ========================================
+--  ===============================================================
+--  GET
+--  ===============================================================
 
-FUNCTION getAdoptionForm RETURN SYS_REFCURSOR
-IS
+FUNCTION getAdoptionForm RETURN SYS_REFCURSOR IS
     v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT * FROM adoption_form;
-        RETURN v_cursor;
-END;
-
-FUNCTION getPhoto RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT * FROM photo;
-        RETURN v_cursor;
-END;
-
-FUNCTION getRating RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT * FROM rating;
-        RETURN v_cursor;
-END;
-
-FUNCTION getMatch RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT * FROM match;
-        RETURN v_cursor;
-END;
-
-FUNCTION getParameters RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT * FROM parameters;
-        RETURN v_cursor;
-END;
-
--- ======================================== DELETE ========================================
-
-PROCEDURE deletePhoto(pIdPhoto IN NUMBER)
-IS
 BEGIN
-    DELETE FROM photo
-    WHERE id_photo = pIdPhoto;
-END;
+    OPEN v_cursor FOR
+        SELECT af.id_adoption,
+               af.notes,
+               af.adoption_date,
+               af."reference",
+               af.id_adopter,
+               af.id_pet
+        FROM   adoption_form af
+        ORDER  BY af.adoption_date DESC;
+    RETURN v_cursor;
+END getAdoptionForm;
 
-PROCEDURE deleteRating(pIdRating IN NUMBER)
-IS
+-- ?????????????????????????????????????????????????????????????
+
+FUNCTION getAdoptionFormById(pIdAdoption IN NUMBER) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
 BEGIN
-    DELETE FROM rating
-    WHERE id_rating = pIdRating;
-END;
+    OPEN v_cursor FOR
+        SELECT af.id_adoption,
+               af.notes,
+               af.adoption_date,
+               af."reference",
+               af.id_adopter,
+               af.id_pet
+        FROM   adoption_form af
+        WHERE  af.id_adoption = pIdAdoption;
+    RETURN v_cursor;
+END getAdoptionFormById;
+
+--  ===============================================================
+
+FUNCTION getAdoptionsByPet(pIdPet IN NUMBER) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT af.id_adoption,
+               af.notes,
+               af.adoption_date,
+               af."reference",
+               af.id_adopter,
+               af.id_pet
+        FROM   adoption_form af
+        WHERE  af.id_pet = pIdPet
+        ORDER  BY af.adoption_date DESC;
+    RETURN v_cursor;
+END getAdoptionsByPet;
+
+--  ===============================================================
+
+FUNCTION getAdoptionsByAdopter(pIdAdopter IN NUMBER) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT af.id_adoption,
+               af.notes,
+               af.adoption_date,
+               af."reference",
+               af.id_adopter,
+               af.id_pet
+        FROM   adoption_form af
+        WHERE  af.id_adopter = pIdAdopter
+        ORDER  BY af.adoption_date DESC;
+    RETURN v_cursor;
+END getAdoptionsByAdopter;
+
+--  ===============================================================
+
+FUNCTION getPhoto RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM photo;
+    RETURN v_cursor;
+END getPhoto;
+
+FUNCTION getRating RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM rating;
+    RETURN v_cursor;
+END getRating;
+
+FUNCTION getMatch RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM match;
+    RETURN v_cursor;
+END getMatch;
+
+FUNCTION getParameters RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM parameters;
+    RETURN v_cursor;
+END getParameters;
+
+
+--  ===============================================================
+--  DELETE
+-- ===============================================================
+
+PROCEDURE deleteAdoptionForm(pIdAdoption IN NUMBER) IS
+BEGIN
+    DELETE FROM adoption_form
+    WHERE  id_adoption = pIdAdoption;
+    COMMIT;
+END deleteAdoptionForm;
+
+--  ===============================================================
+
+PROCEDURE deletePhoto(pIdPhoto IN NUMBER) IS
+BEGIN
+    DELETE FROM photo WHERE id_photo = pIdPhoto;
+    COMMIT;
+END deletePhoto;
+
+PROCEDURE deleteRating(pIdRating IN NUMBER) IS
+BEGIN
+    DELETE FROM rating WHERE id_rating = pIdRating;
+    COMMIT;
+END deleteRating;
+
 
 END adminAdoptionMatch;
+/
