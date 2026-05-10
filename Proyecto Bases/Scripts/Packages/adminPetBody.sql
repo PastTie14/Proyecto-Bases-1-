@@ -3,16 +3,16 @@ CREATE OR REPLACE PACKAGE BODY adminPet AS
 FUNCTION insertPet(pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,
                                        pEmail IN VARCHAR2, pIdStatus IN NUMBER, pIdRace IN NUMBER, 
-                                       pIdSize IN NUMBER, pIdRescuer IN NUMBER, pIdCribHouse IN NUMBER,
+                                       pIdSize IN NUMBER, pIdUser IN NUMBER, pIdCribHouse IN NUMBER,
                                        pIdDistrict IN NUMBER)
 RETURN NUMBER
 AS
     n_pet_id NUMBER(8);
 BEGIN
     INSERT INTO pet (id_pet, picture, first_name, birth_date,
-                    date_lost, date_found, email, id_status, id_race, id_rescuer, id_size, id_crib_house, id_district)
+                    date_lost, date_found, email, id_status, id_race, id_size, id_user,  id_crib_house, id_district)
     VALUES(s_pet.nextVal, pPicture, pFirstName, pBirthDate, pDateLost, pDateFound, 
-            pEmail, pIdStatus, pIdRace, pIdRescuer, pIdSize, pIdCribHouse, pIdDistrict);
+            pEmail, pIdStatus, pIdRace, pIdSize, pIdUser, pIdCribHouse, pIdDistrict);
     COMMIT;
     SELECT s_pet.CURRVAL INTO n_pet_id FROM DUAL;
     RETURN (n_pet_id); 
@@ -182,7 +182,7 @@ BEGIN
         LEFT JOIN ENERGY_LEVEL d
         ON c.id_energy_level = d.id_energy_level
         LEFT JOIN "user" e
-        ON a.id_rescuer = e.id_user
+        ON a.id_user = e.id_user
         LEFT JOIN "size" f
         ON a.id_size = f.id_size
         LEFT JOIN TRAINING_EASE g
@@ -222,7 +222,7 @@ BEGIN
         LEFT JOIN ENERGY_LEVEL d
         ON c.id_energy_level = d.id_energy_level
         LEFT JOIN "user" e
-        ON a.id_rescuer = e.id_user
+        ON a.id_user = e.id_user
         LEFT JOIN "size" f
         ON a.id_size = f.id_size
         LEFT JOIN TRAINING_EASE g

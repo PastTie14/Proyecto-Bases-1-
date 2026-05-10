@@ -289,26 +289,27 @@ public class Pet extends DBItem {
 
     public static int insert(String picture, String firstName, String birthdate,
                              String dateLost, String dateFound, String email,
-                             int idStatus, int idPetRace, int idRescuer, int idSize) {
+                             int idStatus, int idPetRace, int idSize, int idRescuer, int idDistrict) {
         final String sql =
-            "BEGIN ? := adminPet.insertPet(?,?,?,TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),?,?,?,?,?); END;";
+            "BEGIN ? := adminPet.insertPet(?,?,TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),?,?,?,?,?,?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
             st.registerOutParameter(1, OracleTypes.NUMERIC);
-            st.setInt   (2,  0);
-            st.setString(3,  picture);
-            st.setString(4,  firstName);
-            st.setString(5,  birthdate);
+            st.setString(2,  picture);
+            st.setString(3,  firstName);
+            st.setString(4,  birthdate);
             if (dateLost != null && !dateLost.isBlank())
-                st.setString(6, dateLost);
+                st.setString(5, dateLost);
             else
-                st.setNull(6, OracleTypes.VARCHAR);
-            st.setString(7,  dateFound);
-            st.setString(8,  email);
-            st.setInt   (9,  idStatus);
-            st.setInt   (10, idPetRace);
+                st.setNull(5, OracleTypes.VARCHAR);
+            st.setString(6,  dateFound);
+            st.setString(7,  email);
+            st.setInt   (8,  idStatus);
+            st.setInt   (9,  idPetRace);
+            st.setInt   (10, idSize);
             st.setInt   (11, idRescuer);
-            st.setInt   (12, idSize);
+            st.setInt   (12, 37);
+            st.setInt   (13, idDistrict);
             st.execute();
             return st.getInt(1);
         } catch (SQLException ex) {

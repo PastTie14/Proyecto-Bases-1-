@@ -204,9 +204,10 @@ public class PetFormPanel extends JPanel {
         loadCombo(TrainingEase.getAll(),  trainingMap,      trainingEase,  1, 2);
         loadCombo(CurrentStatus.getAll(), currentStatusMap, currentStatus, 1, 2);
         loadCombo(Size.getAll(),          sizeMap,          size,          1, 2);
-        canton.setOptions("—");
-        distrito.setOptions("—");
-        race.setOptions("—");
+        loadCombo(Canton.getAll(),      cantonMap,     canton,     1, 2);
+        loadCombo(District.getAll(),      distritoMap,     distrito,     1, 2);
+        loadCombo(Race.getAll(),      raceMap,     race,     1, 2);
+
     }
  
     private void loadCombo(ResultSet rs,
@@ -401,9 +402,11 @@ public class PetFormPanel extends JPanel {
             dateFound.getValue(),
             email.getValue(),
             idStatus,
-            idRace,   
-            idUser,
-            idSize
+            idRace,
+            idSize,
+            idUser, 
+            idDistrito/*, // rescuer
+            idCribHouse*/
         );
  
         if (idPet <= 0) {
@@ -415,7 +418,6 @@ public class PetFormPanel extends JPanel {
  
         // ── Relaciones básicas de la mascota ──────────────────────
         if (idColor    > 0) PetXColor.insert(idPet, idColor);
-        if (idDistrito > 0) PetXDistrict.insert(idPet, idDistrito);
  
         ArrayList<String> petPhoneValues = petPhones.getValues();
         if (!petPhoneValues.isEmpty()) {
