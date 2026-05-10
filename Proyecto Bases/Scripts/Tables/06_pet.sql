@@ -24,7 +24,7 @@ CREATE TABLE pet
     id_size     NUMBER(8),
     id_status   NUMBER(4),
     id_race     NUMBER(4),
-    id_rescuer  NUMBER(8),
+    id_user  NUMBER(8),
     id_crib_house NUMBER(8),
     id_district NUMBER(8)
 )
@@ -74,8 +74,8 @@ ALTER TABLE pet
     FOREIGN KEY (id_race) REFERENCES race (id_race);
 
 ALTER TABLE pet
-    ADD CONSTRAINT fk_pet_rescuer
-    FOREIGN KEY (id_rescuer) REFERENCES rescuer (id_user);
+    ADD CONSTRAINT fk_pet_user
+    FOREIGN KEY (id_user) REFERENCES "user" (id_user);
     
 ALTER TABLE pet
     ADD CONSTRAINT fk_pet_crib_house
@@ -131,7 +131,7 @@ COMMENT ON COLUMN pet.id_race
 IS 'Foreign key, references the race of the pet';
 
 COMMENT ON COLUMN pet.id_rescuer
-IS 'Foreign key, references the rescuer who found the pet';
+IS 'Foreign key, references the user who registers the pet';
 
 COMMENT ON COLUMN pet.id_crib_house
 IS 'Foreign key, references the crib house that takes care of the pet';
