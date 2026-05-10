@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY adminConsult AS
-/*
+
 FUNCTION getDonations(pStartDate IN DATE, pEndDate IN DATE, pIdDonor IN NUMBER, 
                         pIdAssociation IN NUMBER) RETURN SYS_REFCURSOR
 IS
@@ -23,7 +23,7 @@ IS
 
         RETURN v_cursor;
     END;
-*/
+
 FUNCTION getBlackListReport RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
@@ -119,7 +119,7 @@ IS
     v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT cb.id_user, cb."name", cb.requires_donations, pt."name", COUNT(1) OVER () FROM crib_house cb
+        SELECT cb.id_user, cb."name", u.email, cb.requires_donations, pt."name", s."name", COUNT(1) OVER () FROM crib_house cb
         
         INNER JOIN pet_type_x_crib_house ptxcb
         ON cb.id_user = ptxcb.id_crib_house
@@ -127,9 +127,18 @@ IS
         INNER JOIN pet_type pt
         ON ptxcb.id_pet_type = pt.id_pet_type
         
+        INNER JOIN "user" u
+        ON cb.id_user = u.id_user
+        
+        INNER JOIN size_x_crib_house sxcb
+        ON cb.id_user = sxcb.id_crib_house
+        
+        INNER JOIN "size" s
+        ON sxcb.id_size = s.id_size
+        
         WHERE pt.id_pet_type = NVL(pIdPetType, pt.id_pet_type)
         
-        GROUP BY cb.id_user, cb."name", cb.requires_donations, pt."name"
+        GROUP BY cb.id_user, cb."name", u.email, cb.requires_donations, pt."name", s."name"
         ORDER BY cb.id_user;
         
         RETURN v_cursor;

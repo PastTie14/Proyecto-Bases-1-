@@ -1,6 +1,6 @@
 -- ============================================================
 -- FILE 04 - FINANCIAL
--- Tables: donation, donation_x_user
+-- Tables: donation
 -- Depends on: currency (01), user (02)
 -- ============================================================
 

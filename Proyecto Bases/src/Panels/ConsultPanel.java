@@ -390,8 +390,8 @@ public class ConsultPanel extends JPanel {
                 );
                 columns = new String[]{
                     "ID Casa Cuna", "Nombre", "Email",
-                    "Requiere Donaciones", "Tamaño Aceptado",
-                    "Tamaños Aceptados", "Total Registros"
+                    "Requiere Donaciones", "Mascota Aceptada",
+                    "Tamaño Aceptado", "Total Registros"
                 };
                 break;
 
