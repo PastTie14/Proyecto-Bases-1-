@@ -18,13 +18,15 @@ BEGIN
     RETURN (n_pet_id); 
 END insertPet;
 
-PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
-                        pRegistrationDate IN DATE, pIdPet IN NUMBER)
+FUNCTION insertIdChip(pChipNumber IN VARCHAR2,
+                        pRegistrationDate IN DATE, pIdPet IN NUMBER) 
+RETURN NUMBER
 IS 
 BEGIN
     INSERT INTO identification_chip (id_chip, chip_number, registration_date, id_pet)
     VALUES(s_identificationChip.nextVal, pChipNumber, pRegistrationDate, pIdPet);
     COMMIT;
+    RETURN s_identificationChip.CURRVAL; 
 END insertIdChip;
 
 PROCEDURE insertPetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER)

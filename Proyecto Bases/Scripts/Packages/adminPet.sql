@@ -7,8 +7,8 @@ FUNCTION insertPet(pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                                        pIdSize IN NUMBER, pIdUser IN NUMBER, pIdCribHouse IN NUMBER,
                                        pIdDistrict IN NUMBER) RETURN NUMBER;
                                        
-PROCEDURE insertIdChip(pIdChip IN NUMBER, pChipNumber IN VARCHAR2,
-                        pRegistrationDate IN DATE, pIdPet IN NUMBER);
+FUNCTION insertIdChip(pChipNumber IN VARCHAR2,
+                        pRegistrationDate IN DATE, pIdPet IN NUMBER) RETURN NUMBER;
 PROCEDURE insertPetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER);
 
 PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER);

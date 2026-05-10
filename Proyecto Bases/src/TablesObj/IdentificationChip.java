@@ -64,7 +64,7 @@ public class IdentificationChip extends DBItem {
     public static void insert(int idChip, String chipNumber, String registrationDate, int idPet) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement stmt = con.prepareCall("{ CALL adminPet.insertIdentificationChip(?, ?, ?, ?) }");
+            CallableStatement stmt = con.prepareCall("BEGIN ?:= adminPet.insertIdChip(?, ?, ?); END;");
             stmt.setInt(1, idChip);
             stmt.setString(2, chipNumber);
             stmt.setString(3, registrationDate);
