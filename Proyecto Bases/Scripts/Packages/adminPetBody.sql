@@ -101,6 +101,15 @@ BEGIN
     Return v_cursor;
 END;
 
+FUNCTION getPetByRescuer(pIdUser IN NUMBER) RETURN SYS_REFCURSOR
+IS 
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM pet
+    WHERE id_user= pIdUser;
+    Return v_cursor;
+END;
+
 
 FUNCTION getIdChip RETURN SYS_REFCURSOR
 IS
