@@ -3,12 +3,16 @@ package Panels;
 import Components.Format;
 import TablesObj.Adopter;
 import TablesObj.BlackList;
+import TablesObj.UserXBlackList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import oracle.net.aso.e;
  
 
 public class BlackListPanel extends JPanel {
@@ -19,6 +23,8 @@ public class BlackListPanel extends JPanel {
  
     public int idBanned;
  
+    public int idBlacklistRow;
+    
     public int idBlacklist;
     
     public int idUser;
@@ -45,7 +51,8 @@ public class BlackListPanel extends JPanel {
  
     public BlackListPanel(int idUser) {
         this.idUser = idUser;
-        this.idBlacklist = BlackList.getBlackListId(idBanned);
+        this.idBlacklist = BlackList.getBlackListId(idUser);
+        idBlacklistRow = 0;
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
         add(buildCenter(),  BorderLayout.CENTER);
@@ -171,17 +178,63 @@ public class BlackListPanel extends JPanel {
                 refreshStatusLabel();
             }
         });
- 
+        
         tblBlacklist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = tblBlacklist.getSelectedRow();
                 if (row == -1) return;
                 Object val = tblBlacklist.getValueAt(row, 0);
-                idBlacklist = parseId(val);
+                idBlacklistRow = parseId(val);
                 refreshStatusLabel();
             }
         });
+        
+        btnAgregar.addActionListener(e -> {
+            onAgregarClicked(); 
+        });
+        
+        btnEliminar.addActionListener(e -> {
+            onEliminarClicked(); 
+        });
+        
+        btnActualizar.addActionListener(e -> {
+            onActualizarClicked(); 
+        });
+        
+    }
+    
+    private void onAgregarClicked(){
+        String reason = txaRazon.getText();
+        if(reason.isBlank()){
+            if(idBanned>0 && idBlacklist>0){
+                UserXBlackList.insert(reason, idBanned, idBlacklist);
+            }else
+                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+        }else
+            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+    }
+    
+    private void onEliminarClicked(){
+        String reason = txaRazon.getText();
+        if(reason.isBlank()){
+            if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
+                UserXBlackList.delete(idBlacklist , idBanned);
+            }else
+                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+        }else
+            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+    }
+    
+    private void onActualizarClicked(){
+        String reason = txaRazon.getText();
+        if(reason.isBlank()){
+            if(idBlacklist > 0 && idBanned>0 && idBanned!=idBlacklist){
+                UserXBlackList.update(reason,idBanned,idBlacklist  );
+            }else
+                JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
+        }else
+            JOptionPane.showConfirmDialog(null, "Por favor seleccione un usuario para colocar en la BlackList");
     }
  
     // ════════════════════════════════════════════════════════════════

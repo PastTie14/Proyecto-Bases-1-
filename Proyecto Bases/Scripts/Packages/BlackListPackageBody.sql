@@ -18,6 +18,18 @@ BEGIN
     COMMIT;
 END;
 
+-- ===================================== UPDATE ========================================
+
+PROCEDURE updateUserXBlackList (pReason IN VARCHAR2, pIdUser IN NUMBER, pIdReport IN NUMBER)
+IS
+BEGIN
+UPDATE user_x_black_list
+    SET reason = NVL(pReason,Reason)
+    WHERE pIdUser = id_user AND pIdReport = id_report;
+    COMMIT;
+END;
+
+
 -- ======================================== GET ========================================
 
 FUNCTION getBlackList RETURN SYS_REFCURSOR

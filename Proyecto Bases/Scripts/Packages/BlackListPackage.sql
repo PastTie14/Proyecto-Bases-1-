@@ -4,6 +4,9 @@ CREATE OR REPLACE PACKAGE adminBlackList IS
 PROCEDURE insertBlackList(pIdUser IN NUMBER);
 PROCEDURE insertUserXBlackList(pReason IN VARCHAR2, pIdUser IN NUMBER, pIdReport IN NUMBER);
 
+-- UPDATE
+PROCEDURE updateUserXBlackList (pReason IN VARCHAR2, pIdUser IN NUMBER, pIdReport IN NUMBER);
+
 -- GET
 FUNCTION getBlackList RETURN SYS_REFCURSOR;
 FUNCTION getBlackListId (pIdUser IN VARCHAR2) RETURN NUMBER;

@@ -263,8 +263,6 @@ public class PetPopup extends JDialog {
                 adoptBtn.setText("Adoptar");
                 footer.add(adoptBtn);
             }
-
-            
         return footer;
     }
  

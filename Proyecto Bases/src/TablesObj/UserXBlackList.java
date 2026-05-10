@@ -46,6 +46,17 @@ public class UserXBlackList extends DBItem {
             stmt.execute();
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
+    
+    public static void update(String reason, int idUser, int idReport){
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminBlackList.updateUserXBlackList(?, ?, ?) }");
+            stmt.setString(1, reason);
+            stmt.setInt(2, idUser);
+            stmt.setInt(3, idReport);
+            stmt.execute();
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 
     // ── DBItem — no aplica para tablas intermedias ────────────────
     @Override public ResultSet getItem()  { throw new UnsupportedOperationException("Junction table — use getAll()."); }
