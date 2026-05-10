@@ -45,7 +45,7 @@ BEGIN
 END;
  
 PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
-                    pCurrentValue VARCHAR2, pIdUser IN NUMBER)
+                    pCurrentValue VARCHAR2)
 IS 
 BEGIN
     INSERT INTO "log" (id_log, changeDate, changeBy, tableName, fieldName, previousValue, currentValue)
