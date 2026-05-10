@@ -93,10 +93,19 @@ public class Province extends DBItem {
             data = null;
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
-
-    @Override
-    public void deleteItem() { throw new UnsupportedOperationException("No delete SP for Province."); }
+    
+    public void deleteItem(int selectedId) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.deleteProvince(?) }");
+            stmt.setInt(1, selectedId);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 
     @Override
     public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+    
 }

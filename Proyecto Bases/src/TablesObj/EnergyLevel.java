@@ -94,9 +94,18 @@ public class EnergyLevel extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
 
-    @Override
-    public void deleteItem() { throw new UnsupportedOperationException("No delete SP for EnergyLevel."); }
+    public void deleteItem(int selectedId) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminPetExtraInfo.deleteEnergyLevel(?) }");
+            stmt.setInt(1, selectedId);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 
     @Override
     public void updateItem() { throw new UnsupportedOperationException("Use updateItem(...) with parameters."); }
+
+    
 }

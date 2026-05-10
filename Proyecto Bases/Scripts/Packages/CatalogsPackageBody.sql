@@ -156,7 +156,124 @@ create or replace PACKAGE BODY adminCatalogs AS
         WHERE  id_value_type = p_id_value_type;
         COMMIT;
     END;
+    
+    PROCEDURE updateSize(p_id_size IN NUMBER, p_name VARCHAR2) IS
+    BEGIN
+        UPDATE "size"
+        SET    "name" = p_name
+        WHERE  id_size = p_id_size;
 
+        COMMIT;
+    END;
+
+    PROCEDURE updateSizeXCribHouse(
+        p_id_size IN NUMBER,
+        p_old_crib_house IN NUMBER,
+        p_new_crib_house IN NUMBER
+    ) IS
+    BEGIN
+        UPDATE size_x_crib_house
+        SET    id_crib_house = p_new_crib_house
+        WHERE  id_size = p_id_size
+        AND    id_crib_house = p_old_crib_house;
+
+        COMMIT;
+    END;
+
+
+    -- ==================== DELETE ====================
+
+    PROCEDURE deleteCurrency(p_id_currency IN NUMBER) IS
+    BEGIN
+        DELETE FROM currency
+        WHERE id_currency = p_id_currency;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteProvince(p_id_province IN NUMBER) IS
+    BEGIN
+        DELETE FROM province
+        WHERE id_province = p_id_province;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteCanton(p_id_canton IN NUMBER) IS
+    BEGIN
+        DELETE FROM canton
+        WHERE id_canton = p_id_canton;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteDistrict(p_id_district IN NUMBER) IS
+    BEGIN
+        DELETE FROM district
+        WHERE id_district = p_id_district;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deletePetType(p_id_pet_type IN NUMBER) IS
+    BEGIN
+        DELETE FROM pet_type
+        WHERE id_pet_type = p_id_pet_type;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteRace(p_id_race IN NUMBER) IS
+    BEGIN
+        DELETE FROM race
+        WHERE id_race = p_id_race;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteStatus(p_id_status IN NUMBER) IS
+    BEGIN
+        DELETE FROM status
+        WHERE id_status = p_id_status;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteColor(p_id_color IN NUMBER) IS
+    BEGIN
+        DELETE FROM color
+        WHERE id_color = p_id_color;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteValueType(p_id_value_type IN NUMBER) IS
+    BEGIN
+        DELETE FROM value_type
+        WHERE id_value_type = p_id_value_type;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteSize(p_id_size IN NUMBER) IS
+    BEGIN
+        DELETE FROM "size"
+        WHERE id_size = p_id_size;
+
+        COMMIT;
+    END;
+
+    PROCEDURE deleteSizeXCribHouse(
+        p_id_size IN NUMBER,
+        p_id_crib_house IN NUMBER
+    ) IS
+    BEGIN
+        DELETE FROM size_x_crib_house
+        WHERE id_size = p_id_size
+        AND   id_crib_house = p_id_crib_house;
+
+        COMMIT;
+    END;
 
     -- ==================== GET ====================
 

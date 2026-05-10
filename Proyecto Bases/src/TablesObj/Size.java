@@ -104,6 +104,27 @@ public class Size extends DBItem {
             LOG.log(Level.SEVERE, "Error al insertar Size name=" + name, ex);
         }
     }
+    
+    public void updateItem(int idSize, String name) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.updateSize(?, ?) }");
+            stmt.setInt(1, idSize);
+            stmt.setString(2, name);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
+    
+    public void deleteItem(int idSize){
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement stmt = con.prepareCall("{ CALL adminCatalogs.deleteSize(?) }");
+            stmt.setInt(1, idSize);
+            stmt.execute();
+            data = null;
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+    }
 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — INSTANCIA
@@ -124,13 +145,6 @@ public class Size extends DBItem {
         }
         return null;
     }
-
-    // adminCatalogs no expone updateSize ni deleteSize en el paquete actual
-    @Override
-    public void deleteItem() {
-        throw new UnsupportedOperationException("deleteSize no está implementado en adminCatalogs.");
-    }
-
     @Override
     public void updateItem() {
         throw new UnsupportedOperationException("updateSize no está implementado en adminCatalogs.");
