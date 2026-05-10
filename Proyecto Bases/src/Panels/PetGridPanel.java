@@ -1,5 +1,8 @@
-package Components;
+package Panels;
  
+import Components.FormComboBox;
+import Components.Format;
+import Components.PetCard;
 import TablesObj.Pet;
 import TablesObj.Status;
 import javax.swing.*;
@@ -26,6 +29,7 @@ public class PetGridPanel extends JPanel {
     private final ArrayList<PetCard> cards;
     private final JScrollPane        scrollPane;
     private final JPanel             grid;
+    private final int                idUser;
  
     /** Mapa ordenado: label visible → id_status (-1 = All). */
     private final LinkedHashMap<String, Integer> statusMap = new LinkedHashMap<>();
@@ -34,18 +38,47 @@ public class PetGridPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTORES
     // ─────────────────────────────────────────────────────────────
- 
-    /**
-     * Constructor sin argumentos: carga todas las mascotas desde la BD.
-     */
-    public PetGridPanel() {
-        this(loadPetsByStatusId(1)); // carga inicial con status 1
+
+    public PetGridPanel(int idUser) {
+        this(loadPetsByStatusId(1));
     }
- 
     
     public PetGridPanel(ArrayList<Pet> pets) {
         this.pets  = new ArrayList<>(pets);
         this.cards = new ArrayList<>();
+        this.idUser  = 0;
+ 
+        setLayout(new BorderLayout());
+        setBackground(Format.COLOR_BG);
+ 
+        // ── Panel de filtros ──────────────────────────────────────
+        statusCombo = buildStatusCombo();
+        JPanel filterBar = buildFilterBar(statusCombo);
+        add(filterBar, BorderLayout.NORTH);
+ 
+        // ── Grid de tarjetas ──────────────────────────────────────
+        grid = new JPanel(new WrapLayout(FlowLayout.LEFT, H_GAP, V_GAP));
+        grid.setBackground(Format.COLOR_BG);
+        grid.setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
+ 
+        buildCards();
+ 
+        scrollPane = new JScrollPane(grid);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBackground(Format.COLOR_BG);
+        scrollPane.getViewport().setBackground(Format.COLOR_BG);
+ 
+        add(scrollPane, BorderLayout.CENTER);
+    }
+ 
+    
+    public PetGridPanel(ArrayList<Pet> pets, int idUser) {
+        this.pets  = new ArrayList<>(pets);
+        this.cards = new ArrayList<>();
+        this.idUser  = idUser;
  
         setLayout(new BorderLayout());
         setBackground(Format.COLOR_BG);
@@ -143,7 +176,7 @@ public class PetGridPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
  
 
-    private static ArrayList<Pet> loadPetsByStatusId(int statusId) {
+    public static ArrayList<Pet> loadPetsByStatusId(int statusId) {
         ArrayList<Pet> list = new ArrayList<>();
         try {
             ResultSet rs = Pet.getAllPetsByStatus(statusId);
@@ -184,7 +217,7 @@ public class PetGridPanel extends JPanel {
         cards.clear();
  
         for (Pet pet : pets) {
-            PetCard card = new PetCard(pet);
+            PetCard card = new PetCard(pet, idUser);
             cards.add(card);
             grid.add(card);
         }

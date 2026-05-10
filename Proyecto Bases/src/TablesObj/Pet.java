@@ -61,7 +61,7 @@ public class Pet extends DBItem {
     public String getDateFound() { loadData(); return get(5); }
     public String getEmail()     { loadData(); return get(6); }
     public int    getIdStatus()  { loadData(); return getInt(7); }
-    public int    getIdPetType() { loadData(); return getInt(8); }
+    public int    getIdPetRace() { loadData(); return getInt(8); }
     public int    getIdRescuer() { loadData(); return getInt(9); }
     public String getPetType()   { loadData(); return get(2); }
     public String getStatus()    { loadData(); return get(7); }
@@ -256,10 +256,40 @@ public class Pet extends DBItem {
             if (con  != null) try { con.close();  } catch (SQLException e) { e.printStackTrace(); }
         }
     }
+    
+    public  void petFound(int pIdPet) {
+        Connection con = null;
+        CallableStatement stmt = null;
+        try {
+            con = DriverManager.getConnection(host, uName, uPass);
+            con.setAutoCommit(false);
+            stmt = con.prepareCall("{ CALL adminPet.petFound(?) }");
+            stmt.setInt(1, pIdPet);
+            stmt.execute();
+            con.commit();
+            data = null;
+        } catch (Exception e) {
+            if (con != null) try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        } 
+    }
+    
+    public static ResultSet getByRescuer(int idUser) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(
+                    "BEGIN ? := adminPet.getPetByRescuer(?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, idUser);
+            st.execute();
+            return (ResultSet) st.getObject(1);
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return null;
+    }
 
     public static int insert(String picture, String firstName, String birthdate,
                              String dateLost, String dateFound, String email,
-                             int idStatus, int idPetType, int idRescuer, int idSize) {
+                             int idStatus, int idPetRace, int idRescuer, int idSize) {
         final String sql =
             "BEGIN ? := adminPet.insertPet(?,?,?,TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),?,?,?,?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -276,7 +306,7 @@ public class Pet extends DBItem {
             st.setString(7,  dateFound);
             st.setString(8,  email);
             st.setInt   (9,  idStatus);
-            st.setInt   (10, idPetType);
+            st.setInt   (10, idPetRace);
             st.setInt   (11, idRescuer);
             st.setInt   (12, idSize);
             st.execute();

@@ -1,5 +1,6 @@
-package Components;
+package Panels;
  
+import Components.Format;
 import TablesObj.Adopter;
 import TablesObj.BlackList;
 import javax.swing.*;

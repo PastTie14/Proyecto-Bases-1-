@@ -121,17 +121,6 @@ public class PhoneNumber extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, "Error en fetchNumbers: " + sql, ex); }
         return list;
     }
-
-    /**
-     * Inserta un número de teléfono.
-     * Pasa 0 en idUser / idPet / idVeterinarian para dejar el campo como NULL.
-     *
-     * @param idPhone         ID del teléfono (0 = sin asignar, la BD puede usar secuencia).
-     * @param number          Número telefónico.
-     * @param idUser          ID del usuario propietario (0 = NULL).
-     * @param idPet           ID de la mascota propietaria (0 = NULL).
-     * @param idVeterinarian  ID del veterinario propietario (0 = NULL).
-     */
     public static void insert(int idPhone, long number,
                               int idUser, int idPet, int idVeterinarian) {
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -166,6 +155,18 @@ public class PhoneNumber extends DBItem {
             try {
                 long num = Long.parseLong(raw.trim());
                 insert(0, num, 0, idPet, 0);
+            } catch (NumberFormatException e) {
+                LOG.log(Level.WARNING, "Número de teléfono no válido: " + raw, e);
+            }
+        }
+    }
+    
+    public static void insertForVeterinarian(int idVet, ArrayList<String> numbers) {
+        for (String raw : numbers) {
+            if (raw == null || raw.isBlank()) continue;
+            try {
+                long num = Long.parseLong(raw.trim());
+                insert(0, num, 0, 0, idVet);
             } catch (NumberFormatException e) {
                 LOG.log(Level.WARNING, "Número de teléfono no válido: " + raw, e);
             }

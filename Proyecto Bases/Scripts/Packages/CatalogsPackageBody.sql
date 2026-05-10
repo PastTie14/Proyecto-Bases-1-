@@ -269,6 +269,17 @@ create or replace PACKAGE BODY adminCatalogs AS
         RETURN v_cursor;
     END;
     
+    FUNCTION getRaceByPetType(p_id_pet_type IN NUMBER) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id_race, "name", id_pet_type
+              FROM race
+             WHERE id_pet_type = p_id_pet_type
+             ORDER BY "name";
+        RETURN v_cursor;
+    END getRaceByPetType;
+    
 
     FUNCTION getStatus RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;

@@ -41,6 +41,7 @@ create or replace PACKAGE adminCatalogs IS
     
     FUNCTION getRace RETURN SYS_REFCURSOR;
     FUNCTION getRaceById(pIdRace IN NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getRaceByPetType(p_id_pet_type IN NUMBER) RETURN SYS_REFCURSOR;
     
     FUNCTION getStatus RETURN SYS_REFCURSOR;
     FUNCTION getStatusById(pIdStatus IN NUMBER) RETURN SYS_REFCURSOR;

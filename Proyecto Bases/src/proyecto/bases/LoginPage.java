@@ -3,6 +3,10 @@ package proyecto.bases;
 import Components.Format;
 import Components.mainWindow;
 import Connect.DBConnection;
+import TablesObj.Adopter;
+import TablesObj.Association;
+import TablesObj.CribHouse;
+import TablesObj.Rescuer;
 //import Components.mainWindow;
 
 import javax.swing.*;
@@ -152,15 +156,42 @@ public class LoginPage {
 
         try {
             // Llama al stored procedure de login.
-            // Se espera que devuelva una fila si las credenciales son correctas,
-            // o un ResultSet vacío si no coinciden.
+            // Luego busca el nivel de acceso del usuario
             int id = DBConnection.login(email, pass);
+            
+            
 
-            if (id != 0 && id>=1) {
+            if (Rescuer.getRescuerByID(id)) {
+                System.out.println("RESCUER");
                 frame.dispose();
-                mainWindow win = new mainWindow(id);
+                mainWindowRescuer win = new mainWindowRescuer(id);
                 win.setVisible(true);
-            } else {
+                return;
+            }
+            if (Adopter.getAdopterByID(id)){
+                System.out.println("ADOPTER");
+                frame.dispose();
+                mainWindowAdopter win = new mainWindowAdopter(id);
+                win.setVisible(true);
+                return;
+            }
+            
+            if(CribHouse.getCribHouseByID(id)){
+                System.out.println("CRIB");
+                frame.dispose();
+                mainWindowCrib win = new mainWindowCrib(id);
+                win.setVisible(true);
+                return;
+            }
+            if(Association.getAssociationById(id)){
+                System.out.println("CRIB");
+                frame.dispose();
+                mainWindowAsociation win = new mainWindowAsociation(id);
+                win.setVisible(true);
+                return;
+            }
+            else {
+                
                 JOptionPane.showMessageDialog(frame,
                     "Email o contraseña incorrectos.",
                     "Acceso denegado", JOptionPane.WARNING_MESSAGE);

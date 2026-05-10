@@ -5,67 +5,75 @@ PROCEDURE insertTreatment(pIdTreatment IN NUMBER, pName IN VARCHAR2,
 IS 
 BEGIN
     INSERT INTO treatment (id_treatment, "name", dose)
-    VALUES(s_treatment.nextVal, pName, pDose);
+    VALUES(pIdTreatment, pName, pDose);
     COMMIT;
 END insertTreatment;
 
 --=======================================================================================
 
-PROCEDURE insertDisease(pIdDisease IN NUMBER, pName IN VARCHAR2)
-IS 
-BEGIN
-    INSERT INTO disease (id_disease, "name")
-    VALUES(s_disease.nextVal, pName);
-    COMMIT;
-END insertDisease;
+FUNCTION insertDisease(pName IN VARCHAR2) RETURN NUMBER IS
+    BEGIN
+        INSERT INTO disease (id_disease, "name")
+        VALUES (s_disease.NEXTVAL, pName);
+        COMMIT;
+        RETURN s_disease.CURRVAL;
+    END insertDisease;
 
 --=======================================================================================
+
 
 PROCEDURE insertMedicSheet(pIdMedicSheet IN NUMBER, pAbandonmentDescription IN VARCHAR2,
                             pIdVeterinarian IN NUMBER, pIdPetExtraInfo IN NUMBER)
 IS 
 BEGIN
     INSERT INTO medic_sheet (id_medic_sheet, abandonment_description, id_veterinarian, id_pet_extra_info)
-    VALUES(s_medicSheet.nextVal, pAbandonmentDescription, pIdVeterinarian, pIdPetExtraInfo);
+    VALUES(pIdMedicSheet, pAbandonmentDescription, pIdVeterinarian, pIdPetExtraInfo);
     COMMIT;
 END insertMedicSheet;
 
+FUNCTION insertTreatment(pName IN VARCHAR2, pDose IN VARCHAR2) RETURN NUMBER IS
+    BEGIN
+        INSERT INTO treatment (id_treatment, "name", dose)
+        VALUES (s_treatment.NEXTVAL, pName, pDose);
+        COMMIT;
+        RETURN s_treatment.CURRVAL;
+    END insertTreatment;
+
+FUNCTION insertMedicSheetF(pAbandonmentDesc IN VARCHAR2,
+                               pIdVeterinarian  IN NUMBER,
+                               pIdPetExtraInfo  IN NUMBER) RETURN NUMBER IS
+    BEGIN
+        INSERT INTO medic_sheet (id_medic_sheet, abandonment_description,
+                                 id_veterinarian, id_pet_extra_info)
+        VALUES (s_medicSheet.NEXTVAL, pAbandonmentDesc,
+                NULLIF(pIdVeterinarian, 0), pIdPetExtraInfo);
+        COMMIT;
+        RETURN s_medicSheet.CURRVAL;
+    END insertMedicSheetF;
+    
+
 --=======================================================================================
 
-FUNCTION insertar_veterinario (
-    p_id_veterinarian   IN NUMBER,
-    p_first_name        IN VARCHAR2,
-    p_second_name       IN VARCHAR2,
-    p_first_surname     IN VARCHAR2,
-    p_second_surname    IN VARCHAR2,
-    p_clinic_name       IN VARCHAR2
-) RETURN NUMBER
-IS
-BEGIN
-    INSERT INTO veterinarian (
-        id_veterinarian,
-        first_name,
-        second_name,
-        first_surname,
-        second_surname,
-        clinic_name,
-        created_at,
-        created_by
-    ) VALUES (
-        s_veterinarian.nextVal,
-        p_first_name,
-        p_second_name,
-        p_first_surname,
-        p_second_surname,
-        p_clinic_name,
-        SYSDATE,
-        USER
-    );
-
-    COMMIT;
-
-    RETURN s_veterinarian.currVal;
-END;
+FUNCTION insertVeterinarian(
+        p_first_name     IN VARCHAR2,
+        p_second_name    IN VARCHAR2,
+        p_first_surname  IN VARCHAR2,
+        p_second_surname IN VARCHAR2,
+        p_clinic_name    IN VARCHAR2
+    ) RETURN NUMBER IS
+    BEGIN
+        INSERT INTO veterinarian (
+            id_veterinarian, first_name, second_name,
+            first_surname, second_surname, clinic_name
+        ) VALUES (
+            s_veterinarian.NEXTVAL,
+            p_first_name, p_second_name,
+            p_first_surname, p_second_surname,
+            p_clinic_name
+        );
+        COMMIT;
+        RETURN s_veterinarian.CURRVAL;
+    END insertVeterinarian;
 
 --=======================================================================================
 

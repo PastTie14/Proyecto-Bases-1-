@@ -54,6 +54,7 @@ public class AdopterFormPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
 
     private void prefill() {
+
         User    u = new User(idUser);
         Adopter a = new Adopter(idUser);
 
@@ -113,7 +114,7 @@ public class AdopterFormPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────
 
     public boolean buildAndSave() {
-        // ── Validaciones mínimas ──────────────────────────────────
+        // ── Validaciones mínimas ──────────────────────────────────        
         if (email.getValue().isBlank() || firstName.getValue().isBlank()
                 || firstSurname.getValue().isBlank()) {
             JOptionPane.showMessageDialog(this,

@@ -1,5 +1,6 @@
 package Components;
  
+import TablesObj.Bounty;
 import TablesObj.MedicSheet;
 import TablesObj.Pet;
  
@@ -58,15 +59,17 @@ public class PetPopup extends JDialog {
     private final ArrayList<ArrayList<String>> medicArr;
     private BufferedImage           image;
     private JPanel                  imagePanel;
+    private final int               idUser;
  
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTOR
     // ─────────────────────────────────────────────────────────────
  
-    public PetPopup(Frame parent, Pet pet) {
+    public PetPopup(Frame parent, Pet pet, int idUser) {
         super(parent, true);
         this.pet = pet;
         this.rs  = Pet.getPopupItem(pet.getId()); 
+        this.idUser  = idUser;
         medicArr = MedicSheet.getMedicalData(pet.getId());
  
         setUndecorated(true);
@@ -234,8 +237,8 @@ public class PetPopup extends JDialog {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 16, 12));
         footer.setBackground(Format.COLOR_BG);
         footer.setBorder(Format.borderDivider());
- 
-        JButton adoptBtn = new JButton("Adoptar") {
+       
+        JButton adoptBtn = new JButton() {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 Format.enableAntiAlias(g2);
@@ -252,7 +255,16 @@ public class PetPopup extends JDialog {
         adoptBtn.setPreferredSize(new Dimension(120, 36));
         adoptBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         adoptBtn.addActionListener(e -> onAdoptClicked());
-        footer.add(adoptBtn);
+        if (pet.getIdStatus() == 1){
+            adoptBtn.setText("Reclamar Recompensa");
+            footer.add(adoptBtn);
+        }else if (pet.getIdStatus() == 2){}
+        else{
+                adoptBtn.setText("Adoptar");
+                footer.add(adoptBtn);
+            }
+
+            
         return footer;
     }
  
@@ -261,7 +273,27 @@ public class PetPopup extends JDialog {
     // ─────────────────────────────────────────────────────────────
  
     protected void onAdoptClicked() {
-        // TODO: implementar lógica de adopción
+        //1 -> Perdido
+        if(pet.getIdStatus() == 1){
+            int idBounty = Bounty.getBountyPetId(pet.getId());
+            Bounty bounty = new Bounty(idBounty);
+            if (bounty.getAmount() > 0){
+                BountyDonationDialog dialog = new BountyDonationDialog(null, pet, idBounty, bounty.getIdCurrency(), idUser);
+                dialog.setAlwaysOnTop(true);
+                dialog.setVisible(true);
+            }
+            
+        }
+        //2 -> Encontrado
+        if(pet.getIdStatus() == 2){
+            
+        }
+        else{
+            AdoptionFormDialog dialog = new AdoptionFormDialog(null, idUser, pet.getId());
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+        }
+        
     }
  
     // ─────────────────────────────────────────────────────────────

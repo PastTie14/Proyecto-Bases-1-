@@ -53,6 +53,32 @@ public class AdoptionForm extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return null;
     }
+    
+    public static ResultSet getByPet(int idPet) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(
+                    "BEGIN ? := adminAdoptionMatch.getAdoptionFormByPet(?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, idPet);
+            st.execute();
+            return (ResultSet) st.getObject(1);
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return null;
+    }
+    
+    public static ResultSet getByRescuer(int idRescuer) {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(
+                    "BEGIN ? := adminAdoptionMatch.getAdoptionsByRescuer(?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, idRescuer);
+            st.execute();
+            return (ResultSet) st.getObject(1);
+        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return null;
+    }
 
     public static void insert(int id, String notes, String adoptionDate,
                                String reference, int idAdopter, int idPet) {

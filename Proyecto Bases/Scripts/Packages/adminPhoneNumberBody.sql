@@ -8,7 +8,7 @@ PROCEDURE insertPhoneNumber(pIdPhone IN NUMBER, pNumber IN NUMBER,
 AS 
 BEGIN
     INSERT INTO phone_number (id_phone, "number", id_user, id_pet, id_veterinarian)
-    VALUES(pIdPhone, pNumber, pIdUser, pIdPet, pIdVeterinarian);
+    VALUES(s_phoneNumber.nextVal, pNumber, pIdUser, pIdPet, pIdVeterinarian);
     COMMIT;
 END;
 

@@ -1,10 +1,12 @@
-package Components;
+package proyecto.bases;
 
+import Panels.PetGridPanel;
 import Panels.BlackListPanel;
 import Panels.ConsultPanel;
-import Panels.StatsPanel;
+import Panels.CribHouseFormPanel;
+import Components.MenuItem;
 import Panels.SideMenuPanel;
-import Panels.PetGridPanel;
+import Panels.StatsPanel;
 import Panels.PetSearchPanel;
 import Panels.PetFormPanel;
 import javax.swing.*;
@@ -12,20 +14,21 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class mainWindow extends JFrame {
+public class mainWindowCrib extends JFrame {
 
     private int idUser;
     private JPanel content;
     private JLabel placeholder;
 
-    private PetGridPanel petGrid;
     private PetFormPanel petForm;
     private PetSearchPanel petSearch;
     private ConsultPanel consult;
     private BlackListPanel blackList;
     private StatsPanel stats;
+    private CribHouseFormPanel config;
+    
 
-    public mainWindow(int idUser) {
+    public mainWindowCrib(int idUser) {
         this.idUser = idUser;
         initUI();
     }
@@ -56,11 +59,12 @@ public class mainWindow extends JFrame {
     }
 
     private void initComponents() {
-        petGrid = new PetGridPanel(PetGridPanel.loadPetsByStatusId(1),idUser);
         petForm = new PetFormPanel(idUser);
         petSearch = new PetSearchPanel();
         blackList = new BlackListPanel(idUser);
         stats = new StatsPanel();
+        consult = new ConsultPanel();
+        config = new CribHouseFormPanel(idUser);
         List<MenuItem> items = createMenuItems();
 
         SideMenuPanel menu = new SideMenuPanel(items);
@@ -111,16 +115,13 @@ public class mainWindow extends JFrame {
                 public void show() { setContent(blackList);}
             },
             new MenuItem() {
-                public String getName() { return "Adoptar"; }
-                public void show() { setContent(petGrid); }
-            },
-            new MenuItem() {
                 public String getName() { return "Da en adopción"; }
                 public void show() { setContent(petForm); }
             },
-            createPlaceholderItem("Donar", "💜  Donar"),
-            createPlaceholderItem("Dar Rating", "⭐  Dar Rating"),
-            createPlaceholderItem("Ver casas refugio", "🏡  Ver casas refugio")
+            new MenuItem() {
+                public String getName() { return "Configuración"; }
+                public void show() { setContent(config); }
+            }
         );
     }
 

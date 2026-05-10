@@ -1,5 +1,5 @@
 package TablesObj;
-
+ 
 import static Connect.DBConnection.host;
 import static Connect.DBConnection.uName;
 import static Connect.DBConnection.uPass;
@@ -8,16 +8,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.*;
 import oracle.jdbc.OracleTypes;
-
-
+ 
 public class MedicSheet extends DBItem {
-
+ 
     private static final Logger LOG = Logger.getLogger(MedicSheet.class.getName());
     private final int id;
     private ArrayList<String> data;
-
+ 
     public MedicSheet(int id) { this.id = id; }
-
+ 
     private void loadData() {
         if (data != null) return;
         data = new ArrayList<>();
@@ -29,15 +28,32 @@ public class MedicSheet extends DBItem {
             }
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
     }
-
-    private String get(int i)  { return (data != null && i < data.size()) ? data.get(i) : null; }
-    private int getInt(int i)  { String v = get(i); if (v == null) return 0; try { return Integer.parseInt(v); } catch (NumberFormatException e) { return 0; } }
-
-    public int    getId()                      { return id; }
-    public String getAbandonmentDescription()  { loadData(); return get(1); }
-    public int    getIdVeterinarian()          { loadData(); return getInt(2); }
-    public int    getIdPetExtraInfo()          { loadData(); return getInt(3); }
-
+ 
+    private String get(int i) { return (data != null && i < data.size()) ? data.get(i) : null; }
+    public int    getId()             { return id; }
+    public String getAbandonDesc()    { loadData(); return get(1); }
+    public int    getIdVeterinarian() { loadData(); String v = get(2); return v != null ? Integer.parseInt(v) : 0; }
+    public int    getIdPetExtraInfo() { loadData(); String v = get(3); return v != null ? Integer.parseInt(v) : 0; }
+ 
+    // ── Static ────────────────────────────────────────────────────
+ 
+    public static int insert(int pIdMedicSheet, String pAbandonDesc,
+                             int pIdVeterinarian, int pIdPetExtraInfo) {
+        try (Connection con = DriverManager.getConnection(host, uName, uPass);
+             CallableStatement st = con.prepareCall(
+                     "BEGIN ? := adminMedical.insertMedicSheetF(?,?,?); END;")) {
+            st.registerOutParameter(1, OracleTypes.NUMERIC);
+            st.setString(2, pAbandonDesc);
+            st.setInt   (3, pIdVeterinarian); 
+            st.setInt   (4, pIdPetExtraInfo);
+            st.execute();
+            return st.getInt(1);
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error en insertMedicSheetF", ex);
+        }
+        return -1;
+    }
+ 
     public static ResultSet getAll() {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -49,18 +65,16 @@ public class MedicSheet extends DBItem {
         return null;
     }
     
-   
-   public static ArrayList<ArrayList<String>> getMedicalData(int idPet) {
+    public static ArrayList<ArrayList<String>> getMedicalData(int idPet) {
         ArrayList<String> diseases   = new ArrayList<>();
         ArrayList<String> treatments = new ArrayList<>();
         ArrayList<String> doses      = new ArrayList<>();
 
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
-            // ✅ (?) añadido para recibir el parámetro idPet
             CallableStatement stmt = con.prepareCall("BEGIN ? := adminMedical.getDiseasesAndTreatments(?); END;");
             stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setInt(2, idPet);   // ahora sí existe el índice 2
+            stmt.setInt(2, idPet);   
             stmt.execute();
 
             ResultSet rs = (ResultSet) stmt.getObject(1);
@@ -85,28 +99,25 @@ public class MedicSheet extends DBItem {
         result.add(doses);       
         return result;
     }
-
-
-    public static void insert(int id, String abandonDesc, int idVet, int idPetExtraInfo) {
-        try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ CALL adminMedical.insertMedicSheet(?,?,?,?) }")) {
-            st.setInt(1, id); st.setString(2, abandonDesc);
-            st.setInt(3, idVet); st.setInt(4, idPetExtraInfo);
+ 
+    // ── Instance ──────────────────────────────────────────────────
+ 
+    @Override
+    public ResultSet getItem() {
+        try {
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            CallableStatement st = con.prepareCall(
+                    "BEGIN ? := adminMedical.getMedicSheetById(?); END;");
+            st.registerOutParameter(1, OracleTypes.CURSOR);
+            st.setInt(2, id);
             st.execute();
+            return (ResultSet) st.getObject(1);
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
+        return null;
     }
-
-    public void update(String abandonDesc, int idVet, int idPetExtraInfo) {
-        try (Connection con = DriverManager.getConnection(host, uName, uPass);
-             CallableStatement st = con.prepareCall("{ CALL adminMedical.updateMedicSheet(?,?,?,?) }")) {
-            con.setAutoCommit(false);
-            st.setInt(1, id); st.setString(2, abandonDesc);
-            st.setInt(3, idVet); st.setInt(4, idPetExtraInfo);
-            st.execute(); con.commit(); data = null;
-        } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
-    }
-
-    @Override public ResultSet getItem() { return getAll(); }
-    @Override public void deleteItem()   { throw new UnsupportedOperationException(); }
-    @Override public void updateItem()   { throw new UnsupportedOperationException(); }
+    
+     
+ 
+    @Override public void deleteItem() { throw new UnsupportedOperationException(); }
+    @Override public void updateItem() { throw new UnsupportedOperationException(); }
 }
