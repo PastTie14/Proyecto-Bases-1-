@@ -1,6 +1,7 @@
 package Components;
 
 import TablesObj.AdoptionForm;
+import TablesObj.Pet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -214,16 +215,17 @@ public class AdoptionFormDialog extends JDialog {
         }
 
         // Formato básico de fecha
-        if (!dateVal.matches("\\d{4}-\\d{2}-\\d{2}")) {
+        if (!dateVal.matches("\\d{2}-\\d{2}-\\d{4}")) {
             SwingUtilities.invokeLater(() ->
                 JOptionPane.showMessageDialog(this,
-                    "Formato de fecha inválido. Usa YYYY-MM-DD.",
+                    "Formato de fecha inválido. Usa DD-MM-YYYY.",
                     "Formato inválido", JOptionPane.WARNING_MESSAGE));
             return false;
         }
 
         // ── Persistencia ──────────────────────────────────────────
         try {
+            new Pet(idPet).adoptar(idAdopter, 3);
             AdoptionForm.insert(
                 notes.getValue(),           // notas (puede estar vacío)
                 dateVal,                    // fecha de adopción

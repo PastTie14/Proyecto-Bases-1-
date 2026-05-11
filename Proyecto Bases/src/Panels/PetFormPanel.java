@@ -476,9 +476,7 @@ public class PetFormPanel extends JPanel {
         // ── Validación de campos obligatorios ─────────────────────
         if (pictureUrl.getValue().isBlank() ||
             petName.getValue().isBlank()    ||
-            birthdate.getValue().isBlank()  ||
-            email.getValue().isBlank()      ||
-            dateFound.getValue().isBlank()) {
+            email.getValue().isBlank()) {
             JOptionPane.showMessageDialog(this,
                 "Completa los campos obligatorios: imagen, nombre, fecha de nacimiento, email y fecha de encuentro.",
                 "Campos requeridos", JOptionPane.WARNING_MESSAGE);
@@ -511,8 +509,7 @@ public class PetFormPanel extends JPanel {
             idRace,
             idSize,
             idUser, 
-            idDistrito/*, // rescuer
-            idCribHouse*/
+            idDistrito
         );
  
         if (idPet <= 0) {
