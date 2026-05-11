@@ -11,7 +11,7 @@
 CREATE TABLE pet
 (
     id_pet      NUMBER(8),
-    picture     VARCHAR2(200),
+    picture     VARCHAR2(500),
     first_name  VARCHAR2(50),
     birth_date  DATE,
     date_lost   DATE,
