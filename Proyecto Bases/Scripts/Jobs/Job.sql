@@ -3,7 +3,8 @@ DBMS_SCHEDULER.CREATE_SCHEDULE (
     schedule_name => 'schedule_jobs',
     start_date => TRUNC(SYSDATE),
     repeat_interval => 'FREQ=HOURLY;
-                        INTERVAL=' || TRUNC(hours_job) || ';'
+                        INTERVAL=' || TRUNC(4) || ';',
+    end_date => TRUNC(TO_DATE('12/05/2026', 'DD-MM-YYYY'))
 );
 DBMS_SCHEDULER.CREATE_JOB
 (
@@ -39,6 +40,6 @@ DBMS_SCHEDULER.CREATE_JOB
       AND m2.id_match IS NULL;
 END;',
     schedule_name => 'schedule_jobs',
-    enabled = false
+    enabled => true
 );
 END;

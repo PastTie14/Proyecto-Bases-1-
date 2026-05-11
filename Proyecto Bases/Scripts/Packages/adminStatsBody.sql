@@ -76,7 +76,7 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
-            AND s.id_status = 1
+            AND s.id_status = 4
             
             GROUP BY s.status_type, pt."name", r."name"
             
@@ -95,7 +95,7 @@ FUNCTION getAdoptedVSUnadopted(pIdType IN NUMBER, pIdRace IN NUMBER) RETURN SYS_
             
             WHERE pt.id_pet_type = NVL(pIdType, pt.id_pet_type)
             AND r.id_race = NVL(pIdRace, r.id_race)
-            AND s.id_status = 2
+            AND s.id_status = 3
             
             GROUP BY s.status_type, pt."name", r."name";
         RETURN v_cursor;

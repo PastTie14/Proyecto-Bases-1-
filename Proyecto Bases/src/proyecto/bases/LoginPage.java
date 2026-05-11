@@ -162,14 +162,12 @@ public class LoginPage {
             
 
             if (Rescuer.getRescuerByID(id)) {
-                System.out.println("RESCUER");
                 frame.dispose();
                 mainWindowRescuer win = new mainWindowRescuer(id);
                 win.setVisible(true);
                 return;
             }
             if (Adopter.getAdopterByID(id)){
-                System.out.println("ADOPTER");
                 frame.dispose();
                 mainWindowAdopter win = new mainWindowAdopter(id);
                 win.setVisible(true);
@@ -177,14 +175,12 @@ public class LoginPage {
             }
             
             if(CribHouse.getCribHouseByID(id)){
-                System.out.println("CRIB");
                 frame.dispose();
                 mainWindowCrib win = new mainWindowCrib(id);
                 win.setVisible(true);
                 return;
             }
             if(Association.getAssociationById(id)){
-                System.out.println("CRIB");
                 frame.dispose();
                 mainWindowAsociation win = new mainWindowAsociation(id);
                 win.setVisible(true);

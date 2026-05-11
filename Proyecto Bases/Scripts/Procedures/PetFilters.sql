@@ -8,7 +8,7 @@ BEGIN
     OPEN petCursor FOR
         SELECT DISTINCT ic.id_chip, d."name", ca."name",
                         pr."name", s.status_type, pt."name",
-                        r.id_race, p.id_adopter, co.id_color, p.createdat
+                        r."name", p.id_user, co."name", p.createdat
         FROM pet p
         LEFT JOIN identification_chip ic
         ON p.id_pet = ic.id_pet
@@ -44,7 +44,7 @@ BEGIN
         AND   (pIdStatus   IS NULL OR s.id_status     = pIdStatus)
         AND   (pIdPetType  IS NULL OR pt.id_pet_type   = pIdPetType)
         AND   (pIdRace     IS NULL OR r.id_race       = pIdRace)
-        AND   (pIdRescuer  IS NULL OR p.id_adopter = pIdRescuer)
+        AND   (pIdRescuer  IS NULL OR p.id_user = pIdRescuer)
         AND   (pIdColor    IS NULL OR co.id_color     = pIdColor)
         ORDER BY p.createdAt;
 END getPetFilters;
