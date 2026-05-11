@@ -207,12 +207,15 @@ public class BountyDonationDialog extends JDialog {
             @Override
             protected Boolean doInBackground() {
                 ArrayList<String> rs = Pet.getPopupItem(pet.getId());
-                return Donation.insertDonationTransaction(
+                boolean res = Donation.insertDonationTransaction(
                         bountyAmount, 
                         selectedType == 'A' ? selectedId : 0,  // idAssociation
+                        bountyIdCurrency,
                         selectedType == 'C' ? selectedId : 0,  // idCribHouse 
-                        bountyIdCurrency, idAdopter, pet
+                        idAdopter
                 );
+                pet.adoptar(idAdopter, 5);
+                return res;
 
                 
             }

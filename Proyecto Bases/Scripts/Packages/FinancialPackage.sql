@@ -1,7 +1,7 @@
 CREATE OR REPLACE PACKAGE adminFinancial IS
 
 -- INSERT
-PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, 
+PROCEDURE insertDonation(pAmount IN NUMBER, pIdAssociation IN NUMBER, 
                             pIdCurrency IN NUMBER, pIdCribHouse IN NUMBER, pIdDonnor IN NUMBER);
 
 -- GET

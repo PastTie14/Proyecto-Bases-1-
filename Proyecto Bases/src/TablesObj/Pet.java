@@ -321,9 +321,7 @@ public class Pet extends DBItem {
             if (con  != null) try { con.close();  } catch (SQLException e) { e.printStackTrace(); }
         }
     }
-    
-    //TODO: completar bindings — actualmente solo bindea id (pos 1) y status (pos 8),
-    // los parámetros 2-7 quedan sin valor y causarán error en Oracle.
+
     public void adoptar(int idUser, int pIdStatus) {
         Connection con = null;
         CallableStatement stmt = null;

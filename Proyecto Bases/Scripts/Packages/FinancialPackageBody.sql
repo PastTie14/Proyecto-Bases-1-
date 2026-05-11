@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY adminFinancial AS
 
 -- ======================================== INSERT ========================================
 
-PROCEDURE insertDonation(pIdDonation IN NUMBER, pAmount IN NUMBER, pIdAssociation IN NUMBER, 
+PROCEDURE insertDonation(pAmount IN NUMBER, pIdAssociation IN NUMBER, 
                             pIdCurrency IN NUMBER, pIdCribHouse IN NUMBER, pIdDonnor IN NUMBER)
 IS 
 BEGIN
