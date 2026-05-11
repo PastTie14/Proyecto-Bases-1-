@@ -18,6 +18,16 @@ BEGIN
     RETURN (n_pet_id); 
 END insertPet;
 
+PROCEDURE adoptPet(pIdUser IN NUMBER, pIdStatus IN NUMBER, pIdPet IN NUMBER)
+IS 
+BEGIN
+    UPDATE pet 
+    SET id_adopter = pIdUser, id_Status = pIdStatus
+    WHERE pIdPet = id_pet;
+    COMMIT;
+END;
+
+
 FUNCTION insertIdChip(pChipNumber IN VARCHAR2,
                         pRegistrationDate IN DATE, pIdPet IN NUMBER) 
 RETURN NUMBER

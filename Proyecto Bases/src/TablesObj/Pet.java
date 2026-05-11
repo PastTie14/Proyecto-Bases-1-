@@ -322,15 +322,16 @@ public class Pet extends DBItem {
         }
     }
 
-    public void adoptar(int idUser, int pIdStatus) {
+    public void changePetStatus(int idUser, int pIdStatus, int idPet) {
         Connection con = null;
         CallableStatement stmt = null;
         try {
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
-            stmt = con.prepareCall("{ CALL adminPet.adoptarPet(?, ?) }");
+            stmt = con.prepareCall("{ CALL adminPet.adoptPet(?, ?, ?) }");
             stmt.setInt(1, id);
             stmt.setInt(2, pIdStatus);
+            stmt.setInt(3, idPet);
             stmt.execute();
             con.commit();
             data = null;

@@ -214,7 +214,7 @@ public class BountyDonationDialog extends JDialog {
                         selectedType == 'C' ? selectedId : 0,  // idCribHouse 
                         idAdopter
                 );
-                pet.adoptar(idAdopter, 5);
+                pet.changePetStatus(idAdopter, 5, pet.getId());
                 return res;
 
                 

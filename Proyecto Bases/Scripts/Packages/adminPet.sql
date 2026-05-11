@@ -13,6 +13,8 @@ PROCEDURE insertPetXColor(pIdPet IN NUMBER, pIdColor IN NUMBER);
 
 PROCEDURE insertPetTypeXCribHouse(pIdPetType IN NUMBER, pIdCribHouse IN NUMBER);
 
+PROCEDURE adoptPet(pIdUser IN NUMBER, pIdStatus IN NUMBER, pIdPet IN NUMBER);
+
 -- UPDATE
 PROCEDURE updatePet(pIdPet IN NUMBER, pPicture IN VARCHAR2, pFirstName IN VARCHAR2,
                     pBirthDate IN DATE, pDateLost IN DATE, pDateFound IN DATE,

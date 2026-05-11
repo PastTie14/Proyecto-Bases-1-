@@ -225,7 +225,7 @@ public class AdoptionFormDialog extends JDialog {
 
         // ── Persistencia ──────────────────────────────────────────
         try {
-            new Pet(idPet).adoptar(idAdopter, 3);
+            new Pet(idPet).changePetStatus(idAdopter, 3,idPet);
             AdoptionForm.insert(
                 notes.getValue(),           // notas (puede estar vacío)
                 dateVal,                    // fecha de adopción
