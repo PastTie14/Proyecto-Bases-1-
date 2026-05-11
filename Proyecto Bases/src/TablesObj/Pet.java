@@ -377,7 +377,7 @@ public class Pet extends DBItem {
                              String dateLost, String dateFound, String email,
                              int idStatus, int idPetRace, int idSize, int idRescuer, int idDistrict) {
         final String sql =
-            "BEGIN ? := adminPet.insertPet(?,?,TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),TO_DATE(?,'YYYY-MM-DD'),?,?,?,?,?,?,?); END;";
+            "BEGIN ? := adminPet.insertPet(?,?,TO_DATE(?,'DD-MM-YYYY'),TO_DATE(?,'DD-MM-YYYY'),TO_DATE(?,'DD-MM-YYYY'),?,?,?,?,?,?,?); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
             st.registerOutParameter(1, OracleTypes.NUMERIC);

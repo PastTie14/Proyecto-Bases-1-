@@ -111,7 +111,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             INNER JOIN status s
             ON p.id_status = s.id_status
             
-            WHERE s.id_status = 2
+            WHERE s.id_status = 3
             AND TRUNC((SYSDATE - p.birth_date) / 365) BETWEEN 0 AND 1
             
             UNION
@@ -122,7 +122,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             INNER JOIN status s
             ON p.id_status = s.id_status
             
-            WHERE s.id_status = 2
+            WHERE s.id_status = 3
             AND TRUNC((SYSDATE - p.birth_date) / 365) BETWEEN 1 AND 5
             
             UNION
@@ -133,7 +133,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             INNER JOIN status s
             ON p.id_status = s.id_status
             
-            WHERE s.id_status = 2
+            WHERE s.id_status = 3
             AND TRUNC((SYSDATE - p.birth_date) / 365) BETWEEN 5 AND 9
             
             UNION
@@ -144,7 +144,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             INNER JOIN status s
             ON p.id_status = s.id_status
             
-            WHERE s.id_status = 2
+            WHERE s.id_status = 3
             AND TRUNC((SYSDATE - p.birth_date) / 365) BETWEEN 10 AND 12
             
             UNION
@@ -155,7 +155,7 @@ FUNCTION getUnadoptedPetsByAgeRange RETURN SYS_REFCURSOR IS
             INNER JOIN status s
             ON p.id_status = s.id_status
             
-            WHERE s.id_status = 2
+            WHERE s.id_status = 3
             AND TRUNC((SYSDATE - p.birth_date) / 365) > 12;
         RETURN v_cursor;
     END;

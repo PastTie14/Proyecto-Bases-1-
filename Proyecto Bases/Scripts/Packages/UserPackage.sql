@@ -7,7 +7,7 @@ PROCEDURE insertAdopter(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARC
 PROCEDURE insertRescuer(pIdUser IN NUMBER, pFirstName VARCHAR2, pSecondName VARCHAR2, pFirstSurname VARCHAR2, pSecondSurname VARCHAR2);
 PROCEDURE insertCribHouse(pIdUser IN NUMBER, pName VARCHAR2, pRequiresDonations IN NUMBER);
 PROCEDURE insertLog(pIdLog IN NUMBER, pChangeDate DATE, pChangeBy VARCHAR2, pTableName VARCHAR2, pFieldName VARCHAR2, pPreviousValue VARCHAR2,
-                    pCurrentValue VARCHAR2, pIdUser IN NUMBER);
+                    pCurrentValue VARCHAR2);
 
 -- UPDATE
 PROCEDURE updateUser(pIdUser IN NUMBER, pEmail IN VARCHAR2, pPassword IN VARCHAR2);

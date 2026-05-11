@@ -38,10 +38,10 @@ public class PetFormPanel extends JPanel {
  
     private final FormField      petName    = new FormField("Nombre de la mascota");
     private final FormField      pictureUrl = new FormField("URL de imagen");
-    private final FormField      birthdate  = new FormField("Fecha de nacimiento (YYYY-MM-DD)");
+    private final FormField      birthdate  = new FormField("Fecha de nacimiento (DD-MM-YYYY)");
     private final FormField      email      = new FormField("Email de contacto");
-    private final FormField      dateLost   = new FormField("Fecha de pérdida (opcional, YYYY-MM-DD)");
-    private final FormField      dateFound  = new FormField("Fecha de encuentro (YYYY-MM-DD)");
+    private final FormField      dateLost   = new FormField("Fecha de pérdida (opcional, DD-MM-YYYY)");
+    private final FormField      dateFound  = new FormField("Fecha de encuentro (DD-MM-YYYY)");
     private final FormField      chipId     = new FormField("Número de chip (opcional)");
     private final FormComboBox   status     = new FormComboBox("Estado");
     private final FormComboBox   petType    = new FormComboBox("Tipo de mascota");

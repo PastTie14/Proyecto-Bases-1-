@@ -22,7 +22,7 @@ IS
         AND d.id_association = NVL(pIdAssociation, d.id_association)
         
         GROUP BY d.amount, u.email, d.createdAt, a."name"
-        ORDER BY d.amount;
+        ORDER BY d.amount DESC;
 
         RETURN v_cursor;
     END;
@@ -183,7 +183,8 @@ FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN
             FROM
             -- selects from rescuer
             (
-            SELECT r.id_user, u.email, r.first_name, r.second_name, r.first_surname, r.second_surname, COUNT(p.id_pet) AS rescues_count 
+            SELECT r.id_user, u.email, r.first_name, r.second_name, 
+                    r.first_surname, r.second_surname, COUNT(p.id_pet) AS rescues_count 
             FROM rescuer r
                 
             INNER JOIN pet p
@@ -198,7 +199,8 @@ FUNCTION getBestRescuersAndAdopters(pStartDate IN DATE, pEndDate IN DATE) RETURN
             FULL OUTER JOIN -- outer join for all combinations
             -- selects from adopter
             (
-            SELECT a.id_user, u.email, a.first_name, a.second_name, a.first_surname, a.second_surname, COUNT(af.id_pet) AS adoptions_count 
+            SELECT a.id_user, u.email, a.first_name, a.second_name, 
+                    a.first_surname, a.second_surname, COUNT(af.id_pet) AS adoptions_count 
             FROM adopter a
             
             INNER JOIN adoption_form af
