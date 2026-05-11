@@ -23,10 +23,8 @@ public class MyPetPopup extends PetPopup {
         this.pet    = pet;
         this.idUser = idUser;
         this.owner  = owner;
-
-        if (pet.getIdStatus() != STATUS_ADOPTED) {
-            injectEditButton();
-        }
+        injectEditButton();
+        
     }
 
     // ─────────────────────────────────────────────────────────────
