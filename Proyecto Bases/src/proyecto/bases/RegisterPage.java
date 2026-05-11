@@ -35,6 +35,7 @@ public class RegisterPage {
     private final JCheckBox donationsCheckBox = buildCheckBox("Necesita donaciones");
     private final JPasswordField tfPass  = buildPasswordField();
     private final JTextField tfEmail  = buildTextField();
+    private final JTextField tfPhone  = buildTextField();
 
     private final JButton btnRegistrar  = buildPrimaryButton("Registrarse");
     private final JButton btnIrALogin   = buildLinkButton("¿Ya tenés cuenta? Iniciá sesión");
@@ -211,6 +212,9 @@ public class RegisterPage {
         current+= 2;
             
         addFormField(current, "Contraseña", tfPass, true);
+        current+= 2;
+        
+        addFormField(current, "Número de teléfono", tfPhone, true);
         
         // updates the window
         form.revalidate();
@@ -451,6 +455,7 @@ public class RegisterPage {
     private void registrar() {
         String pass   = new String(tfPass.getPassword()).trim();
         String email  = tfEmail.getText().trim();
+        String number = tfPhone.getText().trim();
         
         // they share attributes
         if (comboBoxUsers.getSelectedItem().equals("Adoptante") || comboBoxUsers.getSelectedItem().equals("Rescatista")) {
@@ -471,10 +476,10 @@ public class RegisterPage {
         try {
             
             if (comboBoxUsers.getSelectedItem().equals("Adoptante"))
-                DBConnection.insertAdopter(email, pass, firstName, secondName, firstSurname, secondSurname);
+                DBConnection.insertAdopter(email, pass, firstName, secondName, firstSurname, secondSurname, number);
 
             if (comboBoxUsers.getSelectedItem().equals("Rescatista"))
-                DBConnection.insertRescuer(email, pass, firstName, secondName, firstSurname, secondSurname);
+                DBConnection.insertRescuer(email, pass, firstName, secondName, firstSurname, secondSurname, number);
                     
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
@@ -504,7 +509,7 @@ public class RegisterPage {
 
         try {
             
-            DBConnection.insertAssociation(email, pass, name);
+            DBConnection.insertAssociation(email, pass, name, number);
                     
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
@@ -550,7 +555,7 @@ public class RegisterPage {
                 return;
             }
             
-            DBConnection.insertCribHouse(email, pass, name, requiresDonations, selectedPetTypes, selectedSizes);
+            DBConnection.insertCribHouse(email, pass, name, requiresDonations, selectedPetTypes, selectedSizes, number);
                     
             JOptionPane.showMessageDialog(frame,
                 "Cuenta creada correctamente. Podés iniciar sesión.",
