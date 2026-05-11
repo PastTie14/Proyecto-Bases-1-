@@ -389,13 +389,15 @@ public class DBConnection {
             stmt.setString(3, password);
             stmt.execute();
             
-            Long userId = stmt.getLong(1);
+            int userId = stmt.getInt(1);
             stmt = con.prepareCall("{ CALL adminUser.insertAssociation(?, ?)}");
             stmt.setLong(1, userId);
             stmt.setString(2, name);
             
             stmt.execute();
             con.commit();
+            BlackList.insert((int) userId);
+
 
         } catch (Exception e) {
             // Revertir si algo falla
@@ -409,6 +411,7 @@ public class DBConnection {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
             if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
+        
     }
     
     public static void insertCribHouse(String email, String password, String name, int requiresDonations,
