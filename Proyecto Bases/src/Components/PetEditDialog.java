@@ -1,8 +1,9 @@
-package Panels;
+package Components;
 
 import Components.Format;
 import Components.FormComboBox;
 import Components.FormField;
+import Panels.MyPetsPanel;
 import TablesObj.Pet;
 import TablesObj.PetExtraInfo;
 import TablesObj.Status;
@@ -166,7 +167,7 @@ public class PetEditDialog extends JDialog {
     private void prefillFields() {
         fldName     .setValue(nvl(pet.getFirstName()));
         fldPicture  .setValue(nvl(pet.getPicture()));
-        fldBirthdate.setValue(nvl(pet.getBirthdate()));
+        fldBirthdate.setValue( (nvl(pet.getBirthdate())));
         fldDateLost .setValue(nvl(pet.getDateLost()));
         fldDateFound.setValue(nvl(pet.getDateFound()));
         fldEmail    .setValue(nvl(pet.getEmail()));

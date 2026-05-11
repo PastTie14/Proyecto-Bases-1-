@@ -1,7 +1,6 @@
 package Components;
 
 import Panels.MyPetsPanel;
-import Panels.PetEditDialog;
 import TablesObj.Pet;
 
 import javax.swing.*;

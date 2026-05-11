@@ -1,38 +1,39 @@
 package TablesObj;
-
+ 
 import static Connect.DBConnection.host;
 import static Connect.DBConnection.uName;
 import static Connect.DBConnection.uPass;
 import Connect.DBItem;
-
+ 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-
+ 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
-
+ 
 public class Pet extends DBItem {
-
+ 
     private static final Logger LOG = Logger.getLogger(Pet.class.getName());
-
+ 
     private final int id;
     private ArrayList<String> data;
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  CONSTRUCTOR
     // ─────────────────────────────────────────────────────────────
-
+ 
     public Pet(int id) {
         this.id = id;
     }
-
+ 
     private void loadData() {
         if (data != null) return;
         data = new ArrayList<>();
@@ -48,7 +49,7 @@ public class Pet extends DBItem {
             LOG.log(Level.SEVERE, "Error al cargar datos de Pet id=" + id, ex);
         }
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  GETTERS
     // ─────────────────────────────────────────────────────────────
@@ -72,35 +73,31 @@ public class Pet extends DBItem {
     //  16  | id_current_user   | Se refiere al user el cual posee la mascota actualmente
     //  17  | id_district       |
     
-
-    public int    getId()        { return id; }
-    public String getPicture()   { loadData(); return get(2); }
-    public String getFirstName() { loadData(); return get(3); }
-    public String getBirthdate() { loadData(); return get(4); }
-    public String getDateLost()  { loadData(); return get(5); }
-    public String getDateFound() { loadData(); return get(6); }
-    public String getEmail()     { loadData(); return get(7); }
  
-    public int    getIdSize()  { loadData(); return getInt(12); }
-    public int    getIdStatus()  { loadData(); return getInt(13); }
-    public int    getIdPetRace() { loadData(); return getInt(14); }
-    public int    getIdUser() { loadData(); return getInt(15); }
-    public int    getIdCurrentUser() { loadData(); return getInt(16); }
-    public int    getIdDistrict() { loadData(); return getInt(17); }
-
-    public String getPetType()   { loadData(); return get(2); }
-    public String getStatus()    { loadData(); return get(7); }
-
+    public int    getId()        { return id; }
+    public String getPicture()   { loadData(); return get(1); }
+    public String getFirstName() { loadData(); return get(2); }
+    public String getBirthdate() { loadData(); return normalizeDate(get(3)); }
+    public String getDateLost()  { loadData(); return normalizeDate(get(4)); }
+    public String getDateFound() { loadData(); return normalizeDate(get(5)); }
+    public String getEmail()     { loadData(); return get(6); } 
+    public int    getIdSize()        { loadData(); return getInt(11); }
+    public int    getIdStatus()      { loadData(); return getInt(12); }
+    public int    getIdPetRace()     { loadData(); return getInt(13); }
+    public int    getIdUser()        { loadData(); return getInt(14); }
+    public int    getIdCurrentUser() { loadData(); return getInt(15); }
+    public int    getIdDistrict()    { loadData(); return getInt(16); }
+ 
     public PetExtraInfo getExtraInfo() { return new PetExtraInfo(id); }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  HELPERS INTERNOS
     // ─────────────────────────────────────────────────────────────
-
+ 
     private String get(int index) {
         return (data != null && index < data.size()) ? data.get(index) : null;
     }
-
+ 
     private int getInt(int index) {
         String val = get(index);
         if (val == null) return 0;
@@ -112,19 +109,58 @@ public class Pet extends DBItem {
         if (val > 0) st.setInt(idx, val);
         else         st.setNull(idx, Types.NUMERIC);
     }
-
+ 
+    /**
+     * Normaliza cualquier string de fecha al formato "YYYY-MM-DD" que espera Date.valueOf().
+     * Oracle devuelve las fechas como "2016-07-29 00:00:00" al usar rs.getString(),
+     * lo que hace que Date.valueOf() lance IllegalArgumentException.
+     * Este método recorta el timestamp y maneja también el formato "YYYY/MM/DD".
+     */
+    private static String normalizeDate(String raw) {
+        if (raw == null || raw.isBlank()) return null;
+        String s = raw.trim();
+ 
+        // Caso: "2016-07-29 00:00:00" o "2016-07-29T00:00:00" — recortar al separador
+        if (s.length() > 10 && (s.charAt(10) == ' ' || s.charAt(10) == 'T'))
+            s = s.substring(0, 10);
+ 
+        // Caso: "2026/02/14" — reemplazar separador
+        s = s.replace('/', '-');
+ 
+        return s; // debería quedar como "YYYY-MM-DD"
+    }
+ 
+    /**
+     * Bindea un parámetro DATE desde un String de cualquier formato reconocible.
+     * Si el string es null, en blanco, o no parseable, bindea SQL NULL.
+     */
+    private static void setDateOrNull(CallableStatement st, int idx, String dateStr)
+            throws SQLException {
+        String normalized = normalizeDate(dateStr);
+        if (normalized == null) {
+            st.setNull(idx, Types.DATE);
+            return;
+        }
+        try {
+            st.setDate(idx, Date.valueOf(normalized));
+        } catch (IllegalArgumentException ex) {
+            LOG.log(Level.WARNING, "Fecha con formato no reconocido, se bindea NULL: '" + dateStr + "'");
+            st.setNull(idx, Types.DATE);
+        }
+    }
+ 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — ESTÁTICAS
     // ─────────────────────────────────────────────────────────────
     public static ArrayList<ArrayList<Object>> runSearch(
             int pIdChip,int pIdRescuer, int pIdStatus, int pIdPetType,
             int pIdColor,int pIdRace , int pIdProvince, int pIdCanton, int pIdDistrict) {
-
+ 
         ArrayList<ArrayList<Object>> filas = new ArrayList<>();
-
+ 
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement st = con.prepareCall("{ call getPetFilters(?,?,?,?,?,?,?,?,?,?) }")) {
-
+ 
             setIntOrNull(st, 1, pIdChip);       
             setIntOrNull(st, 2, pIdDistrict);   
             setIntOrNull(st, 3, pIdCanton);     
@@ -134,15 +170,15 @@ public class Pet extends DBItem {
             setIntOrNull(st, 7, pIdRescuer);    
             setIntOrNull(st, 8, pIdRace);       
             setIntOrNull(st, 9, pIdColor);      
-
+ 
             st.registerOutParameter(10, OracleTypes.CURSOR);
-
+ 
             st.execute();
-
+ 
             try (ResultSet rs = (ResultSet) st.getObject(10)) {
                 ResultSetMetaData meta = rs.getMetaData();
                 int cols = meta.getColumnCount();
-
+ 
                 while (rs.next()) {
                     ArrayList<Object> fila = new ArrayList<>();
                     for (int i = 1; i <= cols; i++) {
@@ -151,14 +187,14 @@ public class Pet extends DBItem {
                     filas.add(fila);
                 }
             }
-
+ 
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, "Error en getPetFilters", ex);
         }
-
+ 
         return filas;
     }
-
+ 
     public static ArrayList<String> getPopupItem(int id) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -180,7 +216,7 @@ public class Pet extends DBItem {
         }
         return null;
     }
-
+ 
     public static ResultSet getAllPets() {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -193,7 +229,7 @@ public class Pet extends DBItem {
         }
         return null;
     }
-
+ 
     public static ResultSet getAllPetsByStatus(int p_IdStatus) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
@@ -207,11 +243,11 @@ public class Pet extends DBItem {
         }
         return null;
     }
-
+ 
     // ─────────────────────────────────────────────────────────────
     //  OPERACIONES DE BD — INSTANCIA
     // ─────────────────────────────────────────────────────────────
-
+ 
     @Override
     public ResultSet getItem() {
         try {
@@ -226,7 +262,7 @@ public class Pet extends DBItem {
         }
         return null;
     }
-
+ 
     /*
      * @return: 0.imagen, 1.statusType, 2.nombre, 3.idExtraInfo, 4.energyLevel,
      *          5.email, 6.size, 7.TrainingEase, 8.PetType
@@ -238,7 +274,7 @@ public class Pet extends DBItem {
             stmt.registerOutParameter(1, OracleTypes.CURSOR);
             stmt.setInt(2, id);
             stmt.execute();
-
+ 
             ResultSet rs = (ResultSet) stmt.getObject(1);
             ArrayList<String> arr = new ArrayList<>();
             if (rs != null && rs.next()) {
@@ -253,7 +289,8 @@ public class Pet extends DBItem {
         }
         return null;
     }
-
+ 
+    
     public void updateItem(String pPicture, String pFirstName, String pBirthDate,
                            String pDateLost, String pDateFound, String pEmail, int pIdStatus) {
         Connection con = null;
@@ -261,18 +298,21 @@ public class Pet extends DBItem {
         try {
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
-            stmt = con.prepareCall("{ CALL adminPet.updatePet(?, ?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD'), ?, ?) }");
+ 
+          
+            stmt = con.prepareCall("{ CALL adminPet.updatePet(?, ?, ?, ?, ?, ?, ?, ?) }");
             stmt.setInt(1, id);
             stmt.setString(2, pPicture);
             stmt.setString(3, pFirstName);
-            stmt.setString(4, pBirthDate);
-            stmt.setString(5, pDateLost);
-            stmt.setString(6, pDateFound);
+            setDateOrNull(stmt, 4, pBirthDate);  
+            setDateOrNull(stmt, 5, pDateLost);  
+            setDateOrNull(stmt, 6, pDateFound);  
             stmt.setString(7, pEmail);
             stmt.setInt(8, pIdStatus);
+ 
             stmt.execute();
             con.commit();
-            data = null;
+            data = null; // invalidar caché
         } catch (Exception e) {
             if (con != null) try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             e.printStackTrace();
@@ -282,17 +322,17 @@ public class Pet extends DBItem {
         }
     }
     
-    
-    //TODO
+    //TODO: completar bindings — actualmente solo bindea id (pos 1) y status (pos 8),
+    // los parámetros 2-7 quedan sin valor y causarán error en Oracle.
     public void adoptar(int idUser, int pIdStatus) {
         Connection con = null;
         CallableStatement stmt = null;
         try {
             con = DriverManager.getConnection(host, uName, uPass);
             con.setAutoCommit(false);
-            stmt = con.prepareCall("{ CALL adminPet.updatePet(?, ?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD'), ?, ?) }");
+            stmt = con.prepareCall("{ CALL adminPet.adoptarPet(?, ?) }");
             stmt.setInt(1, id);
-            stmt.setInt(8, pIdStatus);
+            stmt.setInt(2, pIdStatus);
             stmt.execute();
             con.commit();
             data = null;
@@ -305,7 +345,7 @@ public class Pet extends DBItem {
         }
     }
     
-    public  void petFound(int pIdPet) {
+    public void petFound(int pIdPet) {
         Connection con = null;
         CallableStatement stmt = null;
         try {
@@ -334,7 +374,7 @@ public class Pet extends DBItem {
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return null;
     }
-
+ 
     public static int insert(String picture, String firstName, String birthdate,
                              String dateLost, String dateFound, String email,
                              int idStatus, int idPetRace, int idSize, int idRescuer, int idDistrict) {
@@ -365,7 +405,7 @@ public class Pet extends DBItem {
         }
         return -1;
     }
-
+ 
     @Override public void deleteItem() { throw new UnsupportedOperationException("Not supported yet."); }
     @Override public void updateItem() { throw new UnsupportedOperationException("Not supported yet."); }
 }

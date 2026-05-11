@@ -195,17 +195,17 @@ BEGIN
     RETURN v_cursor;
 END;
 
-FUNCTION getBountyByPet(pIdPet IN NUMBER) RETURN SYS_REFCURSOR
+FUNCTION getBountyByPet(pIdPet IN NUMBER) RETURN NUMBER
 IS
-    v_cursor SYS_REFCURSOR;
+    v_number NUMBER;
 BEGIN
-    OPEN v_cursor FOR SELECT b.id_bounty FROM bounty b
+   SELECT  b.id_bounty INTO v_number FROM bounty b 
     INNER JOIN PET_EXTRA_INFO pex
     ON pex.id_pet_extra_info = b.id_pet_extra_info
     INNER JOIN pet p
     ON p.id_pet = pex.id_pet
         WHERE p.id_pet= pIdPet;
-    RETURN v_cursor;
+    RETURN v_number;
 END;
 
 

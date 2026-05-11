@@ -274,23 +274,31 @@ public class PetPopup extends JDialog {
         //1 -> Perdido
         if(pet.getIdStatus() == 1){
             int idBounty = Bounty.getBountyPetId(pet.getId());
-            Bounty bounty = new Bounty(idBounty);
-            if (bounty.getAmount() > 0){
-                BountyDonationDialog dialog = new BountyDonationDialog(null, pet, idBounty, bounty.getIdCurrency(), idUser);
-                dialog.setAlwaysOnTop(true);
-                dialog.setVisible(true);
-            }
-            
+            if( idBounty>0){
+                   Bounty bounty = new Bounty(idBounty);
+                if (bounty.getAmount() > 0){
+                    BountyDonationDialog dialog = new BountyDonationDialog(null, pet, bounty.getAmount(), bounty.getIdCurrency(), idUser);
+                    dialog.setAlwaysOnTop(true);
+                    dialog.setVisible(true);
+                }
+            }else
+                JOptionPane.showMessageDialog(null, "La mascota seleccionada no tiene un recompensa asociada");
         }
         //2 -> Encontrado
         if(pet.getIdStatus() == 2){
             
         }
-        else{
+        //3 -> En adopcion
+        if(pet.getIdStatus() == 3){
             AdoptionFormDialog dialog = new AdoptionFormDialog(null, idUser, pet.getId());
             dialog.setAlwaysOnTop(true);
             dialog.setVisible(true);
         }
+        //4 -> Adoptada
+        if(pet.getIdStatus() == 4){
+            //No Hace nada
+        }
+            
         
     }
  
