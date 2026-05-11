@@ -77,6 +77,7 @@ PROCEDURE updateParameters(
 FUNCTION getAdoptionForm         RETURN SYS_REFCURSOR;
  
 FUNCTION getAdoptionFormById(pIdAdoption IN NUMBER)  RETURN SYS_REFCURSOR;
+
  
 FUNCTION getAdoptionsByPet(pIdPet IN NUMBER)         RETURN SYS_REFCURSOR;
  
@@ -86,6 +87,7 @@ FUNCTION getPhoto      RETURN SYS_REFCURSOR;
 FUNCTION getRating     RETURN SYS_REFCURSOR;
 FUNCTION getMatch      RETURN SYS_REFCURSOR;
 FUNCTION getParameters RETURN SYS_REFCURSOR;
+FUNCTION getRatingByUserAndAdopter(pIdUser IN NUMBER, pIdAdopter IN NUMBER) RETURN SYS_REFCURSOR;
  
 -- ======================================== DELETE ========================================
 

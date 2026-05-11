@@ -265,6 +265,15 @@ BEGIN
     RETURN v_cursor;
 END getParameters;
 
+FUNCTION getRatingByUserAndAdopter(pIdUser IN NUMBER, pIdAdopter IN NUMBER) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM rating
+    WHERE id_user = pIdUser AND id_adopter = pIdAdopter;
+    RETURN v_cursor;
+END;
+
 
 --  ===============================================================
 --  DELETE

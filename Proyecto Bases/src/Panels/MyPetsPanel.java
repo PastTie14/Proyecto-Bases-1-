@@ -1,6 +1,7 @@
 package Panels;
 
 import Components.Format;
+import Components.MyPetCard;
 import Components.MyPetPopup;
 import Components.PetCard;
 import TablesObj.Pet;
@@ -23,7 +24,7 @@ public class MyPetsPanel extends JPanel {
 
     private final int                idUser;
     private final ArrayList<Pet>     pets  = new ArrayList<>();
-    private final ArrayList<PetCard> cards = new ArrayList<>();
+    private final ArrayList<MyPetCard> cards = new ArrayList<>();
 
     private final JPanel      grid;
     private final JScrollPane scrollPane;
@@ -138,15 +139,10 @@ public class MyPetsPanel extends JPanel {
         if (pets.isEmpty()) {
             grid.add(buildEmptyState());
         } else {
+            Frame parent = (Frame) SwingUtilities.getWindowAncestor(this);
             for (Pet pet : pets) {
                 // Tarjeta especial: abre MyPetPopup en lugar del popup genérico
-                PetCard card = new PetCard(pet, idUser) {
-                    @Override
-                    protected void onCardClicked() {
-                        Frame parent = (Frame) SwingUtilities.getWindowAncestor(this);
-                        new MyPetPopup(parent, pet, idUser, MyPetsPanel.this).setVisible(true);
-                    }
-                };
+                MyPetCard card = new MyPetCard(parent, pet, idUser, MyPetsPanel.this);
                 cards.add(card);
                 grid.add(card);
             }
@@ -190,7 +186,7 @@ public class MyPetsPanel extends JPanel {
         buildCards();
     }
 
-    public ArrayList<PetCard> getCards()     { return cards; }
+    public ArrayList<MyPetCard> getCards()     { return cards; }
     public JScrollPane        getScrollPane(){ return scrollPane; }
 
     private static class WrapLayout extends FlowLayout {

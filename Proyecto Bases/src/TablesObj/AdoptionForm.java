@@ -58,7 +58,7 @@ public class AdoptionForm extends DBItem {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
             CallableStatement st = con.prepareCall(
-                    "BEGIN ? := adminAdoptionMatch.getAdoptionFormByPet(?); END;");
+                    "BEGIN ? := adminAdoptionMatch.getAdoptionsByPet(?); END;");
             st.registerOutParameter(1, OracleTypes.CURSOR);
             st.setInt(2, idPet);
             st.execute();
