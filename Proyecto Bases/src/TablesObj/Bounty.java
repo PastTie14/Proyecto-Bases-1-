@@ -51,11 +51,11 @@ public class Bounty extends DBItem {
     public static int getBountyPetId(int petId) {
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement st = con.prepareCall("BEGIN ? := adminPetExtraInfo.getBounty(?); END;");
+            CallableStatement st = con.prepareCall("BEGIN ? := adminPetExtraInfo.getBountyByPet(?); END;");
             st.registerOutParameter(1, OracleTypes.NUMBER);
             st.setInt(2, petId);
             st.execute();
-            return (int) st.getObject(1);
+            return  st.getInt(1);
         } catch (SQLException ex) { LOG.log(Level.SEVERE, null, ex); }
         return 0;
     }
