@@ -46,8 +46,12 @@ public class PetFormPanel extends JPanel {
     private final FormComboBox   status     = new FormComboBox("Estado");
     private final FormComboBox   petType    = new FormComboBox("Tipo de mascota");
     private final FormComboBox   race       = new FormComboBox("Raza");
-    private final FormComboBox   color      = new FormComboBox("Color");
     private final FormComboBox   size       = new FormComboBox("Tamaño");
+ 
+    // ── Multi-color panel ─────────────────────────────────────────
+    private final JPanel colorListPanel = new JPanel();
+    private final ArrayList<FormComboBox> colorRows = new ArrayList<>();
+    private ArrayList<String> colorOptions = new ArrayList<>();
     private final FormComboBox   provincia  = new FormComboBox("Provincia");
     private final FormComboBox   canton     = new FormComboBox("Cantón");
     private final FormComboBox   distrito   = new FormComboBox("Distrito");
@@ -88,6 +92,7 @@ public class PetFormPanel extends JPanel {
         setBackground(Format.COLOR_BG);
  
         loadAllCombos();
+        race.setOptions(new ArrayList<>(java.util.List.of("— Seleccione tipo primero —")));
  
         provincia.getCombo().addActionListener(e -> onProvinciaChanged());
         canton.getCombo().addActionListener(e -> onCantonChanged());
@@ -109,7 +114,7 @@ public class PetFormPanel extends JPanel {
         inner.add(gap());  inner.add(status);
         inner.add(gap());  inner.add(petType);
         inner.add(gap());  inner.add(race);
-        inner.add(gap());  inner.add(color);
+        inner.add(gap());  inner.add(buildColorPanel());
         inner.add(gap());  inner.add(size);
         inner.add(gap());  inner.add(petPhones);      // FIX: pet phones in basic section
         inner.add(gap());  inner.add(sectionTitle("Ubicación"));
@@ -197,7 +202,7 @@ public class PetFormPanel extends JPanel {
     private void loadAllCombos() {
         loadCombo(Status.getAll(),        statusMap,        status,        1, 2);
         loadCombo(PetType.getAll(),       petTypeMap,       petType,       1, 2);
-        loadCombo(TablesObj.PetColor.getAll(), colorMap,    color,         1, 2);
+        loadColorOptions();
         loadCombo(Province.getAll(),      provinciaMap,     provincia,     1, 2);
         loadCombo(Currency.getAll(),      currencyMap,      currency,      1, 3);
         loadCombo(EnergyLevel.getAll(),   energyMap,        energyLevel,   1, 2);
@@ -206,8 +211,6 @@ public class PetFormPanel extends JPanel {
         loadCombo(Size.getAll(),          sizeMap,          size,          1, 2);
         loadCombo(Canton.getAll(),      cantonMap,     canton,     1, 2);
         loadCombo(District.getAll(),      distritoMap,     distrito,     1, 2);
-        loadCombo(Race.getAll(),      raceMap,     race,     1, 2);
-
     }
  
     private void loadCombo(ResultSet rs,
@@ -231,7 +234,99 @@ public class PetFormPanel extends JPanel {
         combo.setOptions(labels);
     }
  
-    // ── Cascada Provincia → Cantón ────────────────────────────────
+    // ── Carga de opciones de color ────────────────────────────────
+ 
+    private void loadColorOptions() {
+        colorOptions.clear();
+        colorMap.clear();
+        try {
+            ResultSet rs = TablesObj.PetColor.getAll();
+            while (rs != null && rs.next()) {
+                int    id    = rs.getInt(1);
+                String label = rs.getString(2);
+                if (label != null) {
+                    colorMap.put(label, id);
+                    colorOptions.add(label);
+                }
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error cargando colores", ex);
+        }
+    }
+ 
+    // ── Panel dinámico de colores ─────────────────────────────────
+ 
+    private JPanel buildColorPanel() {
+        colorListPanel.setLayout(new BoxLayout(colorListPanel, BoxLayout.Y_AXIS));
+        colorListPanel.setOpaque(false);
+        colorListPanel.setAlignmentX(LEFT_ALIGNMENT);
+        colorListPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+ 
+        // Header row: label + botón "+"
+        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        header.setOpaque(false);
+        header.setAlignmentX(LEFT_ALIGNMENT);
+        JLabel lbl = new JLabel("Colores");
+        lbl.setFont(Format.FONT_BODY);
+        lbl.setForeground(Format.COLOR_PRIMARY);
+        JButton addBtn = new JButton("+ Añadir color");
+        addBtn.setFont(Format.FONT_BODY);
+        addBtn.setForeground(Format.COLOR_PRIMARY);
+        addBtn.setBackground(Format.COLOR_BG);
+        addBtn.setBorderPainted(false);
+        addBtn.setFocusPainted(false);
+        addBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        addBtn.addActionListener(e -> addColorRow());
+        header.add(lbl);
+        header.add(Box.createHorizontalStrut(12));
+        header.add(addBtn);
+ 
+        colorListPanel.add(header);
+         addColorRow();
+ 
+        return colorListPanel;
+    }
+ 
+    private void addColorRow() {
+        FormComboBox colorCombo = new FormComboBox("");
+        colorCombo.setOptions(colorOptions);
+        colorCombo.setAlignmentX(LEFT_ALIGNMENT);
+ 
+        JPanel row = new JPanel();
+        row.setLayout(new BoxLayout(row, BoxLayout.X_AXIS));
+        row.setOpaque(false);
+        row.setAlignmentX(LEFT_ALIGNMENT);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
+ 
+        JButton removeBtn = new JButton("✕");
+        removeBtn.setFont(Format.FONT_BODY);
+        removeBtn.setForeground(Color.GRAY);
+        removeBtn.setBackground(Format.COLOR_BG);
+        removeBtn.setBorderPainted(false);
+        removeBtn.setFocusPainted(false);
+        removeBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        removeBtn.setToolTipText("Eliminar este color");
+        removeBtn.addActionListener(e -> {
+            if (colorRows.size() > 1) {
+                colorRows.remove(colorCombo);
+                colorListPanel.remove(row);
+                colorListPanel.revalidate();
+                colorListPanel.repaint();
+            }
+        });
+ 
+        row.add(colorCombo);
+        row.add(Box.createHorizontalStrut(6));
+        row.add(removeBtn);
+ 
+        colorRows.add(colorCombo);
+        colorListPanel.add(Box.createVerticalStrut(Format.GAP_META));
+        colorListPanel.add(row);
+        colorListPanel.revalidate();
+        colorListPanel.repaint();
+    }
+ 
+    // ── Cascada Provincia -> Cantón ────────────────────────────────
  
     private void onProvinciaChanged() {
         String selected = provincia.getSelected();
@@ -264,7 +359,7 @@ public class PetFormPanel extends JPanel {
                 : cantonLabels);
     }
  
-    // ── Cascada Cantón → Distrito ─────────────────────────────────
+    // ── Cascada Cantón -> Distrito ─────────────────────────────────
  
     private void onCantonChanged() {
         String selected = canton.getSelected();
@@ -294,11 +389,14 @@ public class PetFormPanel extends JPanel {
                 : distritoLabels);
     }
  
-    // ── Cascada PetType → Race ────────────────────────────────────
+    // ── Cascada PetType -> Race ────────────────────────────────────
  
     private void onPetTypeChanged() {
         String selected = petType.getSelected();
-        if (selected == null) return;
+        if (selected == null) {
+            race.setOptions(new ArrayList<>(java.util.List.of("— Seleccione tipo primero —")));
+            return;
+        }
         Integer idPetType = petTypeMap.get(selected);
         if (idPetType == null) return;
  
@@ -389,9 +487,17 @@ public class PetFormPanel extends JPanel {
  
         int idStatus   = resolveId(statusMap,  status.getSelected());
         int idRace     = resolveId(raceMap,    race.getSelected());
-        int idColor    = resolveId(colorMap,   color.getSelected());
         int idDistrito = resolveId(distritoMap, distrito.getSelected());
         int idSize     = resolveId(sizeMap,    size.getSelected());
+ 
+        // ── Colores seleccionados ─────────────────────────────────
+        ArrayList<Integer> selectedColorIds = new ArrayList<>();
+        for (FormComboBox cb : colorRows) {
+            int cId = resolveId(colorMap, cb.getSelected());
+            if (cId > 0 && !selectedColorIds.contains(cId)) {
+                selectedColorIds.add(cId);
+            }
+        }
  
         // ── Insertar mascota ──────────────────────────────────────
         int idPet = Pet.insert(
@@ -417,7 +523,7 @@ public class PetFormPanel extends JPanel {
         }
  
         // ── Relaciones básicas de la mascota ──────────────────────
-        if (idColor    > 0) PetXColor.insert(idPet, idColor);
+        for (int cId : selectedColorIds) PetXColor.insert(idPet, cId);
  
         ArrayList<String> petPhoneValues = petPhones.getValues();
         if (!petPhoneValues.isEmpty()) {
@@ -464,7 +570,7 @@ public class PetFormPanel extends JPanel {
                                    || hasVetInfo
                                    || diseases.getValues().stream().anyMatch(s -> s != null && !s.isBlank())
                                    || treatments.getValues().stream().anyMatch(s -> s != null && !s.isBlank());
-
+ 
                 if (hasMedData) {
                     // Validación: cada tratamiento debe tener su dosis
                     ArrayList<String> treatmentVals = treatments.getValues();
@@ -480,7 +586,7 @@ public class PetFormPanel extends JPanel {
                             return false;
                         }
                     }
-
+ 
                     int idVet = 0;
                     if (hasVetInfo) {
                         idVet = Veterinarian.insert(
@@ -497,7 +603,7 @@ public class PetFormPanel extends JPanel {
                             }
                         }
                     }
-
+ 
                     int idMedicSheet = MedicSheet.insert(
                         abandonDesc.getValue(), idVet, idExtraInfo
                     );
@@ -515,7 +621,7 @@ public class PetFormPanel extends JPanel {
         ArrayList<String> diseaseNames   = diseases.getValues();
         ArrayList<String> treatmentNames = treatments.getValues();
         ArrayList<String> doseValues     = doses.getValues();       // ← nuevo
-
+ 
         ArrayList<Integer> insertedDiseaseIds = new ArrayList<>();
         for (String name : diseaseNames) {
             if (name == null || name.isBlank()) continue;
@@ -525,15 +631,15 @@ public class PetFormPanel extends JPanel {
                 DiseaseXMedicSheet.insert(idDisease, idMedicSheet);
             }
         }
-
+ 
         for (int i = 0; i < treatmentNames.size(); i++) {
             String name = treatmentNames.get(i);
             if (name == null || name.isBlank()) continue;
-
+ 
             // La validación de arriba garantiza que dose no estará vacía
             String rawDose = (i < doseValues.size()) ? doseValues.get(i).trim() : "";
-            String dose    = rawDose.isEmpty() ? "" : rawDose + " mg";  // ← "150 mg"
-
+            String dose    = rawDose.isEmpty() ? "" : rawDose + " mg";  // 
+ 
             int idTreatment = Treatment.insertAndGetId(name.trim(), dose);
             if (idTreatment > 0) {
                 for (int idDisease : insertedDiseaseIds) {
