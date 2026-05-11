@@ -85,12 +85,11 @@ public class Donation extends DBItem {
  
 
     public static boolean insertDonationTransaction(
-            int    amount,
-            int    idAssociation,
-            int    idCribHouse,
-            int    idCurrency,
-            int    idAdopter,
-            Pet    pet) {
+            int    pAmmount,
+            int    pIdAsociation,
+            int    pIdCurrency,
+            int    pIdCribHouse,
+            int    pIdDonnor) {
  
         Connection con = null;
         try {
@@ -100,40 +99,16 @@ public class Donation extends DBItem {
             // ── 1. Insertar donación ──────────────────────────────
             try (CallableStatement st = con.prepareCall(
                     "{ CALL adminFinancial.insertDonation(?,?,?,?,?) }")) {
-                st.setInt(1, 0); 
-                st.setInt(2, amount);
-                if (idAssociation > 0) st.setInt (3, idAssociation);
-                else                   st.setNull(3, Types.NUMERIC);
-                st.setInt(4, idCurrency);
-                if (idCribHouse > 0) st.setInt (5, idCribHouse);
-                else                 st.setNull(5, Types.NUMERIC);
+                st.setInt(1, pAmmount);
+                if (pIdAsociation > 0) st.setInt (2, pIdAsociation);
+                else                   st.setNull(2, 0);
+                st.setInt(3, pIdCurrency);
+                if (pIdCribHouse > 0) st.setInt (4, pIdCribHouse);
+                else                 st.setNull(4, 0);
+                st.setInt(5, pIdDonnor);
                 st.execute();
             }
  
-            // ── 2. Obtener id de la donación recién creada (CURRVAL) ──
-            int idDonation = -1;
-            try (CallableStatement st = con.prepareCall(
-                    "BEGIN ? := adminFinancial.getLastDonationId(); END;")) {
-                st.registerOutParameter(1, Types.NUMERIC);
-                st.execute();
-                idDonation = st.getInt(1);
-            }
- 
-            if (idDonation <= 0)
-                throw new SQLException("getLastDonationId devolvió un id inválido: " + idDonation);
- 
-            // ── 3. Vincular donación al adoptante ─────────────────
-            try (CallableStatement st = con.prepareCall(
-                    "{ CALL adminFinancial.insertDonationXUser(?,?) }")) {
-                st.setInt(1, idAdopter);
-                st.setInt(2, idDonation);
-                st.execute();
-            }
-            // ── 4. Cambiar estado de la mascota ───────────────────
-            pet.petFound(pet.getId());
-            
- 
-            con.commit();
             return true;
  
         } catch (Exception ex) {
