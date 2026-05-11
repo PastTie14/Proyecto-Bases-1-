@@ -113,6 +113,11 @@ public class StatsPanel extends JPanel {
             String sel = (String) cmbOptions.getSelectedItem();
             if (sel != null) filterLayout.show(filterCard, sel);
         });
+
+        cbPetType4.addActionListener(e -> {
+            int idPetType = resolveCombo(petTypeMap, cbPetType4);
+            reloadRace4(idPetType);
+        });
  
         add(buildNavbar(),  BorderLayout.NORTH);
         add(buildCenter(),  BorderLayout.CENTER);
@@ -135,7 +140,7 @@ public class StatsPanel extends JPanel {
         try {
             ResultSet rs = Status.getAll();
             while (rs != null && rs.next())
-                statusMap.put(rs.getString(2), rs.getInt(1)); // col2=status_type, col1=id_status
+                statusMap.put(rs.getString(2), rs.getInt(1)); 
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, "Error cargando status", ex);
         }
@@ -149,16 +154,9 @@ public class StatsPanel extends JPanel {
                 petTypeMap.put(rs.getString(2), rs.getInt(1));
         } catch (SQLException ex) { LOG.log(Level.SEVERE, "Error cargando petType", ex); }
 
-        // —— Raza ——————————————————————————
-        raceMap.put("— Todos —", 0);
-        try {
-            ResultSet rs = Race.getAll();
-            while (rs != null && rs.next())
-                raceMap.put(rs.getString(2), rs.getInt(1));
-        } catch (SQLException ex) { LOG.log(Level.SEVERE, "Error cargando race", ex); }
-
         petTypeMap.keySet().forEach(k -> { cbPetType1.addItem(k); cbPetType4.addItem(k); });
-        raceMap.keySet().forEach(cbRace4::addItem);
+
+        cbRace4.addItem("— Todos —");
     }
  
     // ─────────────────────────────────────────────────────────────
@@ -437,7 +435,6 @@ public class StatsPanel extends JPanel {
         });
     }
  
-    /** Sobrecarga con ArrayList<String> para columnas (mantiene compatibilidad con código previo). */
     public void fillTable(ArrayList<String> columns, ArrayList<ArrayList<Object>> data) {
         fillTable(columns.toArray(new String[0]), data);
     }
@@ -463,7 +460,6 @@ public class StatsPanel extends JPanel {
             for (ArrayList<Object> row : rows) {
                 String lbl = String.valueOf(row.get(labelCol));
                 Number val = toNumber(row.get(valueCol));
-                // Si la etiqueta ya existe, acumular (UNION puede repetir labels)
                 if (dataset.getIndex(lbl) >= 0) {
                     double prev = dataset.getValue(lbl).doubleValue();
                     dataset.setValue(lbl, prev + val.doubleValue());
@@ -628,8 +624,26 @@ public class StatsPanel extends JPanel {
     }
  
     // ─────────────────────────────────────────────────────────────
-    //  HELPERS LÓGICA
+    //  RECARGA DINÁMICA DE RAZAS (Vista 4)
     // ─────────────────────────────────────────────────────────────
+ 
+    private void reloadRace4(int idPetType) {
+        raceMap.clear();
+        raceMap.put("— Todos —", 0);
+ 
+        try {
+            ResultSet rs = (idPetType == 0) ? Race.getAll() : Race.getByPetType(idPetType);
+            while (rs != null && rs.next())
+                raceMap.put(rs.getString(2), rs.getInt(1));
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error recargando razas para petType=" + idPetType, ex);
+        }
+ 
+        SwingUtilities.invokeLater(() -> {
+            cbRace4.removeAllItems();
+            raceMap.keySet().forEach(cbRace4::addItem);
+        });
+    }
  
     private void styleCombo() {
         cmbOptions.setFont(Format.FONT_BODY_SMALL);
