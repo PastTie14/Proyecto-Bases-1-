@@ -40,7 +40,7 @@ ALTER TABLE adoption_form
 
 ALTER TABLE adoption_form
     ADD CONSTRAINT fk_af_adopter
-    FOREIGN KEY (id_adopter) REFERENCES adopter (id_user)
+    FOREIGN KEY (id_adopter) REFERENCES "user" (id_user)
     ON DELETE CASCADE;
 
 ALTER TABLE adoption_form
@@ -184,7 +184,7 @@ ALTER TABLE rating
 
 ALTER TABLE rating
     ADD CONSTRAINT fk_rating_adopter
-    FOREIGN KEY (id_adopter) REFERENCES adopter (id_user)
+    FOREIGN KEY (id_adopter) REFERENCES "user" (id_user)
     ON DELETE CASCADE;
 
 COMMENT ON TABLE rating

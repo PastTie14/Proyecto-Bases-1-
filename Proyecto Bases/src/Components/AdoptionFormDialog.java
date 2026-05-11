@@ -87,8 +87,7 @@ public class AdoptionFormDialog extends JDialog {
         form.setBorder(BorderFactory.createEmptyBorder(18, 22, 10, 22));
 
         // Fecha de adopción — se pre-rellena con hoy
-        adoptionDate.setValue(java.time.LocalDate.now().toString());
-
+        adoptionDate.setValue(java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy")));    
         form.add(notes);
         form.add(Box.createVerticalStrut(Format.GAP_META));
         form.add(adoptionDate);
@@ -225,7 +224,6 @@ public class AdoptionFormDialog extends JDialog {
 
         // ── Persistencia ──────────────────────────────────────────
         try {
-            new Pet(idPet).changePetStatus(idAdopter, 3,idPet);
             AdoptionForm.insert(
                 notes.getValue(),           // notas (puede estar vacío)
                 dateVal,                    // fecha de adopción
@@ -233,6 +231,8 @@ public class AdoptionFormDialog extends JDialog {
                 idAdopter,                  // id del adoptante
                 idPet                       // id de la mascota
             );
+            new Pet(idPet).changePetStatus(idAdopter, 4,idPet);
+
             return true;
         } catch (Exception ex) {
             LOG.severe("Error al insertar adopción: " + ex.getMessage());
