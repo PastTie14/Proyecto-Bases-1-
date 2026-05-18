@@ -230,8 +230,8 @@ public class RatingPanel extends JPanel {
                     while (rs != null && rs.next()) {
                         ArrayList<Object> row = new ArrayList<>();
                         row.add(rs.getObject(1));  // id_pet
-                        row.add(rs.getString(2));  // nombre
-                        row.add(rs.getString(3));  // estado
+                        row.add(rs.getString(3));  // nombre
+                        row.add(rs.getString(12));  // estado
                         row.add(rs.getString(4));  // fecha de encuentro
                         rows.add(row);
                     }
@@ -317,7 +317,7 @@ public class RatingPanel extends JPanel {
                 type = "Adoptador";
                 ResultSet r = new Adopter(idAdopter).getAllRS();
                 if (r != null && r.next()) {
-                    name = nullSafe(r.getString(2)) + " " + nullSafe(r.getString(4));
+                    name = nullSafe(r.getString(1)) + " " + nullSafe(r.getString(3));
                 }
             } else if (CribHouse.getCribHouseByID(idAdopter)) {
                 type = "Casa Cuna";

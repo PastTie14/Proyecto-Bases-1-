@@ -56,12 +56,22 @@ END insertRating;
 --  ===============================================================
 
 PROCEDURE insertMatch(
-    pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE
+    pMatchDate   IN DATE,
+    pIdPetLost   IN NUMBER,
+    pIdPetFound  IN NUMBER
 ) IS
 BEGIN
-    INSERT INTO match (id_match, match_date)
-    VALUES (s_match.NEXTVAL, pMatchDate);
+    INSERT INTO "MATCH" (
+        id_match,
+        match_date,
+        id_pet_lost,
+        id_pet_found
+    ) VALUES (
+        s_match.NEXTVAL,
+        pMatchDate,
+        pIdPetLost,
+        pIdPetFound
+    );
     COMMIT;
 END insertMatch;
 

@@ -25,8 +25,9 @@ PROCEDURE insertRating(
 );
  
 PROCEDURE insertMatch(
-    pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE
+    pMatchDate   IN DATE,
+    pIdPetLost   IN NUMBER,
+    pIdPetFound  IN NUMBER
 );
  
 PROCEDURE insertParameters(
