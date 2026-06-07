@@ -56,13 +56,29 @@ END insertRating;
 --  ===============================================================
 
 PROCEDURE insertMatch(
-    pIdMatch              IN NUMBER,
-    pMatchDate            IN DATE
+    pMatchDate   IN DATE,
+    pIdPetLost   IN NUMBER,
+    pIdPetFound  IN NUMBER
 ) IS
 BEGIN
-    INSERT INTO match (id_match, match_date)
-    VALUES (s_match.NEXTVAL, pMatchDate);
+    INSERT INTO "MATCH" (
+        id_match,
+        match_date,
+        id_pet_lost,
+        id_pet_found
+    ) VALUES (
+        s_match.NEXTVAL,
+        pMatchDate,
+        pIdPetLost,
+        pIdPetFound
+    );
     COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Match no encontrado.');
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20002, 'Error al insertar match: ' || SQLERRM);
 END insertMatch;
 
 --  ===============================================================

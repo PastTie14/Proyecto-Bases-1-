@@ -259,9 +259,12 @@ public class PetPopup extends JDialog {
             adoptBtn.setText("Reclamar Recompensa");
             footer.add(adoptBtn);
         }else if (pet.getIdStatus() == 2){}
+        else if (pet.getIdStatus() == 3){
+            adoptBtn.setText("Adoptar");
+            footer.add(adoptBtn);
+        }
         else{
-                adoptBtn.setText("Adoptar");
-                footer.add(adoptBtn);
+                    
             }
         return footer;
     }
