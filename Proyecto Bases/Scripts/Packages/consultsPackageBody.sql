@@ -58,44 +58,42 @@ IS
         RETURN v_cursor;
     END;
 
-FUNCTION getMatches(pIdLostPet IN NUMBER, pIdFoundPet IN NUMBER) RETURN SYS_REFCURSOR
+FUNCTION getMatches RETURN SYS_REFCURSOR
 IS
     v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-        SELECT (
-                (
-                -- inspired by these posts: https://forums.oracle.com/ords/apexds/post/calculating-percentages-3532
-                -- https://stackoverflow.com/questions/77622815/create-a-percentage-formula-with-using-a-case-when-expression
+BEGIN
+    OPEN v_cursor FOR
+    SELECT 
+        p1.first_name,
+        p2.first_name,
+        (
+            -- inspired by these posts: https://forums.oracle.com/ords/apexds/post/calculating-percentages-3532
+            -- https://stackoverflow.com/questions/77622815/create-a-percentage-formula-with-using-a-case-when-expression
                 
-                -- if the ids are the same, add 1 and sum the next one, then divide
-                -- by the total (3) and multiply by 100 to get the percentage
-                CASE WHEN p1.id_size = p2.id_size 
-                THEN 1 ELSE 0 END + 
-                
-                CASE WHEN p1.id_race = p2.id_race
-                THEN 1 ELSE 0 END +
-                
-                CASE WHEN p1.id_district = p2.id_district
-                THEN 1 ELSE 0 END
-                ) / 3
-            ) * 100, COUNT(1) OVER () FROM pet p1
+            -- if the ids are the same, add 1 and sum the next one, then divide
+            -- by the total (3) and multiply by 100 to get the percentage
+            CASE WHEN p1.id_size = p2.id_size 
+            THEN 1 ELSE 0 END +
+            
+            CASE WHEN p1.id_race = p2.id_race 
+            THEN 1 ELSE 0 END +
+            
+            CASE WHEN p1.id_district = p2.id_district 
+            THEN 1 ELSE 0 END
+        ) / 3 * 100 AS match_percentage,
+        COUNT(1) OVER ()
         
-        CROSS JOIN pet p2 -- cartesian product to get all combinations
-        -- https://www.datacamp.com/tutorial/cartesian-product
-        
-        /*
-        INNER JOIN color_x_pet cxp1
-        ON p1.id_pet = cxp.id_pet
-        
-        INNER JOIN color_x_pet cxp2
-        ON p2.id_pet = cxp2.id_pet
-        */
-        WHERE p1.id_pet = pIdLostPet
-        AND p2.id_pet = pIdFoundPet;
-
-        RETURN v_cursor;
-    END;
+    FROM match m
+    INNER JOIN pet p1
+    ON m.id_pet_lost = p1.id_pet
+    
+    INNER JOIN pet p2
+    ON m.id_pet_found = p2.id_pet
+    
+    ORDER BY match_percentage DESC;
+    
+    RETURN v_cursor;
+END;
 
 FUNCTION getPetNecessaryTreatments(pMin IN NUMBER, pMax IN NUMBER) RETURN SYS_REFCURSOR
 IS

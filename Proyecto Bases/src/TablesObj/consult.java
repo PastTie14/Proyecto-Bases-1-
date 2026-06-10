@@ -109,13 +109,11 @@ public class consult {
  
     public static ArrayList<ArrayList<Object>> getMatches(int idLostPet, int idFoundPet) {
  
-        final String sql = "BEGIN ? := adminConsult.getMatches(?,?); END;";
+        final String sql = "BEGIN ? := adminConsult.getMatches(); END;";
         try (Connection con = DriverManager.getConnection(host, uName, uPass);
              CallableStatement st = con.prepareCall(sql)) {
  
             st.registerOutParameter(1, OracleTypes.CURSOR);
-            setIntOrNull(st, 2, idLostPet);
-            setIntOrNull(st, 3, idFoundPet);
             st.execute();
  
             try (ResultSet rs = (ResultSet) st.getObject(1)) {

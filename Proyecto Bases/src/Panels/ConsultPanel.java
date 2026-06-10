@@ -130,12 +130,9 @@ public class ConsultPanel extends JPanel {
             R_BLACKLIST
         );
  
-        // 3. Matches — ID mascota perdida e ID mascota encontrada
-        cardPanel.add(filterCard(
-            sectionLabel("Mascotas a comparar"),
-            matchIdLostPet,
-            matchIdFoundPet
-        ), R_MATCHES);
+        // 3. Matches — sin filtros
+        cardPanel.add(emptyCard("Sin filtros — se muestran todos los registros."), 
+            R_MATCHES);
  
         // 4. Tratamientos — rango de cantidad de tratamientos
         cardPanel.add(filterCard(
@@ -339,7 +336,7 @@ public class ConsultPanel extends JPanel {
                     parseIntField(matchIdLostPet.getValue()),
                     parseIntField(matchIdFoundPet.getValue())
                 );
-                columns = new String[]{ "% Similitud", "Total Registros" };
+                columns = new String[]{ "Mascota perdida", "Mascota encontrada", "% Similitud", "Total Registros" };
                 break;
  
             // id_pet | first_name | pet_type | status_type | disease_count | treatment_count | total_records
